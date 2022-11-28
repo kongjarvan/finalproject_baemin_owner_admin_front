@@ -1,4 +1,5 @@
 import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
 import 'package:flutter/material.dart';
 
 void main() {
