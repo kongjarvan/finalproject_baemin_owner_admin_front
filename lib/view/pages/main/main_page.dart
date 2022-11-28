@@ -3,6 +3,7 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/my_icon_with_text.dart';
 import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/store_info_menu.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -52,7 +53,7 @@ class _MainPageState extends State<MainPage> {
               children: [
                 Column(
                   children: [
-                    MyIconWithText(icon: CupertinoIcons.doc_text, settings: LoginPage(), text: '영업관리', color: kMenuIconColor),
+                    MyIconWithText(icon: CupertinoIcons.doc_text, settings: MenuListPage(), text: '영업관리', color: kMenuIconColor),
                     Divider(height: gap_xl, thickness: gap_xxs, color: kMenuIconColor, indent: gap_m, endIndent: gap_m),
                     MyIconWithText(icon: CupertinoIcons.doc_text, settings: LoginPage(), text: '통계', color: kMenuIconColor),
                     Divider(height: gap_xl, thickness: gap_xxs, color: kMenuIconColor, indent: gap_m, endIndent: gap_m),
