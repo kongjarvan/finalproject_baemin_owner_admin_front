@@ -2,6 +2,7 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/logo.dart';
+import 'package:baemin_owner_admin_front/view/pages/register_store/register_owner_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -86,7 +87,7 @@ class _LoginPageState extends State<LoginPage> {
             InkWell(
               child: Text(' 비밀번호 찾기', style: textTheme().bodyText2),
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterOwnerPage()));
               },
             )
           ],
