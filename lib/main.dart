@@ -22,6 +22,7 @@ class MyApp extends StatelessWidget {
         textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.deepOrange),
       ),
       routes: {
+        '/main': (context) => LoginPage(),
         '/login': (context) => LoginPage(),
       },
       home: LoginPage(),
