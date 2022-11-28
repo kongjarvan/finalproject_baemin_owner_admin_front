@@ -1,8 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/store_register_update_form.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/register_update_store_form.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,7 @@ class UpdateStorePage extends StatelessWidget {
                   padding: const EdgeInsets.all(gap_l),
                   child: Column(
                     children: [
-                      StoreRegisterUpdateForm(title: '가게수정'),
+                      RegisterUpdateStoreForm(title: '가게수정'),
                       _buildUpdateButton(context),
                     ],
                   ),

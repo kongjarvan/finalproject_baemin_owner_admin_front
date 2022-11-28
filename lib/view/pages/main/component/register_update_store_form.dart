@@ -2,13 +2,12 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
-import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class StoreRegisterUpdateForm extends StatelessWidget {
+class RegisterUpdateStoreForm extends StatelessWidget {
   final String title;
-  const StoreRegisterUpdateForm({required this.title, Key? key}) : super(key: key);
+  const RegisterUpdateStoreForm({required this.title, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
