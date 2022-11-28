@@ -1,13 +1,13 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/store_register_update_form.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/update_store/update_store_page.dart';
 import 'package:flutter/material.dart';
 
-class RegisterStorePage extends StatelessWidget {
-  const RegisterStorePage({Key? key}) : super(key: key);
+class UpdateStorePage extends StatelessWidget {
+  const UpdateStorePage({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +23,8 @@ class RegisterStorePage extends StatelessWidget {
                   padding: const EdgeInsets.all(gap_l),
                   child: Column(
                     children: [
-                      StoreRegisterUpdateForm(title: '가게등록'),
-                      _buildRegisterButton(context),
+                      StoreRegisterUpdateForm(title: '가게수정'),
+                      _buildUpdateButton(context),
                     ],
                   ),
                 ),
@@ -36,10 +36,10 @@ class RegisterStorePage extends StatelessWidget {
     );
   }
 
-  InkWell _buildRegisterButton(context) {
+  InkWell _buildUpdateButton(context) {
     return InkWell(
       onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateStorePage()));
+        Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
       },
       child: Container(
         decoration: BoxDecoration(
@@ -48,7 +48,7 @@ class RegisterStorePage extends StatelessWidget {
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 120, vertical: gap_s),
-          child: Text('가게등록하기', style: textTheme().headline3),
+          child: Text('가게수정하기', style: textTheme().headline3),
         ),
       ),
     );
