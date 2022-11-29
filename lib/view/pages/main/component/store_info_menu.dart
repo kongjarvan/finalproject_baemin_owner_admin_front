@@ -3,6 +3,7 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/register_store/register_store_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/review_list/review_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -80,7 +81,13 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
           SizedBox(
             width: 80,
             child: InkWell(
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ReviewListPage(),
+                    ));
+              },
               child: Text(
                 textAlign: TextAlign.end,
                 '${text}',

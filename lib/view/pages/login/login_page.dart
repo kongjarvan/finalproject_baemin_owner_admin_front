@@ -22,8 +22,8 @@ class _LoginPageState extends State<LoginPage> {
       body: Center(
         child: SizedBox(
           width: 400,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
+          height: 500,
+          child: ListView(
             children: [
               Logo(),
               InputTextFormField(text: '아이디'),
