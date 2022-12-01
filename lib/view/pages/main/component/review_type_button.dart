@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/reported_review/reported_review_page.dart';
 import 'package:flutter/material.dart';
 
 class ReviewTypeButton extends StatelessWidget {
@@ -17,7 +18,14 @@ class ReviewTypeButton extends StatelessWidget {
           ),
         ),
         child: InkWell(
-          onTap: () {},
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => ReportedReviewPage(),
+              ),
+            );
+          },
           child: Padding(
             padding: const EdgeInsets.all(gap_m),
             child: Center(
@@ -30,6 +38,5 @@ class ReviewTypeButton extends StatelessWidget {
         ),
       ),
     );
-    ;
   }
 }
