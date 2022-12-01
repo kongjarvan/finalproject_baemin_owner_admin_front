@@ -42,7 +42,8 @@ class _MainPageState extends State<MainPage> {
 
   Widget _buildMenuIcon() {
     return Container(
-      width: 80,
+      width: getBodyWidth(context) * 0.1,
+      constraints: BoxConstraints(maxWidth: 80),
       color: kMenuBarSubColor,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
