@@ -1,6 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/OrderInfo.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/review_type_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -94,7 +95,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildOrderInfo(),
+                  OrderInfo(),
                   SizedBox(width: gap_xl),
                   Expanded(
                     flex: 2,
@@ -125,12 +126,19 @@ class _ReviewListPageState extends State<ReviewListPage> {
         Text('구매자 리뷰', style: TextStyle(fontSize: 20)),
         SizedBox(height: gap_s),
         Container(
-          decoration: BoxDecoration(border: Border.all(color: kUnselectedListColor)),
-          child: RichText(
-            maxLines: 2,
-            text: TextSpan(
-                text:
-                    '구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,'),
+          decoration: BoxDecoration(
+            border: Border.all(color: kUnselectedListColor),
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: Padding(
+            padding: const EdgeInsets.all(4),
+            child: RichText(
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              text: TextSpan(
+                  text:
+                      '구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,'),
+            ),
           ),
         ),
       ],
@@ -174,27 +182,6 @@ class _ReviewListPageState extends State<ReviewListPage> {
               Navigator.pushNamed(context, '/main');
             }),
       ],
-    );
-  }
-
-  Widget _buildOrderInfo() {
-    return Expanded(
-      flex: 1,
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Container(
-            height: getBodyHeight(context) * 0.3,
-            color: Colors.green,
-          ),
-          SizedBox(height: gap_s),
-          Text('주문번호: ', style: TextStyle(fontSize: 20)),
-          SizedBox(height: gap_s),
-          Text('구매일자: ', style: textTheme().bodyText2),
-          SizedBox(height: gap_s),
-          Text('숨김여부: ', style: textTheme().bodyText2),
-        ],
-      ),
     );
   }
 
