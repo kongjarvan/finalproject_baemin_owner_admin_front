@@ -25,7 +25,11 @@ class _MenuListPageState extends State<MenuListPage> {
             child: Padding(
               padding: const EdgeInsets.all(gap_l),
               child: Column(
-                children: [_buildMenuListHeader(context), SizedBox(height: gap_l), _buildMenuList()],
+                children: [
+                  _buildMenuListHeader(context),
+                  SizedBox(height: gap_l),
+                  _buildMenuList(),
+                ],
               ),
             ),
           ),
