@@ -2,7 +2,6 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/insert_menu/insert_menu_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/update_menu/update_menu_page.dart';
 import 'package:flutter/material.dart';
 
