@@ -32,7 +32,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
             ),
           ),
           Flexible(
-            child: MenuListPage(),
+            child: ReviewListPage(),
           ),
         ],
       ),
