@@ -2,6 +2,7 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/order_detail/order_detail_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/review_list/review_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
@@ -74,7 +75,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
             ),
           ),
           Flexible(
-            child: MenuListPage(),
+            child: OrderDetailPage(),
           ),
         ],
       ),
@@ -88,7 +89,14 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           InkWell(
-            onTap: () {},
+            onTap: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => OrderDetailPage(),
+                ),
+              );
+            },
             child: Text(
               '${orderName}',
               style: TextStyle(
