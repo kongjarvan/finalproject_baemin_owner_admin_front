@@ -2,6 +2,7 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/my_icon_with_text.dart';
 import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/delivery_status.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
 import 'package:flutter/cupertino.dart';
@@ -31,7 +32,7 @@ class _MainPageState extends State<MainPage> {
             child: Row(
               children: [
                 _buildMenuIcon(),
-                StoreInfoMenu(),
+                DeliveryStatus(),
               ],
             ),
           ),
