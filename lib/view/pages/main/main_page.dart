@@ -5,6 +5,7 @@ import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/delivery_status.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/statistics/statistics_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -35,7 +36,7 @@ class _MainPageState extends State<MainPage> {
             child: Row(
               children: [
                 _buildMenuIcon(),
-                StoreInfoMenu(),
+                StatisticsPage(),
               ],
             ),
           ),
@@ -108,7 +109,10 @@ class _MainPageState extends State<MainPage> {
                               (value) {
                                 return DropdownMenuItem(
                                   value: value,
-                                  child: Text(value),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: gap_s),
+                                    child: Text(value),
+                                  ),
                                 );
                               },
                             ).toList(),
