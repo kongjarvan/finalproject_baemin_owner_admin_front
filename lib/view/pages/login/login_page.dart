@@ -51,7 +51,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
         ),
         onTap: () {
-          Navigator.pushNamed(context, '/main');
+          Navigator.popAndPushNamed(context, '/main');
         });
   }
 
