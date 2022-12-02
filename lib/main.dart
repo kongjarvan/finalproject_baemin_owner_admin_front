@@ -16,6 +16,7 @@ class MyApp extends StatelessWidget {
       title: "beamin_owner_ui",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        splashFactory: NoSplash.splashFactory,
         primarySwatch: Colors.blue,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
