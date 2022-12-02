@@ -13,8 +13,10 @@ class OrderDetailPage extends StatefulWidget {
 }
 
 class _OrderDetailPageState extends State<OrderDetailPage> {
-  final _valueList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
-  var _selectedValue = '60분';
+  final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
+  var _selectedDeliveryTime = '60분';
+  final _orderRefuseReasonList = ['기상악화', '재고소진', '기타'];
+  var _selectedOrderRefuseReason = '기상악화';
 
   @override
   Widget build(BuildContext context) {
@@ -112,7 +114,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           children: [
                             _buildOrderInfoForm('주문번호', '1'),
                             _buildOrderInfoForm('주문시간', '5/26 (수) 20:00'),
-                            _buildOrderInfoForm('예상배달시간', '${_selectedValue}'),
+                            _buildOrderInfoForm('예상배달시간', '${_selectedDeliveryTime}'),
                             _buildOrderInfoForm('완료시간', '진행중'),
                           ],
                         ),
@@ -168,7 +170,111 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   Widget _buildRefuseDeliveryButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
+              title: Text(
+                '주문을 거절할까요?',
+                textAlign: TextAlign.center,
+                style: TextStyle(color: kMainColor, fontSize: 32),
+              ),
+              content: Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: kUnselectedListColor),
+                  ),
+                  child: DropdownButton(
+                    borderRadius: BorderRadius.circular(4),
+                    underline: Container(
+                      height: 0,
+                    ),
+                    isExpanded: true,
+                    value: _selectedOrderRefuseReason,
+                    items: _orderRefuseReasonList.map(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Text(value),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          _selectedOrderRefuseReason = value as String;
+                          print(_selectedOrderRefuseReason);
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(gap_s),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 210,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: kMainColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                            child: Center(
+                              child: Text(
+                                '아니오',
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 20,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {},
+                        child: Container(
+                          width: 210,
+                          decoration: BoxDecoration(
+                            color: kMainColor,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: kMainColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                            child: Center(
+                              child: Text(
+                                '네',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -209,7 +315,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_xs),
               Text(
-                '[도로면] 그린구 그린로 그린아파트 423동 4호',
+                '[도로명] 그린구 그린로 그린아파트 423동 4호',
                 style: textTheme().headline1,
               ),
             ],
@@ -468,8 +574,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           underline: Container(
             height: 0,
           ),
-          value: _selectedValue,
-          items: _valueList.map(
+          value: _selectedDeliveryTime,
+          items: _deliveryTimeList.map(
             (value) {
               return DropdownMenuItem(
                 value: value,
@@ -482,7 +588,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ).toList(),
           onChanged: (value) {
             setState(() {
-              _selectedValue = value as String;
+              _selectedDeliveryTime = value as String;
             });
           }),
     );
