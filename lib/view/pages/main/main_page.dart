@@ -3,6 +3,7 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/my_icon_with_text.dart';
 import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/delivery_status.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -34,7 +35,7 @@ class _MainPageState extends State<MainPage> {
             child: Row(
               children: [
                 _buildMenuIcon(),
-                DeliveryStatus(),
+                StoreInfoMenu(),
               ],
             ),
           ),
@@ -81,10 +82,13 @@ class _MainPageState extends State<MainPage> {
                   builder: (context) => StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
                       titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-                      title: Text(
-                        '영업을 중지할까요?',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(color: kMainColor, fontSize: 32),
+                      title: SizedBox(
+                        width: 300,
+                        child: Text(
+                          '영업을 중지할까요?',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(color: kMainColor, fontSize: 32),
+                        ),
                       ),
                       content: Padding(
                         padding: const EdgeInsets.only(top: 30),
@@ -128,7 +132,7 @@ class _MainPageState extends State<MainPage> {
                               InkWell(
                                 onTap: () {},
                                 child: Container(
-                                  width: 210,
+                                  width: 240,
                                   decoration: BoxDecoration(
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(color: kMainColor),
@@ -151,7 +155,7 @@ class _MainPageState extends State<MainPage> {
                               InkWell(
                                 onTap: () {},
                                 child: Container(
-                                  width: 210,
+                                  width: 240,
                                   decoration: BoxDecoration(
                                     color: kMainColor,
                                     borderRadius: BorderRadius.circular(4),
