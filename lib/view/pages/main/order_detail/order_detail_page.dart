@@ -176,10 +176,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           builder: (context) => StatefulBuilder(
             builder: (context, setState) => AlertDialog(
               titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-              title: Text(
-                '주문을 거절할까요?',
-                textAlign: TextAlign.center,
-                style: TextStyle(color: kMainColor, fontSize: 32),
+              title: SizedBox(
+                width: 300,
+                child: Text(
+                  '주문을 거절할까요?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kMainColor, fontSize: 32),
+                ),
               ),
               content: Padding(
                 padding: const EdgeInsets.only(top: 30),
@@ -223,7 +226,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       InkWell(
                         onTap: () {},
                         child: Container(
-                          width: 210,
+                          width: 240,
                           decoration: BoxDecoration(
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(color: kMainColor),
@@ -246,7 +249,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       InkWell(
                         onTap: () {},
                         child: Container(
-                          width: 210,
+                          width: 240,
                           decoration: BoxDecoration(
                             color: kMainColor,
                             borderRadius: BorderRadius.circular(4),

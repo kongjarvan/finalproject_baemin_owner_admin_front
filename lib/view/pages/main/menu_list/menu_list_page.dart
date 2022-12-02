@@ -122,7 +122,92 @@ Row _buildMenuListHeader(context) {
         children: [
           InkWell(
             onTap: () {
-              Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateMenuPage()));
+              showDialog(
+                context: context,
+                builder: (context) => StatefulBuilder(
+                  builder: (context, setState) => AlertDialog(
+                    titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
+                    title: SizedBox(
+                      width: 300,
+                      child: Text(
+                        '메뉴를 숨길까요?',
+                        textAlign: TextAlign.center,
+                        style: TextStyle(color: kMainColor, fontSize: 32),
+                      ),
+                    ),
+                    content: Padding(
+                      padding: const EdgeInsets.only(bottom: 40),
+                      child: SizedBox(
+                        height: 32,
+                        child: Align(
+                          alignment: AlignmentDirectional.center,
+                          child: Text(
+                            '메뉴 외 n건',
+                            style: TextStyle(fontSize: 24, color: kUnselectedListColor),
+                          ),
+                        ),
+                      ),
+                    ),
+                    actions: [
+                      Padding(
+                        padding: const EdgeInsets.all(gap_s),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                width: 240,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: kMainColor),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                  child: Center(
+                                    child: Text(
+                                      '아니오',
+                                      style: TextStyle(
+                                        color: kMainColor,
+                                        fontSize: 20,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                            InkWell(
+                              onTap: () {},
+                              child: Container(
+                                width: 240,
+                                decoration: BoxDecoration(
+                                  color: kMainColor,
+                                  borderRadius: BorderRadius.circular(4),
+                                  border: Border.all(color: kMainColor),
+                                ),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                  child: Center(
+                                    child: Text(
+                                      '네',
+                                      style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 20,
+                                        height: 1,
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                ),
+              );
             },
             child: Container(
               decoration: BoxDecoration(
