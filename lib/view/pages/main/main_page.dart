@@ -25,11 +25,11 @@ class _MainPageState extends State<MainPage> {
 
   final _valueList = ['건강상의 사유', '재고소진', '기타'];
   var _selectedValue = '건강상의 사유';
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
+
       appBar: AppBar(
         backgroundColor: kMenuBarMainColor,
         elevation: 0,
