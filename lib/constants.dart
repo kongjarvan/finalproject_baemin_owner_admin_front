@@ -6,3 +6,4 @@ const kMenuBarMainColor = Color(0xFF393D4C);
 const kMenuBarSubColor = Color(0xFF282A2D);
 const kMenuIconColor = Color(0xFF7A819D);
 const kButtonSubColor = Color(0xFF6D62E8);
+const kUnselectedListColor = Color(0xFF7D7D7D);

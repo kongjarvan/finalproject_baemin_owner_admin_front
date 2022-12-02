@@ -8,3 +8,10 @@ const double gap_xs = 8;
 const double gap_xxs = 4;
 
 // MediaQuery 내 화면 사이즈를 알게 해 줌
+double getBodyWidth(BuildContext context) {
+  return MediaQuery.of(context).size.width;
+}
+
+double getBodyHeight(BuildContext context) {
+  return MediaQuery.of(context).size.height;
+}
