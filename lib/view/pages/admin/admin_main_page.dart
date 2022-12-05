@@ -17,7 +17,7 @@ class AdminMainPage extends StatefulWidget {
 class _AdminMainPageState extends State<AdminMainPage> {
   var _selectedIndex = 0;
 
-  void _indexNotify() {
+  void _callbackReportedReviewDetailPage() {
     setState(() {
       _selectedIndex = 2;
     });
@@ -33,7 +33,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
 
     final List<Widget> selectedMainView = [
       AdminRegisterOwnerPage(),
-      ReportedReviewListPage(notifyParent: _indexNotify),
+      ReportedReviewListPage(notifyParent: _callbackReportedReviewDetailPage),
       ReportedReviewDetailPage(),
     ];
 
@@ -58,20 +58,26 @@ class _AdminMainPageState extends State<AdminMainPage> {
                     _buildReportedReviewButton(),
                   ],
                 ),
-                Center(
-                  child: InkWell(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.all(gap_m),
-                      child: Text('로그아웃', style: textTheme().headline3),
-                    ),
-                  ),
-                )
+                _buildLogoutButton(context),
               ],
             ),
           ),
           _buildSelectedIndexPage(selectedTitle, selectedMainView),
         ],
+      ),
+    );
+  }
+
+  Center _buildLogoutButton(BuildContext context) {
+    return Center(
+      child: InkWell(
+        onTap: () {
+          Navigator.popAndPushNamed(context, '/login');
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(gap_m),
+          child: Text('로그아웃', style: textTheme().headline3),
+        ),
       ),
     );
   }
