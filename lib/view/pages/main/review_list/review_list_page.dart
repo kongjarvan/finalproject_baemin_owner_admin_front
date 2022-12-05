@@ -260,7 +260,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                       _selectedValue = value as String;
                     });
                   }),
-            )
+            ),
           ],
         ),
       ),

@@ -1,8 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/delivery_status.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/store_info_menu.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/statistics/statistics_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/admin_register_owner_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/reported_review_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,9 +14,8 @@ class AdminMainPage extends StatefulWidget {
 
 class _AdminMainPageState extends State<AdminMainPage> {
   final List<Widget> selectedMainView = [
-    DeliveryStatus(),
-    StatisticsPage(),
-    StoreInfoMenu(),
+    AdminRegisterOwnerPage(),
+    ReportedReviewListPage(),
   ];
 
   var _selectedIndex = 0;
@@ -78,8 +76,8 @@ class _AdminMainPageState extends State<AdminMainPage> {
                   ),
                 ),
                 _buildUnselectedMenuButton('전체 회원', 0),
-                _buildUnselectedMenuButton('일반 회원', 1),
-                _buildSelectedMenuButton('사업자회원', 2),
+                _buildUnselectedMenuButton('일반 회원', 0),
+                _buildSelectedMenuButton('사업자회원', 0),
                 Container(
                   color: kAdminSemiBlackColor,
                   child: Padding(
@@ -88,7 +86,11 @@ class _AdminMainPageState extends State<AdminMainPage> {
                       child: Align(
                         alignment: AlignmentDirectional.centerStart,
                         child: InkWell(
-                          onTap: () {},
+                          onTap: () {
+                            setState(() {
+                              _selectedIndex = 1;
+                            });
+                          },
                           child: Text(
                             '신고 리뷰 관리',
                             style: TextStyle(fontSize: 18.0, color: kWhiteColor, height: 1.0),
@@ -106,8 +108,10 @@ class _AdminMainPageState extends State<AdminMainPage> {
               children: [
                 Container(color: kWhiteColor, height: 80),
                 Divider(thickness: 1, height: 1, color: kAdminSemiBlackColor),
-                Container(
-                  child: selectedMainView[_selectedIndex],
+                Flexible(
+                  child: Container(
+                    child: selectedMainView[_selectedIndex],
+                  ),
                 ),
               ],
             ),
