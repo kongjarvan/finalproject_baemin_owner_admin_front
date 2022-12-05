@@ -14,6 +14,7 @@ class AdminMainPage extends StatefulWidget {
 }
 
 class _AdminMainPageState extends State<AdminMainPage> {
+
   var _selectedIndex = 0;
 
   void _indexNotify() {
@@ -90,6 +91,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
     );
   }
 
+
   Container _buildReportedReviewButton() {
     return Container(
       color: kAdminSemiBlackColor,
@@ -165,6 +167,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
   }
 
   Widget _buildUnselectedMenuButton(text, index1, index2) {
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: gap_xl, vertical: gap_m),
       child: Center(
