@@ -11,6 +11,7 @@ class AdminRegisterOwnerPage extends StatefulWidget {
 }
 
 class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
+
   final _valueList = ['처리유무', '아이디순', '대표자성함순'];
   var _selectedValue = '처리유무';
   var _isChecked = false;
