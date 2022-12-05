@@ -45,7 +45,9 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
                           Container(
                             width: 200,
                             decoration: BoxDecoration(
-                              border: Border.all(),
+                              border: Border.all(
+                                color: kUnselectedListColor,
+                              ),
                               borderRadius: BorderRadius.circular(4),
                               color: Colors.white,
                             ),
@@ -249,14 +251,14 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
       onTap: () {},
       child: Container(
         decoration: BoxDecoration(
-          border: Border.all(color: kUnselectedListColor),
+          border: Border.all(color: kButtonSubColor),
           borderRadius: BorderRadius.circular(4),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: gap_xl, vertical: gap_s),
           child: Text(
             '가입거절',
-            style: TextStyle(fontSize: 18, color: kUnselectedListColor, height: 1),
+            style: TextStyle(fontSize: 18, color: kButtonSubColor, height: 1),
           ),
         ),
       ),
