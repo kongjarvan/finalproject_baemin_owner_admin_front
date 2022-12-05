@@ -4,7 +4,8 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:flutter/material.dart';
 
 class ReportedReviewListPage extends StatefulWidget {
-  const ReportedReviewListPage({Key? key}) : super(key: key);
+  final Function() notifyParent;
+  const ReportedReviewListPage({Key? key, required this.notifyParent}) : super(key: key);
 
   @override
   State<ReportedReviewListPage> createState() => _ReportedReviewListPageState();
@@ -49,85 +50,74 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
           child: Column(
             children: [
               Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.start,
                 children: [
-                  Row(
-                    children: [
-                      Container(
-                        width: 200,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: kUnselectedListColor,
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                          color: Colors.white,
-                        ),
-                        child: DropdownButton(
-                            isExpanded: true,
-                            style: textTheme().headline1,
-                            underline: Container(
-                              height: 0,
-                            ),
-                            value: _selectedValue1,
-                            items: _valueList1.map(
-                              (value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: gap_xs),
-                                    child: Text(value),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedValue1 = value as String;
-                              });
-                            }),
+                  Container(
+                    width: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: kUnselectedListColor,
                       ),
-                      SizedBox(width: gap_s),
-                      Container(
-                        width: 200,
-                        decoration: BoxDecoration(
-                          border: Border.all(
-                            color: kUnselectedListColor,
-                          ),
-                          borderRadius: BorderRadius.circular(4),
-                          color: Colors.white,
+                      borderRadius: BorderRadius.circular(4),
+                      color: Colors.white,
+                    ),
+                    child: DropdownButton(
+                        isExpanded: true,
+                        style: textTheme().headline1,
+                        underline: Container(
+                          height: 0,
                         ),
-                        child: DropdownButton(
-                            isExpanded: true,
-                            style: textTheme().headline1,
-                            underline: Container(
-                              height: 0,
-                            ),
-                            value: _selectedValue2,
-                            items: _valueList2.map(
-                              (value) {
-                                return DropdownMenuItem(
-                                  value: value,
-                                  child: Padding(
-                                    padding: const EdgeInsets.only(left: gap_xs),
-                                    child: Text(value),
-                                  ),
-                                );
-                              },
-                            ).toList(),
-                            onChanged: (value) {
-                              setState(() {
-                                _selectedValue2 = value as String;
-                              });
-                            }),
-                      )
-                    ],
+                        value: _selectedValue1,
+                        items: _valueList1.map(
+                          (value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: gap_xs),
+                                child: Text(value),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedValue1 = value as String;
+                          });
+                        }),
                   ),
-                  Row(
-                    children: [
-                      _buildRefuseButton(),
-                      SizedBox(width: gap_s),
-                      _buildRegisterButton(),
-                    ],
+                  SizedBox(width: gap_s),
+                  Container(
+                    width: 200,
+                    decoration: BoxDecoration(
+                      border: Border.all(
+                        color: kUnselectedListColor,
+                      ),
+                      borderRadius: BorderRadius.circular(4),
+                      color: Colors.white,
+                    ),
+                    child: DropdownButton(
+                        isExpanded: true,
+                        style: textTheme().headline1,
+                        underline: Container(
+                          height: 0,
+                        ),
+                        value: _selectedValue2,
+                        items: _valueList2.map(
+                          (value) {
+                            return DropdownMenuItem(
+                              value: value,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: gap_xs),
+                                child: Text(value),
+                              ),
+                            );
+                          },
+                        ).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            _selectedValue2 = value as String;
+                          });
+                        }),
                   ),
                 ],
               ),
@@ -224,69 +214,45 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
         color: kWhiteColor,
       ),
       children: <Widget>[
-        Container(
-          height: 32,
+        InkWell(
+          onTap: widget.notifyParent,
+          child: SizedBox(
+            height: 32,
+            child: Align(
+              alignment: AlignmentDirectional.center,
+              child: Text('${reportNumber}', style: textTheme().headline1),
+            ),
+          ),
+        ),
+        InkWell(
+          onTap: widget.notifyParent,
           child: Align(
             alignment: AlignmentDirectional.center,
-            child: Text('${reportNumber}', style: textTheme().headline1),
+            child: Text('${ownerId}', style: textTheme().headline1),
           ),
         ),
-        Align(
-          alignment: AlignmentDirectional.center,
-          child: Text('${ownerId}', style: textTheme().headline1),
+        InkWell(
+          onTap: widget.notifyParent,
+          child: Align(
+            alignment: AlignmentDirectional.center,
+            child: Text('${storeRegisterNumber}', style: textTheme().headline1),
+          ),
         ),
-        Align(
-          alignment: AlignmentDirectional.center,
-          child: Text('${storeRegisterNumber}', style: textTheme().headline1),
+        InkWell(
+          onTap: widget.notifyParent,
+          child: Align(
+            alignment: AlignmentDirectional.center,
+            child: Text('${ownerName}', style: textTheme().headline1),
+          ),
         ),
-        Align(
-          alignment: AlignmentDirectional.center,
-          child: Text('${ownerName}', style: textTheme().headline1),
-        ),
-        Align(
-          alignment: AlignmentDirectional.center,
-          child: Text('${result}', style: textTheme().headline1),
+        InkWell(
+          onTap: widget.notifyParent,
+          child: Align(
+            alignment: AlignmentDirectional.center,
+            child: Text('${result}', style: textTheme().headline1),
+          ),
         ),
       ],
-    );
-  }
-
-  Widget _buildRegisterButton() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: kMainColor),
-          borderRadius: BorderRadius.circular(4),
-          color: kMainColor,
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: gap_xl, vertical: gap_s),
-          child: Text(
-            '가입승인',
-            style: TextStyle(fontSize: 18, color: kWhiteColor, height: 1),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildRefuseButton() {
-    return InkWell(
-      onTap: () {},
-      child: Container(
-        decoration: BoxDecoration(
-          border: Border.all(color: kButtonSubColor),
-          borderRadius: BorderRadius.circular(4),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: gap_xl, vertical: gap_s),
-          child: Text(
-            '가입거절',
-            style: TextStyle(fontSize: 18, color: kButtonSubColor, height: 1),
-          ),
-        ),
-      ),
     );
   }
 }
