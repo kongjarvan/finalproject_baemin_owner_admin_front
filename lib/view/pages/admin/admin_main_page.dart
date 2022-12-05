@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
+import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/admin_register_owner_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/reported_review_detail_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/reported_review_list_page.dart';
@@ -16,7 +17,7 @@ class AdminMainPage extends StatefulWidget {
 class _AdminMainPageState extends State<AdminMainPage> {
   var _selectedIndex = 0;
 
-  void _indexNotify() {
+  void _callbackReportedReviewDetailPage() {
     setState(() {
       _selectedIndex = 2;
     });
@@ -32,7 +33,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
 
     final List<Widget> selectedMainView = [
       AdminRegisterOwnerPage(),
-      ReportedReviewListPage(notifyParent: _indexNotify),
+      ReportedReviewListPage(notifyParent: _callbackReportedReviewDetailPage),
       ReportedReviewDetailPage(),
     ];
 
@@ -44,19 +45,39 @@ class _AdminMainPageState extends State<AdminMainPage> {
             width: 300,
             color: kAdminGreyColor,
             child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
-                _buildMenuBarHeader(),
-                _buildOwnerManageButton(),
-                _buildUnselectedMenuButton('전체 회원', 2, 1),
-                _buildUnselectedMenuButton('일반 회원', 1, 1),
-                _buildSelectedMenuButton('사업자회원', 0, 0),
-                _buildReportedReviewButton(),
+                Column(
+                  children: [
+                    _buildMenuBarHeader(),
+                    _buildOwnerManageButton(),
+                    _buildUnselectedMenuButton('전체 회원', 2, 1),
+                    _buildUnselectedMenuButton('일반 회원', 1, 1),
+                    _buildSelectedMenuButton('사업자회원', 0, 0),
+                    _buildReportedReviewButton(),
+                  ],
+                ),
+                _buildLogoutButton(context),
               ],
             ),
           ),
           _buildSelectedIndexPage(selectedTitle, selectedMainView),
         ],
+      ),
+    );
+  }
+
+  Center _buildLogoutButton(BuildContext context) {
+    return Center(
+      child: InkWell(
+        onTap: () {
+          Navigator.popAndPushNamed(context, '/login');
+        },
+        child: Padding(
+          padding: const EdgeInsets.all(gap_m),
+          child: Text('로그아웃', style: textTheme().headline3),
+        ),
       ),
     );
   }
