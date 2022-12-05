@@ -362,7 +362,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                 ],
               ),
             ),
-            Divider(thickness: gap_xs, height: gap_xxs, color: kBackgroundColor),
+            Divider(thickness: gap_xxs, height: gap_xxs, color: kBackgroundColor),
             Expanded(
               child: SingleChildScrollView(
                 scrollDirection: Axis.vertical,

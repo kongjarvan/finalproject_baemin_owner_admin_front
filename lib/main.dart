@@ -1,3 +1,4 @@
+import 'package:baemin_owner_admin_front/view/pages/admin/admin_main_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +26,7 @@ class MyApp extends StatelessWidget {
       routes: {
         '/main': (context) => MainPage(),
         '/login': (context) => LoginPage(),
+        '/admin': (context) => AdminMainPage(),
       },
       home: LoginPage(),
     );
