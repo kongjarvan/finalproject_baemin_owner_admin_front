@@ -149,7 +149,66 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   Widget _buildCompleteDeliveryButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              titlePadding: EdgeInsets.symmetric(horizontal: 120, vertical: 60),
+              title: SizedBox(
+                width: 300,
+                child: Column(
+                  children: [
+                    Text(
+                      '배달완료 알림이',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
+                    ),
+                    Text(
+                      '전송 되었습니다.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(gap_s),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 240,
+                        decoration: BoxDecoration(
+                          color: kMainColor,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: kMainColor),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: gap_s),
+                          child: Center(
+                            child: Text(
+                              '확인',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
