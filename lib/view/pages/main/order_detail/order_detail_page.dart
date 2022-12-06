@@ -1,12 +1,15 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/order_cancel_alert.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  const OrderDetailPage({Key? key}) : super(key: key);
+  final deliveryTitle;
+
+  const OrderDetailPage({required this.deliveryTitle, Key? key}) : super(key: key);
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -15,9 +18,8 @@ class OrderDetailPage extends StatefulWidget {
 class _OrderDetailPageState extends State<OrderDetailPage> {
   final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
   var _selectedDeliveryTime = '60분';
-  final _orderRefuseReasonList = ['기상악화', '재고소진', '기타'];
-  var _selectedOrderRefuseReason = '기상악화';
 
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context),
+                _buildOrderDetailHeader(context, widget.deliveryTitle),
                 SizedBox(height: gap_l),
                 SizedBox(
                   width: getBodyWidth(context),
@@ -147,7 +149,66 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   Widget _buildCompleteDeliveryButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              titlePadding: EdgeInsets.symmetric(horizontal: 120, vertical: 60),
+              title: SizedBox(
+                width: 300,
+                child: Column(
+                  children: [
+                    Text(
+                      '배달완료 알림이',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
+                    ),
+                    Text(
+                      '전송 되었습니다.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                Center(
+                  child: Padding(
+                    padding: const EdgeInsets.all(gap_s),
+                    child: InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: 240,
+                        decoration: BoxDecoration(
+                          color: kMainColor,
+                          borderRadius: BorderRadius.circular(4),
+                          border: Border.all(color: kMainColor),
+                        ),
+                        child: Padding(
+                          padding: const EdgeInsets.symmetric(vertical: gap_s),
+                          child: Center(
+                            child: Text(
+                              '확인',
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                                height: 1,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -174,107 +235,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => AlertDialog(
-              titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-              title: SizedBox(
-                width: 300,
-                child: Text(
-                  '주문을 거절할까요?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: kMainColor, fontSize: 32),
-                ),
-              ),
-              content: Padding(
-                padding: const EdgeInsets.only(top: 30),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: kUnselectedListColor),
-                  ),
-                  child: DropdownButton(
-                    borderRadius: BorderRadius.circular(4),
-                    underline: Container(
-                      height: 0,
-                    ),
-                    isExpanded: true,
-                    value: _selectedOrderRefuseReason,
-                    items: _orderRefuseReasonList.map(
-                      (value) {
-                        return DropdownMenuItem(
-                          value: value,
-                          child: Text(value),
-                        );
-                      },
-                    ).toList(),
-                    onChanged: (value) {
-                      setState(
-                        () {
-                          _selectedOrderRefuseReason = value as String;
-                          print(_selectedOrderRefuseReason);
-                        },
-                      );
-                    },
-                  ),
-                ),
-              ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.all(gap_s),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 240,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: kMainColor),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: gap_s),
-                            child: Center(
-                              child: Text(
-                                '아니오',
-                                style: TextStyle(
-                                  color: kMainColor,
-                                  fontSize: 20,
-                                  height: 1,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      InkWell(
-                        onTap: () {},
-                        child: Container(
-                          width: 240,
-                          decoration: BoxDecoration(
-                            color: kMainColor,
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: kMainColor),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: gap_s),
-                            child: Center(
-                              child: Text(
-                                '네',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  height: 1,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+            builder: (context, setState) => OrderCancelAlert(),
           ),
         );
       },
@@ -364,28 +325,36 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             ),
             Divider(thickness: gap_xxs, height: gap_xxs, color: kBackgroundColor),
             Expanded(
-              child: SingleChildScrollView(
-                scrollDirection: Axis.vertical,
-                child: Padding(
-                  padding: const EdgeInsets.all(gap_m),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildMenuPrice('메뉴', '수량', '금액'),
-                      _buildMenuPrice('메뉴1', 1, '6,000원'),
-                      _buildMenuPrice('메뉴2', 1, '9,000원'),
-                      _buildMenuPrice('메뉴3', 1, '6,000원'),
-                      _buildMenuPrice('메뉴4', 1, '9,000원'),
-                      _buildMenuPrice('메뉴5', 1, '6,000원'),
-                      _buildMenuPrice('메뉴6', 1, '9,000원'),
-                      _buildMenuPrice('메뉴7', 1, '6,000원'),
-                      _buildMenuPrice('메뉴8', 1, '9,000원'),
-                      _buildMenuPrice('메뉴9', 1, '6,000원'),
-                      _buildMenuPrice('메뉴10', 1, '9,000원'),
-                      _buildMenuPrice('메뉴11', 1, '6,000원'),
-                      _buildMenuPrice('메뉴12', 1, '9,000원'),
-                      _buildTotalPrice(12, '90,000원'),
-                    ],
+              child: RawScrollbar(
+                thumbColor: kUnselectedListColor,
+                radius: Radius.circular(5),
+                controller: _scrollController,
+                thickness: 10,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.vertical,
+                  controller: _scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.all(gap_m),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        _buildMenuPrice('메뉴', '수량', '금액'),
+                        _buildMenuPrice('메뉴1', 1, '6,000원'),
+                        _buildMenuPrice('메뉴2', 1, '9,000원'),
+                        _buildMenuPrice('메뉴3', 1, '6,000원'),
+                        _buildMenuPrice('메뉴4', 1, '9,000원'),
+                        _buildMenuPrice('메뉴5', 1, '6,000원'),
+                        _buildMenuPrice('메뉴6', 1, '9,000원'),
+                        _buildMenuPrice('메뉴7', 1, '6,000원'),
+                        _buildMenuPrice('메뉴8', 1, '9,000원'),
+                        _buildMenuPrice('메뉴9', 1, '6,000원'),
+                        _buildMenuPrice('메뉴10', 1, '9,000원'),
+                        _buildMenuPrice('메뉴11', 1, '6,000원'),
+                        _buildMenuPrice('메뉴12', 1, '9,000원'),
+                        _buildTotalPrice(12, '90,000원'),
+                      ],
+                    ),
                   ),
                 ),
               ),
@@ -396,12 +365,12 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Column _buildOrderDetailHeader(BuildContext context) {
+  Column _buildOrderDetailHeader(BuildContext context, deliveryTitle) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '배달 1',
+          '${deliveryTitle}',
           style: TextStyle(color: kMainColor, fontSize: 32),
         ),
         Row(

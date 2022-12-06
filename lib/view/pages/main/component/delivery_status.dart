@@ -1,9 +1,8 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/order_cancel_alert.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/order_detail/order_detail_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/review_list/review_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -14,8 +13,17 @@ class DeliveryStatus extends StatefulWidget {
   State<DeliveryStatus> createState() => _DeliveryStatusState();
 }
 
+final List<Widget> selectedMainView = [
+  OrderDetailPage(deliveryTitle: '배달1'),
+  OrderDetailPage(deliveryTitle: '배달2'),
+  OrderDetailPage(deliveryTitle: '배달3'),
+];
+
+var _selectedIndex = 0;
+
 class _DeliveryStatusState extends State<DeliveryStatus> {
-  var _isChecked = false;
+  List<bool> _isChecked = [false, false];
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build(BuildContext context) {
     return Flexible(
@@ -33,8 +41,8 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildDeliveryOptionCheck('배달'),
-                        _buildDeliveryOptionCheck('포장'),
+                        _buildDeliveryOptionCheck('배달', 0),
+                        _buildDeliveryOptionCheck('포장', 1),
                       ],
                     ),
                   ),
@@ -42,31 +50,35 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                   _buildDeliveryStatus(),
                   Divider(thickness: 2, height: 2),
                   Expanded(
-                    child: SingleChildScrollView(
-                      primary: false,
-                      child: Column(
-                        children: [
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                          _buildOrderInfo('배달2', 15),
-                          _buildOrderInfo('배달1', 3),
-                        ],
+                    child: RawScrollbar(
+                      thumbColor: kMainColor,
+                      radius: Radius.circular(5),
+                      controller: _scrollController,
+                      thickness: 10,
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        primary: false,
+                        child: Column(
+                          children: [
+                            _buildOrderInfo('배달1', 15, 0),
+                            _buildOrderInfo('배달2', 3, 1),
+                            _buildOrderInfo('배달3', 15, 2),
+                            _buildOrderInfo('배달1', 15, 0),
+                            _buildOrderInfo('배달2', 3, 1),
+                            _buildOrderInfo('배달3', 15, 2),
+                            _buildOrderInfo('배달1', 15, 0),
+                            _buildOrderInfo('배달2', 3, 1),
+                            _buildOrderInfo('배달3', 15, 2),
+                            _buildOrderInfo('배달1', 15, 0),
+                            _buildOrderInfo('배달2', 3, 1),
+                            _buildOrderInfo('배달3', 15, 2),
+                            _buildOrderInfo('배달1', 15, 0),
+                            _buildOrderInfo('배달2', 3, 1),
+                            _buildOrderInfo('배달3', 15, 2),
+                          ],
+                        ),
                       ),
                     ),
                   ),
@@ -75,14 +87,14 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
             ),
           ),
           Flexible(
-            child: OrderDetailPage(),
+            child: selectedMainView[_selectedIndex],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildOrderInfo(orderName, menuCount) {
+  Widget _buildOrderInfo(orderName, menuCount, index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: gap_s, horizontal: gap_m),
       child: Column(
@@ -90,12 +102,11 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
         children: [
           InkWell(
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => OrderDetailPage(),
-                ),
-              );
+              setState(() {
+                setState(() {
+                  _selectedIndex = index;
+                });
+              });
             },
             child: Text(
               '${orderName}',
@@ -117,7 +128,14 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
               ),
               SizedBox(width: gap_s),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) => StatefulBuilder(
+                      builder: (context, setState) => OrderCancelAlert(),
+                    ),
+                  );
+                },
                 child: Text(
                   '취소',
                   style: TextStyle(
@@ -161,17 +179,17 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
     );
   }
 
-  Widget _buildDeliveryOptionCheck(text) {
+  Widget _buildDeliveryOptionCheck(text, index) {
     return Row(
       children: [
         Checkbox(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           activeColor: kMainColor,
           checkColor: Colors.white,
-          value: _isChecked,
+          value: _isChecked[index],
           onChanged: (value) {
             setState(() {
-              _isChecked = value!;
+              _isChecked[index] = value!;
             });
           },
         ),
@@ -184,74 +202,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildInfoMenu1(text) {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 80,
-            child: InkWell(
-              onTap: () {},
-              child: Text(
-                textAlign: TextAlign.end,
-                '${text}',
-                style: textTheme().headline3,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 120,
-            child: Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(gap_xs),
-                  child: Icon(
-                    CupertinoIcons.chevron_down,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoMenu2(text) {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 80,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ReviewListPage(),
-                    ));
-              },
-              child: Text(
-                textAlign: TextAlign.end,
-                '${text}',
-                style: TextStyle(
-                  color: kMenuIconColor,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 120),
-        ],
-      ),
     );
   }
 }
