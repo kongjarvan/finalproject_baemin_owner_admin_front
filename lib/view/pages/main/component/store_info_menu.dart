@@ -102,6 +102,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: gap_s),
                   child: Text(textAlign: TextAlign.start, '가게등록', style: textTheme().headline3),
+
                 ),
               ),
             ),
@@ -227,6 +228,73 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
                   height: 1,
                 ),
               ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildStoreManageMenu() {
+    return SingleChildScrollView(
+      primary: false,
+      child: ExpansionPanelList(
+          elevation: 0,
+          expandedHeaderPadding: const EdgeInsets.all(0),
+          children: [
+            ExpansionPanel(
+              backgroundColor: (_isOpen == true) ? kAdminBlackColor : kMenuBarMainColor,
+              canTapOnHeader: true,
+              headerBuilder: (context, isExpanded) {
+                return Padding(
+                  padding: const EdgeInsets.all(gap_s),
+                  child: SizedBox(
+                    width: 200,
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: gap_s),
+                      child: Text(textAlign: TextAlign.start, '가게관리', style: textTheme().headline3),
+                    ),
+                  ),
+                );
+              },
+              body: Column(
+                children: [
+                  _buildInfoMenu('메뉴관리', 2),
+                  _buildInfoMenu('리뷰관리', 3),
+                ],
+              ),
+              isExpanded: _isOpen,
+            ),
+          ],
+          expansionCallback: (panelIndex, isExpanded) {
+            setState(() {
+              _isOpen = !_isOpen;
+            });
+          }),
+    );
+  }
+
+  Widget _buildInfoMenu(text, index) {
+    return Container(
+      color: (_selectedIndex == index) ? kMainColor : kMenuBarMainColor,
+      child: Padding(
+        padding: const EdgeInsets.all(gap_s),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          child: SizedBox(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: gap_m),
+              child: Text('${text}',
+                  style: TextStyle(
+                    color: (_selectedIndex == index) ? kWhiteColor : kMenuIconColor,
+                    fontSize: 16,
+                    height: 1,
+                  )),
             ),
           ),
         ),

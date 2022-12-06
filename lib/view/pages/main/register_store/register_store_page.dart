@@ -14,6 +14,7 @@ class RegisterStorePage extends StatefulWidget {
 
 final ScrollController _scrollController = ScrollController();
 
+
 class _RegisterStorePageState extends State<RegisterStorePage> {
   @override
   Widget build(BuildContext context) {
