@@ -1,6 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/insert_menu/insert_menu_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/register_store/register_store_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/review_list/review_list_page.dart';
@@ -26,13 +27,26 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     });
   }
 
+  void _callbackInsertMenuPage() {
+    setState(() {
+      _selectedIndex = 4;
+    });
+  }
+
+  void _callbackMenuListPage() {
+    setState(() {
+      _selectedIndex = 2;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> selectedMainView = [
       RegisterStorePage(notifyParent: _callbackUpdateStorePage),
       UpdateStorePage(),
-      MenuListPage(),
+      MenuListPage(notifyParent: _callbackInsertMenuPage),
       ReviewListPage(),
+      InsertMenuPage(notifyParent: _callbackMenuListPage),
     ];
 
     return Flexible(

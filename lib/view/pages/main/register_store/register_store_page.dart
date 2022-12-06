@@ -12,6 +12,8 @@ class RegisterStorePage extends StatefulWidget {
   State<RegisterStorePage> createState() => _RegisterStorePageState();
 }
 
+final ScrollController _scrollController = ScrollController();
+
 class _RegisterStorePageState extends State<RegisterStorePage> {
   @override
   Widget build(BuildContext context) {
@@ -22,14 +24,22 @@ class _RegisterStorePageState extends State<RegisterStorePage> {
           children: [
             Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
             Expanded(
-              child: SingleChildScrollView(
-                child: Padding(
-                  padding: const EdgeInsets.all(gap_l),
-                  child: Column(
-                    children: [
-                      RegisterUpdateStoreForm(title: '가게등록'),
-                      _buildRegisterButton(),
-                    ],
+              child: RawScrollbar(
+                thumbColor: kUnselectedListColor,
+                radius: Radius.circular(5),
+                controller: _scrollController,
+                thickness: 10,
+                thumbVisibility: true,
+                child: SingleChildScrollView(
+                  controller: _scrollController,
+                  child: Padding(
+                    padding: const EdgeInsets.all(gap_l),
+                    child: Column(
+                      children: [
+                        RegisterUpdateStoreForm(title: '가게등록'),
+                        _buildRegisterButton(),
+                      ],
+                    ),
                   ),
                 ),
               ),
