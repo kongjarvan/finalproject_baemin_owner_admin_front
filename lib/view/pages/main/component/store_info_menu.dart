@@ -4,6 +4,7 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/insert_menu/insert_menu_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/menu_list/menu_list_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/register_store/register_store_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/reported_review/reported_review_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/review_list/review_list_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/update_store/update_store_page.dart';
 import 'package:flutter/material.dart';
@@ -29,7 +30,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
 
   void _callbackInsertMenuPage() {
     setState(() {
-      _selectedIndex = 4;
+      _selectedIndex = 3;
     });
   }
 
@@ -39,14 +40,27 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     });
   }
 
+  void _callbackReviewListPage() {
+    setState(() {
+      _selectedIndex = 4;
+    });
+  }
+
+  void _callbackReportedReviewPage() {
+    setState(() {
+      _selectedIndex = 5;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     final List<Widget> selectedMainView = [
       RegisterStorePage(notifyParent: _callbackUpdateStorePage),
       UpdateStorePage(),
       MenuListPage(notifyParent: _callbackInsertMenuPage),
-      ReviewListPage(),
       InsertMenuPage(notifyParent: _callbackMenuListPage),
+      ReviewListPage(notifyParent: _callbackReportedReviewPage),
+      ReportedReviewPage(notifyParent: _callbackReviewListPage),
     ];
 
     return Flexible(
@@ -145,8 +159,8 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
               },
               body: Column(
                 children: [
-                  _buildInfoMenu('메뉴관리', 2),
-                  _buildInfoMenu('리뷰관리', 3),
+                  _buildInfoMenu1('메뉴관리', 2),
+                  _buildInfoMenu2('리뷰관리', 4),
                 ],
               ),
               isExpanded: _isOpen,
@@ -160,7 +174,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     );
   }
 
-  Widget _buildInfoMenu(text, index) {
+  Widget _buildInfoMenu1(text, index) {
     return Container(
       color: (_selectedIndex == index) ? kMainColor : kMenuBarMainColor,
       child: Padding(
@@ -175,12 +189,44 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
             width: 200,
             child: Padding(
               padding: const EdgeInsets.symmetric(horizontal: gap_m),
-              child: Text('${text}',
-                  style: TextStyle(
-                    color: (_selectedIndex == index) ? kWhiteColor : kMenuIconColor,
-                    fontSize: 16,
-                    height: 1,
-                  )),
+              child: Text(
+                '${text}',
+                style: TextStyle(
+                  color: (_selectedIndex == index) ? kWhiteColor : kMenuIconColor,
+                  fontSize: 16,
+                  height: 1,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildInfoMenu2(text, index) {
+    return Container(
+      color: (_selectedIndex == index || _selectedIndex == 5) ? kMainColor : kMenuBarMainColor,
+      child: Padding(
+        padding: const EdgeInsets.all(gap_s),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          child: SizedBox(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: gap_m),
+              child: Text(
+                '${text}',
+                style: TextStyle(
+                  color: (_selectedIndex == index || _selectedIndex == 5) ? kWhiteColor : kMenuIconColor,
+                  fontSize: 16,
+                  height: 1,
+                ),
+              ),
             ),
           ),
         ),

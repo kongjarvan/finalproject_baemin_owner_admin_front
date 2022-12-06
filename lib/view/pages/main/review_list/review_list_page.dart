@@ -2,12 +2,12 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/order_info.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/review_type_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReviewListPage extends StatefulWidget {
-  const ReviewListPage({Key? key}) : super(key: key);
+  final Function() notifyParent;
+  const ReviewListPage({required this.notifyParent, Key? key}) : super(key: key);
 
   @override
   State<ReviewListPage> createState() => _ReviewListPageState();
@@ -40,9 +40,51 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      ReviewTypeButton(text: '전체리뷰'),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: widget.notifyParent,
+                            child: Padding(
+                              padding: const EdgeInsets.all(gap_m),
+                              child: Center(
+                                child: Text(
+                                  '전체리뷰',
+                                  style: TextStyle(fontSize: 20, color: kUnselectedListColor),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
                       SizedBox(width: gap_s),
-                      ReviewTypeButton(text: '신고된 리뷰'),
+                      Expanded(
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            border: Border.all(
+                              color: Colors.white,
+                            ),
+                          ),
+                          child: InkWell(
+                            onTap: widget.notifyParent,
+                            child: Padding(
+                              padding: const EdgeInsets.all(gap_m),
+                              child: Center(
+                                child: Text(
+                                  '신고된 리뷰',
+                                  style: TextStyle(fontSize: 20, color: kUnselectedListColor),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
                     ],
                   ),
                   SizedBox(height: gap_m),
