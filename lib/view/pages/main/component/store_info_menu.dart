@@ -51,25 +51,28 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
   }
 
   Widget _buildRegisterStoreMenu() {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          InkWell(
-            onTap: () {
-              setState(() {
-                _selectedIndex = 0;
-              });
-            },
-            child: SizedBox(
-              width: 200,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: gap_s),
-                child: Text(textAlign: TextAlign.start, '가게등록', style: textTheme().headline3),
+    return Container(
+      color: (_selectedIndex == 0) ? kMainColor : null,
+      child: Padding(
+        padding: const EdgeInsets.all(gap_s),
+        child: Row(
+          children: [
+            InkWell(
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 0;
+                });
+              },
+              child: SizedBox(
+                width: 200,
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: gap_s),
+                  child: Text(textAlign: TextAlign.start, '가게등록', style: textTheme().headline3),
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
@@ -106,7 +109,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
           expandedHeaderPadding: const EdgeInsets.all(0),
           children: [
             ExpansionPanel(
-              backgroundColor: kMenuBarMainColor,
+              backgroundColor: (_isOpen == true) ? kAdminBlackColor : kMenuBarMainColor,
               canTapOnHeader: true,
               headerBuilder: (context, isExpanded) {
                 return Padding(
@@ -138,19 +141,27 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
   }
 
   Widget _buildInfoMenu(text, index) {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: InkWell(
-        onTap: () {
-          setState(() {
-            _selectedIndex = index;
-          });
-        },
-        child: SizedBox(
-          width: 200,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: gap_m),
-            child: Text('${text}', style: TextStyle(color: kMenuIconColor, fontSize: 16)),
+    return Container(
+      color: (_selectedIndex == index) ? kMainColor : kMenuBarMainColor,
+      child: Padding(
+        padding: const EdgeInsets.all(gap_s),
+        child: InkWell(
+          onTap: () {
+            setState(() {
+              _selectedIndex = index;
+            });
+          },
+          child: SizedBox(
+            width: 200,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: gap_m),
+              child: Text('${text}',
+                  style: TextStyle(
+                    color: (_selectedIndex == index) ? kWhiteColor : kMenuIconColor,
+                    fontSize: 16,
+                    height: 1,
+                  )),
+            ),
           ),
         ),
       ),

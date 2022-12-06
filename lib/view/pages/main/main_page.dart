@@ -31,55 +31,62 @@ class _MainPageState extends State<MainPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kBackgroundColor,
-      appBar: AppBar(
-        automaticallyImplyLeading: false,
-        backgroundColor: kMenuBarMainColor,
-        elevation: 0,
-        title: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: gap_s),
-          child: Row(
-            children: [
-              Icon(CupertinoIcons.circle_filled, color: (_isOpen == true) ? kMainColor : kUnselectedListColor, size: 20),
-              SizedBox(width: gap_s),
-              Padding(
-                padding: const EdgeInsets.only(bottom: gap_xxs),
-                child: Text((_isOpen == true) ? '영업중' : '영업중지', style: TextStyle(color: Colors.white, fontSize: 18)),
-              ),
-            ],
-          ),
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: Row(
         children: [
-          NavigationRail(
-              backgroundColor: kMenuBarSubColor,
-              labelType: NavigationRailLabelType.all,
-              minWidth: 80,
-              destinations: <NavigationRailDestination>[
-                NavigationRailDestination(
-                  icon: Icon(CupertinoIcons.doc_text, color: kMenuIconColor),
-                  label: Text('영업관리', style: TextStyle(color: kMenuIconColor)),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(CupertinoIcons.doc_text, color: kMenuIconColor),
-                  label: Text('통계', style: TextStyle(color: kMenuIconColor)),
-                ),
-                NavigationRailDestination(
-                  icon: Icon(CupertinoIcons.doc_text, color: kMenuIconColor),
-                  label: Text('가게정보', style: TextStyle(color: kMenuIconColor)),
-                ),
-              ],
-              selectedIndex: _selectedIndex,
-              groupAlignment: -1,
-              onDestinationSelected: (index) {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              },
-              trailing: (_isOpen == true) ? _buildStoreClose(context) : _buildStoreOpen(context)),
+          _buildMainMenuBar(context),
           selectedMainView[_selectedIndex],
         ],
       ),
+    );
+  }
+
+  NavigationRail _buildMainMenuBar(BuildContext context) {
+    return NavigationRail(
+        backgroundColor: kMenuBarSubColor,
+        labelType: NavigationRailLabelType.all,
+        minWidth: 80,
+        destinations: <NavigationRailDestination>[
+          _buildMainMenuIcon('영업관리', CupertinoIcons.doc_text),
+          _buildMainMenuIcon('통계', CupertinoIcons.chart_bar_square),
+          _buildMainMenuIcon('가게정보', CupertinoIcons.building_2_fill),
+        ],
+        selectedIndex: _selectedIndex,
+        groupAlignment: -1,
+        onDestinationSelected: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
+        trailing: (_isOpen == true) ? _buildStoreClose(context) : _buildStoreOpen(context));
+  }
+
+  AppBar _buildAppBar() {
+    return AppBar(
+      automaticallyImplyLeading: false,
+      backgroundColor: kMenuBarMainColor,
+      elevation: 2,
+      shadowColor: kAdminBlackColor,
+      title: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: gap_s),
+        child: Row(
+          children: [
+            Icon(CupertinoIcons.circle_filled, color: (_isOpen == true) ? kMainColor : kUnselectedListColor, size: 20),
+            SizedBox(width: gap_s),
+            Padding(
+              padding: const EdgeInsets.only(bottom: gap_xxs),
+              child: Text((_isOpen == true) ? '영업중' : '영업중지', style: TextStyle(color: Colors.white, fontSize: 18)),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  NavigationRailDestination _buildMainMenuIcon(text, icon) {
+    return NavigationRailDestination(
+      icon: Icon(icon, color: kMenuIconColor, size: 32),
+      label: Text('${text}', style: TextStyle(color: kMenuIconColor)),
     );
   }
 
