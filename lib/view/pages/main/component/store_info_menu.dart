@@ -15,20 +15,26 @@ class StoreInfoMenu extends StatefulWidget {
   State<StoreInfoMenu> createState() => _StoreInfoMenuState();
 }
 
-final List<Widget> selectedMainView = [
-  RegisterStorePage(),
-  UpdateStorePage(),
-  MenuListPage(),
-  ReviewListPage(),
-];
-
 var _selectedIndex = 0;
 
 bool _isOpen = false;
 
 class _StoreInfoMenuState extends State<StoreInfoMenu> {
+  void _callbackUpdateStorePage() {
+    setState(() {
+      _selectedIndex = 1;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
+    final List<Widget> selectedMainView = [
+      RegisterStorePage(notifyParent: _callbackUpdateStorePage),
+      UpdateStorePage(),
+      MenuListPage(),
+      ReviewListPage(),
+    ];
+
     return Flexible(
       child: Row(
         children: [

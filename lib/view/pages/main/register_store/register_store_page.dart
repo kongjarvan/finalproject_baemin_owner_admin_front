@@ -1,16 +1,18 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-
 import 'package:baemin_owner_admin_front/view/pages/main/component/register_update_store_form.dart';
-
-import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/update_store/update_store_page.dart';
 import 'package:flutter/material.dart';
 
-class RegisterStorePage extends StatelessWidget {
-  const RegisterStorePage({Key? key}) : super(key: key);
+class RegisterStorePage extends StatefulWidget {
+  final Function() notifyParent;
+  const RegisterStorePage({required this.notifyParent, Key? key}) : super(key: key);
 
+  @override
+  State<RegisterStorePage> createState() => _RegisterStorePageState();
+}
+
+class _RegisterStorePageState extends State<RegisterStorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +28,7 @@ class RegisterStorePage extends StatelessWidget {
                   child: Column(
                     children: [
                       RegisterUpdateStoreForm(title: '가게등록'),
-                      _buildRegisterButton(context),
+                      _buildRegisterButton(),
                     ],
                   ),
                 ),
@@ -38,11 +40,9 @@ class RegisterStorePage extends StatelessWidget {
     );
   }
 
-  InkWell _buildRegisterButton(context) {
+  Widget _buildRegisterButton() {
     return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => UpdateStorePage()));
-      },
+      onTap: widget.notifyParent,
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(gap_xxs),
