@@ -56,6 +56,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
                 Column(
                   children: [
                     _buildMenuBarHeader(),
+
                     SingleChildScrollView(
                       child: ExpansionPanelList(
                         expandedHeaderPadding: const EdgeInsets.all(0),
