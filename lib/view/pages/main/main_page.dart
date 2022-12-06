@@ -32,6 +32,7 @@ class _MainPageState extends State<MainPage> {
     return Scaffold(
       backgroundColor: kBackgroundColor,
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: kMenuBarMainColor,
         elevation: 0,
         title: Row(
