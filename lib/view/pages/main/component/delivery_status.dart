@@ -3,7 +3,6 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/order_cancel_alert.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/order_detail/order_detail_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/review_list/review_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
@@ -203,74 +202,6 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
           ),
         ),
       ],
-    );
-  }
-
-  Widget _buildInfoMenu1(text) {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 80,
-            child: InkWell(
-              onTap: () {},
-              child: Text(
-                textAlign: TextAlign.end,
-                '${text}',
-                style: textTheme().headline3,
-              ),
-            ),
-          ),
-          SizedBox(
-            width: 120,
-            child: Align(
-              alignment: AlignmentDirectional.centerEnd,
-              child: InkWell(
-                onTap: () {},
-                child: Padding(
-                  padding: const EdgeInsets.all(gap_xs),
-                  child: Icon(
-                    CupertinoIcons.chevron_down,
-                    size: 16,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildInfoMenu2(text) {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          SizedBox(
-            width: 80,
-            child: InkWell(
-              onTap: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ReviewListPage(),
-                    ));
-              },
-              child: Text(
-                textAlign: TextAlign.end,
-                '${text}',
-                style: TextStyle(
-                  color: kMenuIconColor,
-                ),
-              ),
-            ),
-          ),
-          SizedBox(width: 120),
-        ],
-      ),
     );
   }
 }

@@ -7,9 +7,15 @@ import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class InsertMenuPage extends StatelessWidget {
-  const InsertMenuPage({Key? key}) : super(key: key);
+class InsertMenuPage extends StatefulWidget {
+  final Function() notifyParent;
+  const InsertMenuPage({required this.notifyParent, Key? key}) : super(key: key);
 
+  @override
+  State<InsertMenuPage> createState() => _InsertMenuPageState();
+}
+
+class _InsertMenuPageState extends State<InsertMenuPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,7 +26,13 @@ class InsertMenuPage extends StatelessWidget {
             padding: const EdgeInsets.all(gap_l),
             child: Column(
               children: [
-                _buildInsertMenuHeader(context),
+                Column(
+                  children: [
+                    _buildInsertMenuHeader(),
+                    SizedBox(height: gap_m),
+                    _buildMenuInfoHeader(),
+                  ],
+                ),
                 SizedBox(height: gap_xxs),
                 InsertUpdateMenuForm(),
               ],
@@ -31,62 +43,53 @@ class InsertMenuPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInsertMenuHeader(BuildContext context) {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  Container _buildMenuInfoHeader() {
+    return Container(
+      color: Colors.white,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: gap_m, vertical: gap_s),
+        child: Row(
           children: [
+            Icon(CupertinoIcons.person_alt),
+            SizedBox(width: gap_s),
             Text(
-              '메뉴 추가하기',
-              style: TextStyle(fontSize: 32),
+              '메뉴 정보',
+              style: textTheme().headline2,
             ),
-            InkWell(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => MainPage(),
-                  ),
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  border: Border.all(color: kMainColor),
-                  borderRadius: BorderRadius.circular(gap_xxs),
-                  color: kMainColor,
-                ),
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: gap_s,
-                    horizontal: gap_xl,
-                  ),
-                  child: Text(
-                    '메뉴 추가하기',
-                    style: textTheme().headline3,
-                  ),
-                ),
-              ),
-            )
           ],
         ),
-        SizedBox(height: gap_m),
-        Container(
-          color: Colors.white,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: gap_m, vertical: gap_s),
-            child: Row(
-              children: [
-                Icon(CupertinoIcons.person_alt),
-                SizedBox(width: gap_s),
-                Text(
-                  '메뉴 정보',
-                  style: textTheme().headline2,
-                ),
-              ],
+      ),
+    );
+  }
+
+  Row _buildInsertMenuHeader() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          '메뉴 추가하기',
+          style: TextStyle(fontSize: 32),
+        ),
+        InkWell(
+          onTap: widget.notifyParent,
+          child: Container(
+            decoration: BoxDecoration(
+              border: Border.all(color: kMainColor),
+              borderRadius: BorderRadius.circular(gap_xxs),
+              color: kMainColor,
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                vertical: gap_s,
+                horizontal: gap_xl,
+              ),
+              child: Text(
+                '메뉴 추가하기',
+                style: textTheme().headline3,
+              ),
             ),
           ),
-        ),
+        )
       ],
     );
   }
