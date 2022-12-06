@@ -15,8 +15,12 @@ class ReviewListPage extends StatefulWidget {
 
 class _ReviewListPageState extends State<ReviewListPage> {
   bool? _isChecked = false;
-  final _valueList = ['최신순', '별점순', '어떤순'];
-  var _selectedValue = '최신순';
+
+  final _valueList1 = ['최신순', '별점순', '어떤순'];
+  var _selectedValue1 = '최신순';
+
+  final _valueList2 = ['욕설', '기타'];
+  var _selectedValue2 = '욕설';
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -151,7 +155,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('판매자 답글', style: TextStyle(fontSize: 20)),
+            Text('${text}', style: TextStyle(fontSize: 20)),
             SizedBox(height: gap_s),
             TextFormField(
               maxLines: 7,
@@ -170,24 +174,222 @@ class _ReviewListPageState extends State<ReviewListPage> {
         ),
         SizedBox(height: gap_m),
         InkWell(
-            child: Container(
-              width: getBodyWidth(context) * 0.15,
-              decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: kMainColor),
-              child: Padding(
-                padding: const EdgeInsets.all(12.0),
-                child: Align(child: Text('작성하기', style: textTheme().headline3)),
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => StatefulBuilder(
+                builder: (context, setState) => AlertDialog(
+                  titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
+                  title: SizedBox(
+                    width: 300,
+                    child: Text(
+                      '답변을 작성할까요?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
+                    ),
+                  ),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.all(gap_s),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              width: 240,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: kMainColor),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                child: Center(
+                                  child: Text(
+                                    '아니오',
+                                    style: TextStyle(
+                                      color: kMainColor,
+                                      fontSize: 20,
+                                      height: 1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              setState(() {
+                                Navigator.pop(context);
+                              });
+                            },
+                            child: Container(
+                              width: 240,
+                              decoration: BoxDecoration(
+                                color: kMainColor,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: kMainColor),
+                              ),
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                child: Center(
+                                  child: Text(
+                                    '네',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      height: 1,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    )
+                  ],
+                ),
               ),
+            );
+          },
+          child: Container(
+            width: getBodyWidth(context) * 0.15,
+            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: kMainColor),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Align(child: Text('작성하기', style: textTheme().headline3)),
             ),
-            onTap: () {
-              Navigator.pushNamed(context, '/main');
-            }),
+          ),
+        ),
       ],
     );
   }
 
   InkWell _buildReportButton() {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        showDialog(
+          context: context,
+          builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
+              title: SizedBox(
+                width: 300,
+                child: Text(
+                  '해당 리뷰를 신고할까요?',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kMainColor, fontSize: 32),
+                ),
+              ),
+              content: Padding(
+                padding: const EdgeInsets.only(top: 30),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(4),
+                    border: Border.all(color: kUnselectedListColor),
+                  ),
+                  child: DropdownButton(
+                    borderRadius: BorderRadius.circular(4),
+                    underline: Container(
+                      height: 0,
+                    ),
+                    isExpanded: true,
+                    value: _selectedValue2,
+                    items: _valueList2.map(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: gap_s),
+                            child: Text(value),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(
+                        () {
+                          _selectedValue2 = value as String;
+                        },
+                      );
+                    },
+                  ),
+                ),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(gap_s),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Container(
+                          width: 240,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: kMainColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                            child: Center(
+                              child: Text(
+                                '아니오',
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 20,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            Navigator.pop(context);
+                          });
+                        },
+                        child: Container(
+                          width: 240,
+                          decoration: BoxDecoration(
+                            color: kMainColor,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: kMainColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                            child: Center(
+                              child: Text(
+                                '네',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: kUnselectedListColor, width: 2),
@@ -243,8 +445,8 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   underline: Container(
                     height: 0,
                   ),
-                  value: _selectedValue,
-                  items: _valueList.map(
+                  value: _selectedValue1,
+                  items: _valueList1.map(
                     (value) {
                       return DropdownMenuItem(
                         value: value,
@@ -257,7 +459,7 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   ).toList(),
                   onChanged: (value) {
                     setState(() {
-                      _selectedValue = value as String;
+                      _selectedValue1 = value as String;
                     });
                   }),
             ),
