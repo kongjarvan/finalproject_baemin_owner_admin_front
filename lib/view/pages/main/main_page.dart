@@ -35,15 +35,18 @@ class _MainPageState extends State<MainPage> {
         automaticallyImplyLeading: false,
         backgroundColor: kMenuBarMainColor,
         elevation: 0,
-        title: Row(
-          children: [
-            Icon(CupertinoIcons.circle_filled, color: (_isOpen == true) ? kMainColor : kUnselectedListColor, size: 20),
-            SizedBox(width: gap_s),
-            Padding(
-              padding: const EdgeInsets.only(bottom: gap_xxs),
-              child: Text((_isOpen == true) ? '영업중' : '영업중지', style: TextStyle(color: Colors.white, fontSize: 18)),
-            ),
-          ],
+        title: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: gap_s),
+          child: Row(
+            children: [
+              Icon(CupertinoIcons.circle_filled, color: (_isOpen == true) ? kMainColor : kUnselectedListColor, size: 20),
+              SizedBox(width: gap_s),
+              Padding(
+                padding: const EdgeInsets.only(bottom: gap_xxs),
+                child: Text((_isOpen == true) ? '영업중' : '영업중지', style: TextStyle(color: Colors.white, fontSize: 18)),
+              ),
+            ],
+          ),
         ),
       ),
       body: Row(
