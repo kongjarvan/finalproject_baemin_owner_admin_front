@@ -8,7 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class InsertMenuPage extends StatefulWidget {
-  final Function() notifyParent;
+  final Function(int index) notifyParent;
   const InsertMenuPage({required this.notifyParent, Key? key}) : super(key: key);
 
   @override
@@ -71,7 +71,7 @@ class _InsertMenuPageState extends State<InsertMenuPage> {
           style: TextStyle(fontSize: 32),
         ),
         InkWell(
-          onTap: widget.notifyParent,
+          onTap: () => callback(2),
           child: Container(
             decoration: BoxDecoration(
               border: Border.all(color: kMainColor),
@@ -92,5 +92,9 @@ class _InsertMenuPageState extends State<InsertMenuPage> {
         )
       ],
     );
+  }
+
+  void callback(int index) {
+    widget.notifyParent(index);
   }
 }

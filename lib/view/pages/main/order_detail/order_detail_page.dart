@@ -235,7 +235,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => OrderCancelAlert(),
+            builder: (context, setState) => OrderCancelAlert(deliveryTitle: widget.deliveryTitle),
           ),
         );
       },
@@ -504,11 +504,101 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   InkWell _buildAcceptDeliveryButton(BuildContext context) {
     return InkWell(
       onTap: () {
-        Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (context) => MainPage(),
-            ));
+        showDialog(
+          context: context,
+          builder: (context) => StatefulBuilder(
+            builder: (context, setState) => AlertDialog(
+              titlePadding: EdgeInsets.symmetric(horizontal: 120, vertical: 60),
+              title: SizedBox(
+                width: 300,
+                child: Column(
+                  children: [
+                    Text(
+                      '주문을 접수합니다.',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                Padding(
+                  padding: const EdgeInsets.all(gap_s),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                        child: Container(
+                          width: 240,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: kMainColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                            child: Center(
+                              child: Text(
+                                '아니오',
+                                style: TextStyle(
+                                  color: kMainColor,
+                                  fontSize: 20,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          Navigator.pop(context);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
+                            SnackBar(
+                              backgroundColor: Color(0x99FF521C),
+                              content: Text('주문이 접수되었습니다! (${widget.deliveryTitle})'), //snack bar의 내용. icon, button같은것도 가능하다.
+                              duration: Duration(seconds: 3), //올라와있는 시간
+                              action: SnackBarAction(
+                                //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                                label: '확인',
+                                textColor: kWhiteColor, //버튼이름
+                                onPressed: () {}, //버튼 눌렀을때.
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          width: 240,
+                          decoration: BoxDecoration(
+                            color: kMainColor,
+                            borderRadius: BorderRadius.circular(4),
+                            border: Border.all(color: kMainColor),
+                          ),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                            child: Center(
+                              child: Text(
+                                '네',
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20,
+                                  height: 1,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        );
       },
       child: Container(
         decoration: BoxDecoration(

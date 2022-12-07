@@ -3,7 +3,8 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:flutter/material.dart';
 
 class OrderCancelAlert extends StatefulWidget {
-  const OrderCancelAlert({Key? key}) : super(key: key);
+  final deliveryTitle;
+  const OrderCancelAlert({required this.deliveryTitle, Key? key}) : super(key: key);
 
   @override
   State<OrderCancelAlert> createState() => _OrderCancelAlertState();
@@ -95,6 +96,20 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
               InkWell(
                 onTap: () {
                   Navigator.pop(context);
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
+                    SnackBar(
+                      backgroundColor: Color(0x996D62E8),
+                      content: Text('주문이 거절되었습니다. (${widget.deliveryTitle})'), //snack bar의 내용. icon, button같은것도 가능하다.
+                      duration: Duration(seconds: 3), //올라와있는 시간
+                      action: SnackBarAction(
+                        //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
+                        label: '확인',
+                        textColor: kWhiteColor, //버튼이름
+                        onPressed: () {}, //버튼 눌렀을때.
+                      ),
+                    ),
+                  );
                 },
                 child: Container(
                   width: 240,

@@ -132,7 +132,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                   showDialog(
                     context: context,
                     builder: (context) => StatefulBuilder(
-                      builder: (context, setState) => OrderCancelAlert(),
+                      builder: (context, setState) => OrderCancelAlert(deliveryTitle: orderName),
                     ),
                   );
                 },

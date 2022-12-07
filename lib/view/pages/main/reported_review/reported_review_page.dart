@@ -2,11 +2,12 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/component/order_info.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/component/review_type_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReportedReviewPage extends StatefulWidget {
-  final Function() notifyParent;
+  final Function(int index) notifyParent;
   const ReportedReviewPage({required this.notifyParent, Key? key}) : super(key: key);
 
   @override
@@ -36,51 +37,9 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.white,
-                            ),
-                          ),
-                          child: InkWell(
-                            onTap: widget.notifyParent,
-                            child: Padding(
-                              padding: const EdgeInsets.all(gap_m),
-                              child: Center(
-                                child: Text(
-                                  '전체리뷰',
-                                  style: TextStyle(fontSize: 20, color: kUnselectedListColor),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 4, text: '전체 리뷰'),
                       SizedBox(width: gap_s),
-                      Expanded(
-                        child: Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white,
-                            border: Border.all(
-                              color: Colors.white,
-                            ),
-                          ),
-                          child: InkWell(
-                            onTap: () {},
-                            child: Padding(
-                              padding: const EdgeInsets.all(gap_m),
-                              child: Center(
-                                child: Text(
-                                  '신고된 리뷰',
-                                  style: TextStyle(fontSize: 20, color: kUnselectedListColor),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
+                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 5, text: '신고된 리뷰'),
                     ],
                   ),
                   SizedBox(height: gap_m),

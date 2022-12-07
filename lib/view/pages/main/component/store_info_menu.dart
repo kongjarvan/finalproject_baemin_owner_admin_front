@@ -22,45 +22,21 @@ var _selectedIndex = 0;
 bool _isOpen = false;
 
 class _StoreInfoMenuState extends State<StoreInfoMenu> {
-  void _callbackUpdateStorePage() {
+  void _callbackIndexPage(int index) {
     setState(() {
-      _selectedIndex = 1;
-    });
-  }
-
-  void _callbackInsertMenuPage() {
-    setState(() {
-      _selectedIndex = 3;
-    });
-  }
-
-  void _callbackMenuListPage() {
-    setState(() {
-      _selectedIndex = 2;
-    });
-  }
-
-  void _callbackReviewListPage() {
-    setState(() {
-      _selectedIndex = 4;
-    });
-  }
-
-  void _callbackReportedReviewPage() {
-    setState(() {
-      _selectedIndex = 5;
+      _selectedIndex = index;
     });
   }
 
   @override
   Widget build(BuildContext context) {
     final List<Widget> selectedMainView = [
-      RegisterStorePage(notifyParent: _callbackUpdateStorePage),
-      UpdateStorePage(),
-      MenuListPage(notifyParent: _callbackInsertMenuPage),
-      InsertMenuPage(notifyParent: _callbackMenuListPage),
-      ReviewListPage(notifyParent: _callbackReportedReviewPage),
-      ReportedReviewPage(notifyParent: _callbackReviewListPage),
+      RegisterStorePage(notifyParent: (int) => _callbackIndexPage(int)),
+      UpdateStorePage(notifyParent: (int) => _callbackIndexPage(int)),
+      MenuListPage(notifyParent: (int) => _callbackIndexPage(int)),
+      InsertMenuPage(notifyParent: (int) => _callbackIndexPage(int)),
+      ReviewListPage(notifyParent: (int) => _callbackIndexPage(int)),
+      ReportedReviewPage(notifyParent: (int) => _callbackIndexPage(int)),
     ];
 
     return Flexible(
@@ -102,7 +78,6 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: gap_s),
                   child: Text(textAlign: TextAlign.start, '가게등록', style: textTheme().headline3),
-
                 ),
               ),
             ),
@@ -232,45 +207,6 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
           ),
         ),
       ),
-    );
-  }
-
-  Widget _buildStoreManageMenu() {
-    return SingleChildScrollView(
-      primary: false,
-      child: ExpansionPanelList(
-          elevation: 0,
-          expandedHeaderPadding: const EdgeInsets.all(0),
-          children: [
-            ExpansionPanel(
-              backgroundColor: (_isOpen == true) ? kAdminBlackColor : kMenuBarMainColor,
-              canTapOnHeader: true,
-              headerBuilder: (context, isExpanded) {
-                return Padding(
-                  padding: const EdgeInsets.all(gap_s),
-                  child: SizedBox(
-                    width: 200,
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: gap_s),
-                      child: Text(textAlign: TextAlign.start, '가게관리', style: textTheme().headline3),
-                    ),
-                  ),
-                );
-              },
-              body: Column(
-                children: [
-                  _buildInfoMenu('메뉴관리', 2),
-                  _buildInfoMenu('리뷰관리', 3),
-                ],
-              ),
-              isExpanded: _isOpen,
-            ),
-          ],
-          expansionCallback: (panelIndex, isExpanded) {
-            setState(() {
-              _isOpen = !_isOpen;
-            });
-          }),
     );
   }
 
