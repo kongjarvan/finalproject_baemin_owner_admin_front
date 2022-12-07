@@ -1,14 +1,14 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/models/orders/dto/order_detail_resp_dto.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  final deliveryTitle;
-
-  const OrderDetailPage({required this.deliveryTitle, Key? key}) : super(key: key);
+  final orderId;
+  const OrderDetailPage({required this.orderId, Key? key}) : super(key: key);
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -19,8 +19,15 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   var _selectedDeliveryTime = '60분';
 
   final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    final list = [];
+    for (int i = 0; i < ordersDetailList.length; i++)
+      if (widget.orderId == ordersDetailList[i].ordersId) {
+        list.add(ordersDetailList[i]);
+      }
+
     return Scaffold(
       body: Column(
         children: [
@@ -30,7 +37,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context, widget.deliveryTitle),
+                _buildOrderDetailHeader(context, '주문번호 ${widget.orderId}'),
                 SizedBox(height: gap_l),
                 SizedBox(
                   width: getBodyWidth(context),
@@ -46,7 +53,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               child: _buildUserRequest(),
                             ),
                             SizedBox(height: gap_l),
-                            _buildOrderList(),
+                            _buildOrderList(
+                              list,
+                            ),
                           ],
                         ),
                       ),
@@ -234,7 +243,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => OrderCancelAlert(deliveryTitle: widget.deliveryTitle),
+            builder: (context, setState) => OrderCancelAlert(deliveryTitle: '주문번호 ${widget.orderId}'),
           ),
         );
       },
@@ -303,7 +312,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildOrderList() {
+  Widget _buildOrderList(list, totalPrice) {
     return Expanded(
       flex: 2,
       child: Container(
@@ -337,27 +346,27 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     padding: const EdgeInsets.all(gap_m),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildMenuPrice('메뉴', '수량', '금액'),
-                        _buildMenuPrice('메뉴1', 1, '6,000원'),
-                        _buildMenuPrice('메뉴2', 1, '9,000원'),
-                        _buildMenuPrice('메뉴3', 1, '6,000원'),
-                        _buildMenuPrice('메뉴4', 1, '9,000원'),
-                        _buildMenuPrice('메뉴5', 1, '6,000원'),
-                        _buildMenuPrice('메뉴6', 1, '9,000원'),
-                        _buildMenuPrice('메뉴7', 1, '6,000원'),
-                        _buildMenuPrice('메뉴8', 1, '9,000원'),
-                        _buildMenuPrice('메뉴9', 1, '6,000원'),
-                        _buildMenuPrice('메뉴10', 1, '9,000원'),
-                        _buildMenuPrice('메뉴11', 1, '6,000원'),
-                        _buildMenuPrice('메뉴12', 1, '9,000원'),
-                        _buildTotalPrice(12, '90,000원'),
-                      ],
+                      children: List.generate(
+                        list.length,
+                        (index) => _buildMenuPrice(list[index].id, list[index].count, list[index].price),
+                      ),
                     ),
                   ),
                 ),
               ),
-            )
+            ),
+            Divider(thickness: 1, height: 1, color: kAdminBlackColor),
+            Padding(
+              padding: const EdgeInsets.all(gap_m),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text('총계'),
+                  Text('data'),
+                  Text('${totalPrice}'),
+                ],
+              ),
+            ),
           ],
         ),
       ),
@@ -558,7 +567,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
                             SnackBar(
                               backgroundColor: Color(0x99FF521C),
-                              content: Text('주문이 접수되었습니다! (${widget.deliveryTitle})'), //snack bar의 내용. icon, button같은것도 가능하다.
+                              content: Text('주문이 접수되었습니다! (주문번호 ${widget.orderId})'), //snack bar의 내용. icon, button같은것도 가능하다.
                               duration: Duration(seconds: 3), //올라와있는 시간
                               action: SnackBarAction(
                                 //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
