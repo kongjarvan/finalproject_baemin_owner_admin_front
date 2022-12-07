@@ -1,9 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/insert_update_menu_form.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_info/menu/component/insert_update_menu_form.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

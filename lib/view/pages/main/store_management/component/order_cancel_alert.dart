@@ -96,6 +96,7 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
               InkWell(
                 onTap: () {
                   Navigator.pop(context);
+
                   ScaffoldMessenger.of(context).showSnackBar(
                     //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
                     SnackBar(
