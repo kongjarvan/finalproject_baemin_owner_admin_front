@@ -1,7 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/delivery_status.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/store_info_menu.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/store_management_menu.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_info/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/statistics/statistics_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -16,7 +16,7 @@ class MainPage extends StatefulWidget {
 
 class _MainPageState extends State<MainPage> {
   final List<Widget> selectedMainView = [
-    DeliveryStatus(),
+    StoreManagementMenu(),
     StatisticsPage(),
     StoreInfoMenu(),
   ];

@@ -1,13 +1,18 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/register_update_store_form.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_info/store/component/register_update_store_form.dart';
 import 'package:flutter/material.dart';
 
-class UpdateStorePage extends StatelessWidget {
-  const UpdateStorePage({Key? key}) : super(key: key);
+class UpdateStorePage extends StatefulWidget {
+  final Function(int index) notifyParent;
+  const UpdateStorePage({required this.notifyParent, Key? key}) : super(key: key);
 
+  @override
+  State<UpdateStorePage> createState() => _UpdateStorePageState();
+}
+
+class _UpdateStorePageState extends State<UpdateStorePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,9 +42,7 @@ class UpdateStorePage extends StatelessWidget {
 
   InkWell _buildUpdateButton(context) {
     return InkWell(
-      onTap: () {
-        Navigator.push(context, MaterialPageRoute(builder: (context) => MainPage()));
-      },
+      onTap: () => callback(0),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(gap_xxs),
@@ -51,5 +54,9 @@ class UpdateStorePage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void callback(int index) {
+    widget.notifyParent(index);
   }
 }
