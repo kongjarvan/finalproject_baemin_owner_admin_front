@@ -1,16 +1,15 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
-import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/order_cancel_alert.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/order_detail/order_detail_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/order_detail/order_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 
-class DeliveryStatus extends StatefulWidget {
-  const DeliveryStatus({Key? key}) : super(key: key);
+class StoreManagementMenu extends StatefulWidget {
+  const StoreManagementMenu({Key? key}) : super(key: key);
 
   @override
-  State<DeliveryStatus> createState() => _DeliveryStatusState();
+  State<StoreManagementMenu> createState() => _StoreManagementMenuState();
 }
 
 final List<Widget> selectedMainView = [
@@ -21,7 +20,7 @@ final List<Widget> selectedMainView = [
 
 var _selectedIndex = 0;
 
-class _DeliveryStatusState extends State<DeliveryStatus> {
+class _StoreManagementMenuState extends State<StoreManagementMenu> {
   List<bool> _isChecked = [false, false];
   final ScrollController _scrollController = ScrollController();
   @override
@@ -132,7 +131,7 @@ class _DeliveryStatusState extends State<DeliveryStatus> {
                   showDialog(
                     context: context,
                     builder: (context) => StatefulBuilder(
-                      builder: (context, setState) => OrderCancelAlert(),
+                      builder: (context, setState) => OrderCancelAlert(deliveryTitle: orderName),
                     ),
                   );
                 },

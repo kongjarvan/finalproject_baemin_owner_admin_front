@@ -1,11 +1,11 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/component/register_update_store_form.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_info/store/component/register_update_store_form.dart';
 import 'package:flutter/material.dart';
 
 class RegisterStorePage extends StatefulWidget {
-  final Function() notifyParent;
+  final Function(int index) notifyParent;
   const RegisterStorePage({required this.notifyParent, Key? key}) : super(key: key);
 
   @override
@@ -13,7 +13,6 @@ class RegisterStorePage extends StatefulWidget {
 }
 
 final ScrollController _scrollController = ScrollController();
-
 
 class _RegisterStorePageState extends State<RegisterStorePage> {
   @override
@@ -53,7 +52,7 @@ class _RegisterStorePageState extends State<RegisterStorePage> {
 
   Widget _buildRegisterButton() {
     return InkWell(
-      onTap: widget.notifyParent,
+      onTap: () => callback(1),
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(gap_xxs),
@@ -65,5 +64,9 @@ class _RegisterStorePageState extends State<RegisterStorePage> {
         ),
       ),
     );
+  }
+
+  void callback(int index) {
+    widget.notifyParent(index);
   }
 }
