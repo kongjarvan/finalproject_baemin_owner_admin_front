@@ -42,7 +42,7 @@ class _MainPageState extends State<MainPage> {
     );
   }
 
-  NavigationRail _buildMainMenuBar(BuildContext context) {
+  Widget _buildMainMenuBar(BuildContext context) {
     return NavigationRail(
         backgroundColor: kMenuBarSubColor,
         labelType: NavigationRailLabelType.all,

@@ -4,9 +4,9 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/models/orders/dto/order_detail_resp_dto.dart';
 import 'package:baemin_owner_admin_front/view/models/orders/orders.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
+import 'package:baemin_owner_admin_front/view/util/my_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 
 class OrderDetailPage extends StatefulWidget {
   final index;
@@ -23,13 +23,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   final ScrollController _scrollController = ScrollController();
 
   int totalPrice() {
-    int price = 0;
+    int p = 0;
     for (int i = 0; i < ordersDetailList.length; i++) {
       if (orderList[widget.index].id == ordersDetailList[i].ordersId) {
-        price = price + (ordersDetailList[i].price * ordersDetailList[i].count);
+        p = p + ((ordersDetailList[i].menu.price) * ordersDetailList[i].count);
       }
     }
-    return price;
+    return p;
   }
 
   int totalCount() {
@@ -44,10 +44,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    final list = [];
+    final oList = [];
     for (int i = 0; i < ordersDetailList.length; i++)
       if (orderList[widget.index].id == ordersDetailList[i].ordersId) {
-        list.add(ordersDetailList[i]);
+        oList.add(ordersDetailList[i]);
       }
 
     return Scaffold(
@@ -75,7 +75,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               child: _buildUserRequest(),
                             ),
                             SizedBox(height: gap_l),
-                            _buildOrderList(list, totalCount(), totalPrice()),
+                            _buildOrderList(oList, totalCount(), totalPrice()),
                           ],
                         ),
                       ),
@@ -143,7 +143,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         Column(
                           children: [
                             _buildOrderInfoForm('주문번호', '${orderDetailRespDtoList[widget.index].id}'),
-                            _buildOrderInfoForm('주문시간', '${DateFormat("yyyy-MM-dd H:mm").format(orderDetailRespDtoList[widget.index].orderTime)}'),
+                            _buildOrderInfoForm('주문시간', dateFormat(orderDetailRespDtoList[widget.index].orderTime)),
                             _buildOrderInfoForm('예상배달시간', '${_selectedDeliveryTime}'),
                             _buildOrderInfoForm('완료시간', '${orderDetailRespDtoList[widget.index].state}'),
                           ],
@@ -372,7 +372,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                           crossAxisAlignment: CrossAxisAlignment.stretch,
                           children: List.generate(
                             list.length,
-                            (index) => _buildMenuPrice(list[index].id, list[index].count, '${(list[index].price * list[index].count)} 원'),
+                            (index) => _buildMenuPrice(list[index].id, list[index].count, numberPriceFormat('${(list[index].menu.price * list[index].count)}')),
                           ),
                         ),
                       ],
@@ -402,7 +402,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     flex: 1,
                     child: Align(
                       alignment: AlignmentDirectional.centerEnd,
-                      child: Text('${totalPrice} 원', style: textTheme().headline1),
+                      child: Text(numberPriceFormat('${totalPrice}'), style: textTheme().headline1),
                     ),
                   ),
                 ],
