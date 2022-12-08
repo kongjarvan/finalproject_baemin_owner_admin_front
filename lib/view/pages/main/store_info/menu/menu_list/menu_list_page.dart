@@ -240,6 +240,7 @@ class _MenuListPageState extends State<MenuListPage> {
       child: Row(
         children: [
           Checkbox(
+            splashRadius: 0,
             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
             activeColor: kMainColor,
             checkColor: Colors.white,

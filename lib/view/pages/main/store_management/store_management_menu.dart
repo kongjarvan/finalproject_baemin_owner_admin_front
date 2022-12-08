@@ -15,7 +15,7 @@ class StoreManagementMenu extends StatefulWidget {
 
 final List<Widget> selectedMainView = List.generate(
   orderList.length,
-  (index) => OrderDetailPage(orderId: orderList[index].id),
+  (index) => OrderDetailPage(index: index),
 );
 
 var _selectedIndex = 0;
@@ -168,16 +168,22 @@ class _StoreManagementMenuState extends State<StoreManagementMenu> {
   Widget _buildDeliveryOptionCheck(text, index) {
     return Row(
       children: [
-        Checkbox(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          activeColor: kMainColor,
-          checkColor: Colors.white,
-          value: _isChecked[index],
-          onChanged: (value) {
-            setState(() {
-              _isChecked[index] = value!;
-            });
-          },
+        Theme(
+          data: ThemeData(
+            unselectedWidgetColor: kWhiteColor,
+          ),
+          child: Checkbox(
+            splashRadius: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            activeColor: kMainColor,
+            checkColor: Colors.white,
+            value: _isChecked[index],
+            onChanged: (value) {
+              setState(() {
+                _isChecked[index] = value!;
+              });
+            },
+          ),
         ),
         Text(
           '${text}',

@@ -2,13 +2,15 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/models/orders/dto/order_detail_resp_dto.dart';
+import 'package:baemin_owner_admin_front/view/models/orders/orders.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  final orderId;
-  const OrderDetailPage({required this.orderId, Key? key}) : super(key: key);
+  final index;
+  const OrderDetailPage({required this.index, Key? key}) : super(key: key);
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -20,11 +22,31 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
 
   final ScrollController _scrollController = ScrollController();
 
+  int totalPrice() {
+    int price = 0;
+    for (int i = 0; i < ordersDetailList.length; i++) {
+      if (orderList[widget.index].id == ordersDetailList[i].ordersId) {
+        price = price + (ordersDetailList[i].price * ordersDetailList[i].count);
+      }
+    }
+    return price;
+  }
+
+  int totalCount() {
+    int count = 0;
+    for (int i = 0; i < ordersDetailList.length; i++) {
+      if (orderList[widget.index].id == ordersDetailList[i].ordersId) {
+        count = count + ordersDetailList[i].count;
+      }
+    }
+    return count;
+  }
+
   @override
   Widget build(BuildContext context) {
     final list = [];
     for (int i = 0; i < ordersDetailList.length; i++)
-      if (widget.orderId == ordersDetailList[i].ordersId) {
+      if (orderList[widget.index].id == ordersDetailList[i].ordersId) {
         list.add(ordersDetailList[i]);
       }
 
@@ -37,7 +59,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context, '주문번호 ${widget.orderId}'),
+                _buildOrderDetailHeader(context, '주문번호 ${orderList[widget.index].id}'),
                 SizedBox(height: gap_l),
                 SizedBox(
                   width: getBodyWidth(context),
@@ -53,9 +75,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                               child: _buildUserRequest(),
                             ),
                             SizedBox(height: gap_l),
-                            _buildOrderList(
-                              list,
-                            ),
+                            _buildOrderList(list, totalCount(), totalPrice()),
                           ],
                         ),
                       ),
@@ -122,10 +142,10 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       children: [
                         Column(
                           children: [
-                            _buildOrderInfoForm('주문번호', '1'),
-                            _buildOrderInfoForm('주문시간', '5/26 (수) 20:00'),
+                            _buildOrderInfoForm('주문번호', '${orderDetailRespDtoList[widget.index].id}'),
+                            _buildOrderInfoForm('주문시간', '${DateFormat("yyyy-MM-dd H:mm").format(orderDetailRespDtoList[widget.index].orderTime)}'),
                             _buildOrderInfoForm('예상배달시간', '${_selectedDeliveryTime}'),
-                            _buildOrderInfoForm('완료시간', '진행중'),
+                            _buildOrderInfoForm('완료시간', '${orderDetailRespDtoList[widget.index].state}'),
                           ],
                         ),
                         _buildRefuseDeliveryButton(),
@@ -243,7 +263,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => OrderCancelAlert(deliveryTitle: '주문번호 ${widget.orderId}'),
+            builder: (context, setState) => OrderCancelAlert(deliveryTitle: '주문번호 ${orderDetailRespDtoList[widget.index].id}'),
           ),
         );
       },
@@ -282,12 +302,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '[지번] 그린구 그린동 그린아파트 423동 4호',
-                style: textTheme().headline1,
-              ),
-              SizedBox(height: gap_xs),
-              Text(
-                '[도로명] 그린구 그린로 그린아파트 423동 4호',
+                '${orderDetailRespDtoList[widget.index].userAddress}',
                 style: textTheme().headline1,
               ),
             ],
@@ -302,7 +317,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '010-1234-5678',
+                '${orderDetailRespDtoList[widget.index].userPhoneNumber}',
                 style: textTheme().headline1,
               ),
             ],
@@ -312,7 +327,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildOrderList(list, totalPrice) {
+  Widget _buildOrderList(list, totalCount, totalPrice) {
     return Expanded(
       flex: 2,
       child: Container(
@@ -345,11 +360,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                   child: Padding(
                     padding: const EdgeInsets.all(gap_m),
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: List.generate(
-                        list.length,
-                        (index) => _buildMenuPrice(list[index].id, list[index].count, list[index].price),
-                      ),
+                      children: [
+                        _buildMenuPrice('메뉴', '수량', '금액'),
+                        Divider(
+                          thickness: 1,
+                          height: 1,
+                          color: kAdminBlackColor,
+                        ),
+                        SizedBox(height: gap_m),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: List.generate(
+                            list.length,
+                            (index) => _buildMenuPrice(list[index].id, list[index].count, '${(list[index].price * list[index].count)} 원'),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ),
@@ -361,9 +387,24 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text('총계'),
-                  Text('data'),
-                  Text('${totalPrice}'),
+                  Expanded(
+                    flex: 1,
+                    child: Text('총계', style: textTheme().headline1),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: AlignmentDirectional.center,
+                      child: Text('${totalCount}', style: textTheme().headline1),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: Align(
+                      alignment: AlignmentDirectional.centerEnd,
+                      child: Text('${totalPrice} 원', style: textTheme().headline1),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -385,7 +426,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '메뉴 1개 · 10,000원 (결제완료)',
+              '메뉴 ${totalCount()}개 · ${totalPrice()}원 (결제완료)',
               style: TextStyle(fontSize: 22),
             ),
             Row(
@@ -423,7 +464,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           Padding(
             padding: const EdgeInsets.all(gap_m),
             child: Text(
-              '3인분 같은 2인분 주세요~',
+              '${orderList[widget.index].comment}',
               style: textTheme().headline1,
             ),
           ),
@@ -567,7 +608,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
                             SnackBar(
                               backgroundColor: Color(0x99FF521C),
-                              content: Text('주문이 접수되었습니다! (주문번호 ${widget.orderId})'), //snack bar의 내용. icon, button같은것도 가능하다.
+                              content: Text('주문이 접수되었습니다! (주문번호 ${orderList[widget.index].id})'), //snack bar의 내용. icon, button같은것도 가능하다.
                               duration: Duration(seconds: 3), //올라와있는 시간
                               action: SnackBarAction(
                                 //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.

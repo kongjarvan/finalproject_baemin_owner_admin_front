@@ -4,7 +4,6 @@ class OrderDetailRespDto {
   final int id;
   final int storesId;
   final String comment;
-  final OrdersDetail ordersDetailList;
   final String userAddress;
   final String userPhoneNumber;
   final DateTime orderTime;
@@ -14,7 +13,6 @@ class OrderDetailRespDto {
     this.id,
     this.storesId,
     this.comment,
-    this.ordersDetailList,
     this.userAddress,
     this.userPhoneNumber,
     this.orderTime,
@@ -53,9 +51,8 @@ List<OrderDetailRespDto> orderDetailRespDtoList = [
     orderList[0].id,
     orderList[0].storesId,
     orderList[0].comment,
-    ordersDetailList[0],
-    '어딘가겠지요',
-    '어떤번호겠지요',
+    '부산시 수영구 광안로 61번나길 22번지 302호',
+    '010-9101-3199',
     orderList[0].createdAt,
     orderList[0].state,
   ),
@@ -63,9 +60,8 @@ List<OrderDetailRespDto> orderDetailRespDtoList = [
     orderList[1].id,
     orderList[1].storesId,
     orderList[1].comment,
-    ordersDetailList[1 & 2 & 3],
-    '어딘가겠지요',
-    '어떤번호겠지요',
+    '김해시 안동 잠깐만 여길 어떻게 배달해',
+    '010-1234-1234',
     orderList[1].createdAt,
     orderList[1].state,
   ),
@@ -73,9 +69,8 @@ List<OrderDetailRespDto> orderDetailRespDtoList = [
     orderList[2].id,
     orderList[2].storesId,
     orderList[2].comment,
-    ordersDetailList[4 & 5 & 6 & 7 & 8 & 9 & 10 & 11 & 12 & 13],
-    '어딘가겠지요',
-    '어떤번호겠지요',
+    '부산시 수영구 광안역 3번출구',
+    '010-1234-1234',
     orderList[2].createdAt,
     orderList[2].state,
   ),
