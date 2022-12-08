@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
+import 'package:baemin_owner_admin_front/view/models/orders/orders.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/order_detail/order_detail_page.dart';
 import 'package:flutter/material.dart';
@@ -12,11 +13,10 @@ class StoreManagementMenu extends StatefulWidget {
   State<StoreManagementMenu> createState() => _StoreManagementMenuState();
 }
 
-final List<Widget> selectedMainView = [
-  OrderDetailPage(deliveryTitle: '배달1'),
-  OrderDetailPage(deliveryTitle: '배달2'),
-  OrderDetailPage(deliveryTitle: '배달3'),
-];
+final List<Widget> selectedMainView = List.generate(
+  orderList.length,
+  (index) => OrderDetailPage(index: index),
+);
 
 var _selectedIndex = 0;
 
@@ -60,23 +60,10 @@ class _StoreManagementMenuState extends State<StoreManagementMenu> {
                         scrollDirection: Axis.vertical,
                         primary: false,
                         child: Column(
-                          children: [
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                          ],
+                          children: List.generate(
+                            orderList.length,
+                            (index) => _buildOrderInfo('주문번호 ${orderList[index].id}', orderList[index].count, index),
+                          ),
                         ),
                       ),
                     ),
@@ -181,16 +168,22 @@ class _StoreManagementMenuState extends State<StoreManagementMenu> {
   Widget _buildDeliveryOptionCheck(text, index) {
     return Row(
       children: [
-        Checkbox(
-          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-          activeColor: kMainColor,
-          checkColor: Colors.white,
-          value: _isChecked[index],
-          onChanged: (value) {
-            setState(() {
-              _isChecked[index] = value!;
-            });
-          },
+        Theme(
+          data: ThemeData(
+            unselectedWidgetColor: kWhiteColor,
+          ),
+          child: Checkbox(
+            splashRadius: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            activeColor: kMainColor,
+            checkColor: Colors.white,
+            value: _isChecked[index],
+            onChanged: (value) {
+              setState(() {
+                _isChecked[index] = value!;
+              });
+            },
+          ),
         ),
         Text(
           '${text}',
