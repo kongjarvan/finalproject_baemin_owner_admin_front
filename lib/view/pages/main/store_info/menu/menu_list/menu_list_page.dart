@@ -1,10 +1,12 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/models/menus/menus.dart';
 import 'package:flutter/material.dart';
 
 class MenuListPage extends StatefulWidget {
   final Function(int index) notifyParent;
+  final int storeId = 3;
   const MenuListPage({required this.notifyParent, Key? key}) : super(key: key);
 
   @override
@@ -12,22 +14,19 @@ class MenuListPage extends StatefulWidget {
 }
 
 class _MenuListPageState extends State<MenuListPage> {
-  List<bool>? _isChecked = [
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-    false,
-  ];
-
   final ScrollController _scrollController = ScrollController();
 
   @override
   Widget build(BuildContext context) {
+    final mList = [];
+    for (int i = 0; i < menuList.length; i++)
+      if (widget.storeId == menuList[i].storeId) {
+        mList.add(menuList[i]);
+        print('메뉴갯수 ${mList.length}');
+      }
+
+    List<bool>? _isChecked = List.filled(mList.length, false, growable: true);
+
     return Scaffold(
       body: Column(
         children: [
@@ -39,9 +38,76 @@ class _MenuListPageState extends State<MenuListPage> {
                 children: [
                   _buildMenuListHeader(context),
                   SizedBox(height: gap_l),
-                  _buildMenuList(),
+                  Expanded(
+                    child: RawScrollbar(
+                      thumbColor: kUnselectedListColor,
+                      radius: Radius.circular(5),
+                      controller: _scrollController,
+                      thickness: 10,
+                      thumbVisibility: true,
+                      child: SingleChildScrollView(
+                        controller: _scrollController,
+                        scrollDirection: Axis.vertical,
+                        child: Container(
+                          decoration: BoxDecoration(color: Colors.white),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: List.generate(
+                              mList.length,
+                              (index) => _buildMenuDetail(_isChecked, index, '${mList[index].name}', '${mList[index].price}', '${mList[index].intro}'),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
                 ],
               ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildMenuDetail(List<bool> _isChecked, index, menu, price, detail) {
+    return Padding(
+      padding: const EdgeInsets.all(gap_s),
+      child: Row(
+        children: [
+          Checkbox(
+            splashRadius: 0,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+            activeColor: kMainColor,
+            checkColor: Colors.white,
+            value: _isChecked[index],
+            onChanged: (value) {
+              setState(() {
+                _isChecked[index] = value!;
+              });
+            },
+          ),
+          SizedBox(width: gap_m),
+          Container(
+            width: 100,
+            height: 100,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(4),
+              color: kButtonSubColor,
+            ),
+          ),
+          SizedBox(width: gap_m),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: gap_xs),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text('${menu}', style: textTheme().headline1),
+                SizedBox(height: gap_xs),
+                Text('${price} 원', style: textTheme().bodyText1),
+                SizedBox(height: gap_s),
+                Text('${detail}', style: textTheme().bodyText2),
+              ],
             ),
           ),
         ],
@@ -198,84 +264,6 @@ class _MenuListPageState extends State<MenuListPage> {
           ],
         ),
       ],
-    );
-  }
-
-  Expanded _buildMenuList() {
-    return Expanded(
-      child: RawScrollbar(
-        thumbColor: kUnselectedListColor,
-        radius: Radius.circular(5),
-        controller: _scrollController,
-        thickness: 10,
-        thumbVisibility: true,
-        child: SingleChildScrollView(
-          controller: _scrollController,
-          scrollDirection: Axis.vertical,
-          child: Container(
-            decoration: BoxDecoration(color: Colors.white),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                _buildMenuInfo('후라이드치킨', '18,000', '고소하군', 0),
-                _buildMenuInfo('양념치킨', '18,000', '달콤하군', 1),
-                _buildMenuInfo('간장치긴', '19,000', '짭짤하군', 2),
-                _buildMenuInfo('후라이드치킨', '18,000', '고소하군', 3),
-                _buildMenuInfo('양념치킨', '18,000', '달콤하군', 4),
-                _buildMenuInfo('간장치긴', '19,000', '짭짤하군', 5),
-                _buildMenuInfo('후라이드치킨', '18,000', '고소하군', 6),
-                _buildMenuInfo('양념치킨', '18,000', '달콤하군', 7),
-                _buildMenuInfo('간장치긴', '19,000', '짭짤하군', 8),
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
-
-  Padding _buildMenuInfo(menu, price, detail, index) {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          Checkbox(
-            splashRadius: 0,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
-            activeColor: kMainColor,
-            checkColor: Colors.white,
-            value: _isChecked![index],
-            onChanged: (value) {
-              setState(() {
-                _isChecked![index] = value!;
-              });
-            },
-          ),
-          SizedBox(width: gap_m),
-          Container(
-            width: 100,
-            height: 100,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(4),
-              color: kButtonSubColor,
-            ),
-          ),
-          SizedBox(width: gap_m),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: gap_xs),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text('${menu}', style: textTheme().headline1),
-                SizedBox(height: gap_xs),
-                Text('${price} 원', style: textTheme().bodyText1),
-                SizedBox(height: gap_s),
-                Text('${detail}', style: textTheme().bodyText2),
-              ],
-            ),
-          ),
-        ],
-      ),
     );
   }
 

@@ -23,13 +23,13 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   final ScrollController _scrollController = ScrollController();
 
   int totalPrice() {
-    int p = 0;
+    int price = 0;
     for (int i = 0; i < ordersDetailList.length; i++) {
       if (orderList[widget.index].id == ordersDetailList[i].ordersId) {
-        p = p + ((ordersDetailList[i].menu.price) * ordersDetailList[i].count);
+        price = price + ((ordersDetailList[i].menu.price) * ordersDetailList[i].count);
       }
     }
-    return p;
+    return price;
   }
 
   int totalCount() {
@@ -382,34 +382,38 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
             ),
             Divider(thickness: 1, height: 1, color: kAdminBlackColor),
-            Padding(
-              padding: const EdgeInsets.all(gap_m),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Text('총계', style: textTheme().headline1),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: AlignmentDirectional.center,
-                      child: Text('${totalCount}', style: textTheme().headline1),
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Align(
-                      alignment: AlignmentDirectional.centerEnd,
-                      child: Text(numberPriceFormat('${totalPrice}'), style: textTheme().headline1),
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            _buildTotalPrice(totalCount, totalPrice),
           ],
         ),
+      ),
+    );
+  }
+
+  Padding _buildTotalPrice(totalCount, totalPrice) {
+    return Padding(
+      padding: const EdgeInsets.all(gap_m),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            flex: 1,
+            child: Text('총계', style: textTheme().headline1),
+          ),
+          Expanded(
+            flex: 1,
+            child: Align(
+              alignment: AlignmentDirectional.center,
+              child: Text('${totalCount}', style: textTheme().headline1),
+            ),
+          ),
+          Expanded(
+            flex: 1,
+            child: Align(
+              alignment: AlignmentDirectional.centerEnd,
+              child: Text(numberPriceFormat('${totalPrice}'), style: textTheme().headline1),
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -508,44 +512,6 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           ],
         ),
         SizedBox(height: gap_m),
-      ],
-    );
-  }
-
-  Widget _buildTotalPrice(amount, price) {
-    return Column(
-      children: [
-        Divider(
-          thickness: 1,
-          height: 1,
-          color: Colors.black,
-        ),
-        SizedBox(height: gap_m),
-        Row(
-          children: [
-            Expanded(flex: 1, child: SizedBox()),
-            Expanded(
-              flex: 1,
-              child: Align(
-                alignment: AlignmentDirectional.center,
-                child: Text(
-                  '${amount}',
-                  style: textTheme().headline1,
-                ),
-              ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Text(
-                  '${price}',
-                  style: textTheme().headline1,
-                ),
-              ),
-            ),
-          ],
-        ),
       ],
     );
   }
