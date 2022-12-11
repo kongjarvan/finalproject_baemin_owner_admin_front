@@ -1,7 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/domain/menus/menus.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/models/menus/menus.dart';
 import 'package:flutter/material.dart';
 
 class MenuListPage extends StatefulWidget {

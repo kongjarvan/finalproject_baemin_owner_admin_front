@@ -1,24 +1,27 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/domain/orders/dto/order_detail_resp_dto.dart';
+import 'package:baemin_owner_admin_front/domain/orders/orders.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/models/orders/dto/order_detail_resp_dto.dart';
-import 'package:baemin_owner_admin_front/view/models/orders/orders.dart';
+import 'package:baemin_owner_admin_front/util/my_format.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
-import 'package:baemin_owner_admin_front/view/util/my_format.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OrderDetailPage extends StatefulWidget {
+class OrderDetailPage extends ConsumerStatefulWidget {
   final index;
   const OrderDetailPage({required this.index, Key? key}) : super(key: key);
 
   @override
-  State<OrderDetailPage> createState() => _OrderDetailPageState();
+  ConsumerState createState() => _OrderDetailPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
+class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
   final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
   var _selectedDeliveryTime = '60분';
+  var refreshKey = GlobalKey<RefreshIndicatorState>();
+  var scaffodKey = GlobalKey<ScaffoldState>();
 
   final ScrollController _scrollController = ScrollController();
 

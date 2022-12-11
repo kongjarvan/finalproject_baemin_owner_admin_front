@@ -1,5 +1,5 @@
-import 'package:baemin_owner_admin_front/view/models/menus/menus.dart';
-import 'package:baemin_owner_admin_front/view/models/orders/orders.dart';
+import 'package:baemin_owner_admin_front/domain/menus/menus.dart';
+import 'package:baemin_owner_admin_front/domain/orders/orders.dart';
 
 class OrderDetailRespDto {
   final int id;
@@ -19,6 +19,18 @@ class OrderDetailRespDto {
     required this.orderTime,
     required this.state,
   });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'storesId': storesId,
+      'comment': comment,
+      'userAddress': userAddress,
+      'userPhoneNumber': userPhoneNumber,
+      'orderTime': orderTime,
+      'state': state,
+    };
+  }
 }
 
 class OrdersDetail {
