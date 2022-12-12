@@ -3,7 +3,7 @@ import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
 class HttpConnector {
-  final host = "http://192.168.0.129:8080";
+  final host = "http://localhost:8080";
   final headers = {"Content-Type": "application/json; charset=utf-8"};
 
   static final HttpConnector _instance = HttpConnector._single();

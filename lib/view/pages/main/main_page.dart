@@ -21,6 +21,7 @@ class MainPage extends ConsumerStatefulWidget {
 
 class _MainPageState extends ConsumerState<MainPage> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
 
   var _selectedIndex = 0;
 
@@ -30,22 +31,31 @@ class _MainPageState extends ConsumerState<MainPage> {
   bool _isOpen = true;
   @override
   Widget build(BuildContext context) {
+    OrderController orderCT = ref.read(orderController);
+    MainPageModel? model = ref.watch(mainPageViewModel);
+    print('길이: ${model!.orderListRespDtos.length}');
     final List<Widget> selectedMainView = [
-      StoreManagementMenu(),
+      StoreManagementMenu(model: model),
       StatisticsPage(),
       StoreInfoMenu(),
     ];
 
     print('세션: ${UserSession.jwtToken}');
-    return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: kBackgroundColor,
-      appBar: _buildAppBar(),
-      body: Row(
-        children: [
-          _buildMainMenuBar(context),
-          selectedMainView[_selectedIndex],
-        ],
+    return RefreshIndicator(
+      key: refreshKey,
+      onRefresh: () async {
+        orderCT.refreshMainPage();
+      },
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: kBackgroundColor,
+        appBar: _buildAppBar(),
+        body: Row(
+          children: [
+            _buildMainMenuBar(context),
+            selectedMainView[_selectedIndex],
+          ],
+        ),
       ),
     );
   }

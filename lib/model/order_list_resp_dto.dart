@@ -1,16 +1,16 @@
 class OrderListRespDto {
-  final int id;
-  final String payment;
-  final Orders orderList;
-  final String deliveryPrice;
-  final String orderComment;
-  final String deliveryState;
-  final String userAddress;
-  final String userPhone;
-  final String orderTime;
-  final String deliveryHour;
-  final String orderState;
-  final String completeTime;
+  final int? id;
+  final String? payment;
+  final List<Orders>? orderList;
+  final String? deliveryPrice;
+  final String? orderComment;
+  final String? deliveryState;
+  final String? userAddress;
+  final String? userPhone;
+  final String? orderTime;
+  final String? deliveryHour;
+  final String? orderState;
+  final String? completeTime;
 
   OrderListRespDto({
     required this.id,
@@ -27,19 +27,27 @@ class OrderListRespDto {
     required this.completeTime,
   });
 
-  OrderListRespDto.fromJson(Map<String, dynamic> json)
-      : id = json["id"],
-        payment = json["payment"],
-        orderList = json["orderList"],
-        deliveryPrice = json["deliveryPrice"],
-        orderComment = json["orderComment"],
-        deliveryState = json["deliveryState"],
-        userAddress = json["userAddress"],
-        userPhone = json["userPhone"],
-        orderTime = json["orderTime"],
-        deliveryHour = json["deliveryHour"],
-        orderState = json["orderState"],
-        completeTime = json["completeTime"];
+  factory OrderListRespDto.fromJson(Map<String, dynamic> json) {
+    var list = json['orderList'] as List;
+    print('런타임 타입: ${list.runtimeType}');
+    List<Orders> ordersList = list.map((e) => Orders.fromJson(e)).toList();
+    print('안터졌음 ${ordersList[0].menuName}');
+
+    return OrderListRespDto(
+      id: json["id"],
+      payment: json["payment"],
+      orderList: ordersList,
+      deliveryPrice: json["deliveryPrice"],
+      orderComment: json["orderComment"],
+      deliveryState: json["deliveryState"],
+      userAddress: json["userAddress"],
+      userPhone: json["userPhone"],
+      orderTime: json["orderTime"],
+      deliveryHour: json["deliveryHour"],
+      orderState: json["orderState"],
+      completeTime: json["completeTime"],
+    );
+  }
 }
 
 class Orders {
@@ -54,4 +62,13 @@ class Orders {
     required this.menuName,
     required this.price,
   });
+
+  factory Orders.fromJson(Map<String, dynamic> json) {
+    return Orders(
+      id: json["id"],
+      count: json["count"],
+      menuName: json["menuName"],
+      price: json["price"],
+    );
+  }
 }

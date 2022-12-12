@@ -10,7 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
 class StoreManagementMenu extends ConsumerStatefulWidget {
-  const StoreManagementMenu({Key? key}) : super(key: key);
+  final model;
+  const StoreManagementMenu({required this.model, Key? key}) : super(key: key);
 
   @override
   ConsumerState<StoreManagementMenu> createState() => _StoreManagementMenuState();
@@ -23,8 +24,7 @@ class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
   @override
   Widget build(BuildContext context) {
     Logger().d("주문목록페이지 빌드");
-    MainPageModel? model = ref.watch(mainPageViewModel);
-    print('길이: ${model?.orderListRespDtos.length}');
+
     var index = 0;
 
     return Flexible(
@@ -62,8 +62,8 @@ class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
                         scrollDirection: Axis.vertical,
                         primary: false,
                         child: Column(
-                          children: List.generate(3, (index) {
-                            return _buildOrderInfo('asdf', 2);
+                          children: List.generate(widget.model.orderListRespDtos.length, (index) {
+                            return _buildOrderInfo(widget.model.orderListRespDtos[index].id, widget.model.orderListRespDtos[index].orderList!.length);
                           }),
                         ),
                       ),
