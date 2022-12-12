@@ -1,22 +1,30 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/logo.dart';
 import 'package:baemin_owner_admin_front/view/pages/register_owner/register_owner_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
-class LoginPage extends StatefulWidget {
-  const LoginPage({Key? key}) : super(key: key);
+class LoginPage extends ConsumerStatefulWidget {
+  LoginPage({super.key});
 
   @override
-  State<LoginPage> createState() => _LoginPageState();
+  ConsumerState<LoginPage> createState() => _LoginPageState();
 }
 
-class _LoginPageState extends State<LoginPage> {
+class _LoginPageState extends ConsumerState<LoginPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _username = TextEditingController();
+  final _password = TextEditingController();
   bool _isChecked = false;
 
   @override
   Widget build(BuildContext context) {
+    OwnerController ownerCT = ref.read(ownerController);
+    Logger().d("로그인 페이지 빌드 시작");
     return Scaffold(
       backgroundColor: kWhiteColor,
       body: Center(
@@ -26,11 +34,17 @@ class _LoginPageState extends State<LoginPage> {
           child: ListView(
             children: [
               Logo(),
-              InputTextFormField(text: '아이디'),
+              InputTextFormField(
+                text: '아이디',
+                controller: _username,
+              ),
               SizedBox(height: 24),
-              InputTextFormField(text: '비밀번호'),
+              InputTextFormField(
+                text: '비밀번호',
+                controller: _password,
+              ),
               SizedBox(height: 24),
-              _buildLoginButton(context),
+              _buildLoginButton(context, ownerCT),
               SizedBox(height: 24),
               _buildAdditionalMenu(context),
             ],
@@ -40,7 +54,7 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-  InkWell _buildLoginButton(BuildContext context) {
+  InkWell _buildLoginButton(BuildContext context, OwnerController ownerCT) {
     return InkWell(
         child: Container(
           width: double.infinity,
@@ -50,8 +64,11 @@ class _LoginPageState extends State<LoginPage> {
             child: Align(child: Text('로그인', style: textTheme().headline3)),
           ),
         ),
-        onTap: () {
-          Navigator.popAndPushNamed(context, '/main');
+        onTap: () async {
+          await ownerCT.login(
+            username: _username.text.trim(),
+            password: _password.text.trim(),
+          ); // 추가
         });
   }
 

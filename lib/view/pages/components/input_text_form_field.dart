@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 
 class InputTextFormField extends StatelessWidget {
   final String text;
-  const InputTextFormField({required this.text, Key? key}) : super(key: key);
+  final controller;
+  const InputTextFormField({required this.text, this.controller, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -19,6 +20,7 @@ class InputTextFormField extends StatelessWidget {
           ),
           SizedBox(height: gap_s),
           TextFormField(
+            controller: controller,
             validator: (value) => value!.isEmpty ? "${text}를 입력 해 주세요" : null,
             obscureText: text == "Password" ? true : false,
             decoration: InputDecoration(
