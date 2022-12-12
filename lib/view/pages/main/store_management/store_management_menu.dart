@@ -1,30 +1,32 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/order_detail/order_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
-class StoreManagementMenu extends StatefulWidget {
+class StoreManagementMenu extends ConsumerStatefulWidget {
   const StoreManagementMenu({Key? key}) : super(key: key);
 
   @override
-  State<StoreManagementMenu> createState() => _StoreManagementMenuState();
+  ConsumerState<StoreManagementMenu> createState() => _StoreManagementMenuState();
 }
 
-final List<Widget> selectedMainView = [
-  OrderDetailPage(deliveryTitle: '배달1'),
-  OrderDetailPage(deliveryTitle: '배달2'),
-  OrderDetailPage(deliveryTitle: '배달3'),
-];
-
-var _selectedIndex = 0;
-
-class _StoreManagementMenuState extends State<StoreManagementMenu> {
+class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
   List<bool> _isChecked = [false, false];
   final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build(BuildContext context) {
+    Logger().d("주문목록페이지 빌드");
+    MainPageModel? model = ref.watch(mainPageViewModel);
+    print('길이: ${model?.orderListRespDtos.length}');
+    var index = 0;
+
     return Flexible(
       child: Row(
         children: [
@@ -60,23 +62,9 @@ class _StoreManagementMenuState extends State<StoreManagementMenu> {
                         scrollDirection: Axis.vertical,
                         primary: false,
                         child: Column(
-                          children: [
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                            _buildOrderInfo('배달1', 15, 0),
-                            _buildOrderInfo('배달2', 3, 1),
-                            _buildOrderInfo('배달3', 15, 2),
-                          ],
+                          children: List.generate(3, (index) {
+                            return _buildOrderInfo('asdf', 2);
+                          }),
                         ),
                       ),
                     ),
@@ -86,14 +74,14 @@ class _StoreManagementMenuState extends State<StoreManagementMenu> {
             ),
           ),
           Flexible(
-            child: selectedMainView[_selectedIndex],
+            child: OrderDetailPage(orderId: '여무'),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildOrderInfo(orderName, menuCount, index) {
+  Widget _buildOrderInfo(orderName, menuCount) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: gap_s, horizontal: gap_m),
       child: Column(
@@ -101,11 +89,7 @@ class _StoreManagementMenuState extends State<StoreManagementMenu> {
         children: [
           InkWell(
             onTap: () {
-              setState(() {
-                setState(() {
-                  _selectedIndex = index;
-                });
-              });
+              setState(() {});
             },
             child: Text(
               '${orderName}',

@@ -1,4 +1,4 @@
-import 'package:baemin_owner_admin_front/model/user_session.dart';
+import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
 
@@ -22,6 +22,7 @@ class HttpConnector {
 
   Future<Response> get(String path) async {
     Map<String, String> requestHeader = UserSession.getJwtTokenHeader(headers);
+    print('토큰: ${requestHeader.values}');
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().get(uri, headers: requestHeader);
 

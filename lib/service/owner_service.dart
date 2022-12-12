@@ -3,6 +3,9 @@ import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
 import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
+import 'package:baemin_owner_admin_front/model/users.dart';
+import 'package:baemin_owner_admin_front/service/local_service.dart';
+import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 
 class OwnerService {
@@ -15,13 +18,21 @@ class OwnerService {
   }
 
   Future<ResponseDto> fetchLogin(LoginReqDto loginReqDto) async {
-    print('============서비스 진입=============');
-    print(loginReqDto.username);
-    print(loginReqDto.password);
     String requestBody = jsonEncode(loginReqDto.toJson());
+
     Response response = await httpConnector.post("/login", requestBody);
-    print('============서비스 진입=============');
-    print(response.body);
-    return toResponseDto(response); // ResponseDto 응답
+
+    String jwtToken = response.headers["authorization"].toString();
+    print('토큰:${jwtToken}');
+
+    await secureStorage.write(key: "jwtToken", value: jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+
+    Users user = Users.fromJson(responseDto.data);
+
+    UserSession.successAuthentication(user, jwtToken);
+
+    return responseDto;
   }
 }

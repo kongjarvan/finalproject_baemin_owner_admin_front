@@ -22,19 +22,14 @@ class OwnerController {
   Future<void> login({required String username, required String password}) async {
     // 1. DTO 변환
     LoginReqDto loginReqDto = LoginReqDto(username: username, password: password);
-    print(loginReqDto.username);
-    print(loginReqDto.password);
 
     // 2. 통신 요청
     ResponseDto responseDto = await ownerService.fetchLogin(loginReqDto);
-    print(responseDto.msg);
+
     //3. 비지니스 로직 처리
     if (responseDto.msg == "로그인 성공") {
-      print('메인페이지로 이동하기');
-      print(navigatorKey.currentContext);
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
     } else {
-      print('막힘');
       ScaffoldMessenger.of(mContext!).showSnackBar(
         const SnackBar(content: Text("로그인 실패")),
       );

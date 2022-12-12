@@ -6,9 +6,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class OrderDetailPage extends StatefulWidget {
-  final deliveryTitle;
+  final orderId;
 
-  const OrderDetailPage({required this.deliveryTitle, Key? key}) : super(key: key);
+  const OrderDetailPage({required this.orderId, Key? key}) : super(key: key);
 
   @override
   State<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -30,7 +30,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context, widget.deliveryTitle),
+                _buildOrderDetailHeader(context, widget.orderId),
                 SizedBox(height: gap_l),
                 SizedBox(
                   width: getBodyWidth(context),
@@ -234,7 +234,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => OrderCancelAlert(deliveryTitle: widget.deliveryTitle),
+            builder: (context, setState) => OrderCancelAlert(deliveryTitle: widget.orderId),
           ),
         );
       },
@@ -558,7 +558,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
                             SnackBar(
                               backgroundColor: Color(0x99FF521C),
-                              content: Text('주문이 접수되었습니다! (${widget.deliveryTitle})'), //snack bar의 내용. icon, button같은것도 가능하다.
+                              content: Text('주문이 접수되었습니다! (${widget.orderId})'), //snack bar의 내용. icon, button같은것도 가능하다.
                               duration: Duration(seconds: 3), //올라와있는 시간
                               action: SnackBarAction(
                                 //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
