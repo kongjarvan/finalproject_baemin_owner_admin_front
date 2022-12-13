@@ -2,7 +2,7 @@ class OrderListRespDto {
   final int? id;
   final String? payment;
   final List<Orders>? orderList;
-  final String? deliveryPrice;
+  final int? deliveryPrice;
   final String? orderComment;
   final String? deliveryState;
   final String? userAddress;
@@ -54,7 +54,7 @@ class Orders {
   final int id;
   final int count;
   final String menuName;
-  final String price;
+  final int price;
 
   Orders({
     required this.id,

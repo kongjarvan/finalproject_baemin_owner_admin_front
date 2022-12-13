@@ -1,7 +1,8 @@
 import 'package:baemin_owner_admin_front/model/order_list_resp_dto.dart';
 
-class MainPageModel {
+class OrderListPageModel {
+  // state
   List<OrderListRespDto> orderListRespDtos;
 
-  MainPageModel(this.orderListRespDtos);
+  OrderListPageModel(this.orderListRespDtos);
 }

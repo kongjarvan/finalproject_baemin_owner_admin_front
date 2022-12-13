@@ -2,11 +2,9 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/order_controller.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:baemin_owner_admin_front/size.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_model.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_view_model.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/store_management_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_info/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/statistics/statistics_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/order_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,10 +30,9 @@ class _MainPageState extends ConsumerState<MainPage> {
   @override
   Widget build(BuildContext context) {
     OrderController orderCT = ref.read(orderController);
-    MainPageModel? model = ref.watch(mainPageViewModel);
-    print('길이: ${model!.orderListRespDtos.length}');
+
     final List<Widget> selectedMainView = [
-      StoreManagementMenu(model: model),
+      OrderListPage(),
       StatisticsPage(),
       StoreInfoMenu(),
     ];

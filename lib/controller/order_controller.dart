@@ -1,6 +1,6 @@
 import 'package:baemin_owner_admin_front/core/constant/move.dart';
 import 'package:baemin_owner_admin_front/service/order_service.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_view_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final orderController = Provider<OrderController>((ref) {

@@ -5,7 +5,7 @@ String numberPriceFormat(String price) {
   return formatter.format(int.parse(price));
 }
 
-String dateFormat(DateTime dateTime) {
+String dateFormat(String dateTime) {
   final formatter = DateFormat("yyyy-MM-dd H:mm");
-  return formatter.format(dateTime);
+  return formatter.format(DateTime.parse(dateTime));
 }

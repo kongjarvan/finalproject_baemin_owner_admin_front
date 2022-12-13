@@ -1,24 +1,43 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/core/util/my_format.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OrderDetailPage extends StatefulWidget {
-  final orderId;
-
-  const OrderDetailPage({required this.orderId, Key? key}) : super(key: key);
+class OrderDetailPage extends ConsumerStatefulWidget {
+  final model;
+  final index;
+  const OrderDetailPage({required this.model, required this.index, Key? key}) : super(key: key);
 
   @override
-  State<OrderDetailPage> createState() => _OrderDetailPageState();
+  ConsumerState<OrderDetailPage> createState() => _OrderDetailPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
+class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
   final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
   var _selectedDeliveryTime = '60분';
 
   final ScrollController _scrollController = ScrollController();
+
+  num totalCount() {
+    num totalCount = 0;
+    for (num i = 0; i < widget.model.orderListRespDtos[widget.index].orderList.length; i++) {
+      totalCount = totalCount + widget.model.orderListRespDtos[widget.index].orderList[i].count;
+    }
+    return totalCount;
+  }
+
+  num totalPrice() {
+    num totalPrice = 0;
+    for (num i = 0; i < widget.model.orderListRespDtos[widget.index].orderList.length; i++) {
+      totalPrice = totalPrice + widget.model.orderListRespDtos[widget.index].orderList[i].price;
+    }
+    return totalPrice;
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +49,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context, widget.orderId),
+                _buildOrderDetailHeader(context, widget.model.orderListRespDtos[widget.index].id),
                 SizedBox(height: gap_l),
                 SizedBox(
                   width: getBodyWidth(context),
@@ -113,9 +132,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                       children: [
                         Column(
                           children: [
-                            _buildOrderInfoForm('주문번호', '1'),
-                            _buildOrderInfoForm('주문시간', '5/26 (수) 20:00'),
-                            _buildOrderInfoForm('예상배달시간', '${_selectedDeliveryTime}'),
+                            _buildOrderInfoForm('주문번호', '${widget.model.orderListRespDtos[widget.index].id}'),
+                            _buildOrderInfoForm('주문시간', dateFormat(widget.model.orderListRespDtos[widget.index].orderTime)),
+                            _buildOrderInfoForm('예상배달시간', _selectedDeliveryTime),
                             _buildOrderInfoForm('완료시간', '진행중'),
                           ],
                         ),
@@ -234,7 +253,9 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => OrderCancelAlert(deliveryTitle: widget.orderId),
+            builder: (context, setState) => OrderCancelAlert(
+              deliveryTitle: widget.model.orderListRespDtos[widget.index].id,
+            ),
           ),
         );
       },
@@ -273,12 +294,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '[지번] 그린구 그린동 그린아파트 423동 4호',
-                style: textTheme().headline1,
-              ),
-              SizedBox(height: gap_xs),
-              Text(
-                '[도로명] 그린구 그린로 그린아파트 423동 4호',
+                '${widget.model.orderListRespDtos[widget.index].userAddress}',
                 style: textTheme().headline1,
               ),
             ],
@@ -293,7 +309,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '010-1234-5678',
+                widget.model.orderListRespDtos[widget.index].userPhone,
                 style: textTheme().headline1,
               ),
             ],
@@ -337,27 +353,22 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                     padding: const EdgeInsets.all(gap_m),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildMenuPrice('메뉴', '수량', '금액'),
-                        _buildMenuPrice('메뉴1', 1, '6,000원'),
-                        _buildMenuPrice('메뉴2', 1, '9,000원'),
-                        _buildMenuPrice('메뉴3', 1, '6,000원'),
-                        _buildMenuPrice('메뉴4', 1, '9,000원'),
-                        _buildMenuPrice('메뉴5', 1, '6,000원'),
-                        _buildMenuPrice('메뉴6', 1, '9,000원'),
-                        _buildMenuPrice('메뉴7', 1, '6,000원'),
-                        _buildMenuPrice('메뉴8', 1, '9,000원'),
-                        _buildMenuPrice('메뉴9', 1, '6,000원'),
-                        _buildMenuPrice('메뉴10', 1, '9,000원'),
-                        _buildMenuPrice('메뉴11', 1, '6,000원'),
-                        _buildMenuPrice('메뉴12', 1, '9,000원'),
-                        _buildTotalPrice(12, '90,000원'),
-                      ],
+                      children: List.generate(
+                        widget.model.orderListRespDtos[widget.index].orderList.length,
+                        (index) {
+                          return _buildMenuPrice(
+                            widget.model.orderListRespDtos[widget.index].orderList[index].menuName,
+                            widget.model.orderListRespDtos[widget.index].orderList[index].count,
+                            widget.model.orderListRespDtos[widget.index].orderList[index].price,
+                          );
+                        },
+                      ),
                     ),
                   ),
                 ),
               ),
-            )
+            ),
+            _buildTotalPrice(totalCount(), numberPriceFormat('${totalPrice()}')),
           ],
         ),
       ),
@@ -414,7 +425,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           Padding(
             padding: const EdgeInsets.all(gap_m),
             child: Text(
-              '3인분 같은 2인분 주세요~',
+              '${widget.model.orderListRespDtos[widget.index].orderComment}',
               style: textTheme().headline1,
             ),
           ),
@@ -463,40 +474,43 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   Widget _buildTotalPrice(amount, price) {
-    return Column(
-      children: [
-        Divider(
-          thickness: 1,
-          height: 1,
-          color: Colors.black,
-        ),
-        SizedBox(height: gap_m),
-        Row(
-          children: [
-            Expanded(flex: 1, child: SizedBox()),
-            Expanded(
-              flex: 1,
-              child: Align(
-                alignment: AlignmentDirectional.center,
-                child: Text(
-                  '${amount}',
-                  style: textTheme().headline1,
+    return Padding(
+      padding: const EdgeInsets.all(gap_m),
+      child: Column(
+        children: [
+          Divider(
+            thickness: 1,
+            height: 1,
+            color: Colors.black,
+          ),
+          SizedBox(height: gap_m),
+          Row(
+            children: [
+              Expanded(flex: 1, child: SizedBox()),
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Text(
+                    '${amount}',
+                    style: textTheme().headline1,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Text(
-                  '${price}',
-                  style: textTheme().headline1,
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Text(
+                    '${price}',
+                    style: textTheme().headline1,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
@@ -558,7 +572,8 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                             //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
                             SnackBar(
                               backgroundColor: Color(0x99FF521C),
-                              content: Text('주문이 접수되었습니다! (${widget.orderId})'), //snack bar의 내용. icon, button같은것도 가능하다.
+                              content:
+                                  Text('주문이 접수되었습니다! (${widget.model.orderListRespDtos[widget.index].id})'), //snack bar의 내용. icon, button같은것도 가능하다.
                               duration: Duration(seconds: 3), //올라와있는 시간
                               action: SnackBarAction(
                                 //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.

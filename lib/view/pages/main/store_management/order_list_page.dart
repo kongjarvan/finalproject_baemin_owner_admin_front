@@ -1,32 +1,37 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_model.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/main_page_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/order_detail/order_detail_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-class StoreManagementMenu extends ConsumerStatefulWidget {
-  final model;
-  const StoreManagementMenu({required this.model, Key? key}) : super(key: key);
+class OrderListPage extends ConsumerStatefulWidget {
+  const OrderListPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<StoreManagementMenu> createState() => _StoreManagementMenuState();
+  ConsumerState<OrderListPage> createState() => _OrderListPageState();
 }
 
-class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
+class _OrderListPageState extends ConsumerState<OrderListPage> {
   List<bool> _isChecked = [false, false];
   final ScrollController _scrollController = ScrollController();
 
+  var _selectedIndex = 0;
+
   @override
   Widget build(BuildContext context) {
+    OrderListPageModel? model = ref.watch(mainPageViewModel); // viewmodel 초기화
+    MainPageViewModel viewModel = ref.read(mainPageViewModel.notifier);
     Logger().d("주문목록페이지 빌드");
 
-    var index = 0;
+    return model == null ? CircularProgressIndicator() : _buildBody(model, viewModel);
+  }
 
+  Widget _buildBody(OrderListPageModel? model, MainPageViewModel viewModel) {
     return Flexible(
       child: Row(
         children: [
@@ -62,8 +67,8 @@ class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
                         scrollDirection: Axis.vertical,
                         primary: false,
                         child: Column(
-                          children: List.generate(widget.model.orderListRespDtos.length, (index) {
-                            return _buildOrderInfo(widget.model.orderListRespDtos[index].id, widget.model.orderListRespDtos[index].orderList!.length);
+                          children: List.generate(model!.orderListRespDtos.length, (index) {
+                            return _buildOrderInfo(model.orderListRespDtos[index].id, model.orderListRespDtos[index].orderList!.length, index);
                           }),
                         ),
                       ),
@@ -74,14 +79,14 @@ class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
             ),
           ),
           Flexible(
-            child: OrderDetailPage(orderId: '여무'),
+            child: OrderDetailPage(model: model, index: _selectedIndex),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildOrderInfo(orderName, menuCount) {
+  Widget _buildOrderInfo(orderName, menuCount, index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: gap_s, horizontal: gap_m),
       child: Column(
@@ -89,7 +94,9 @@ class _StoreManagementMenuState extends ConsumerState<StoreManagementMenu> {
         children: [
           InkWell(
             onTap: () {
-              setState(() {});
+              setState(() {
+                _selectedIndex = index;
+              });
             },
             child: Text(
               '${orderName}',

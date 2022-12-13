@@ -1,13 +1,16 @@
 class ResponseDto {
+  final int code;
   final String? msg;
   dynamic data; // JsonArray [], JsonObject {}
 
   ResponseDto({
+    required this.code,
     this.msg,
     this.data,
   });
 
   ResponseDto.fromJson(Map<String, dynamic> json)
-      : msg = json["msg"],
+      : code = json["code"],
+        msg = json["msg"],
         data = json["data"];
 }
