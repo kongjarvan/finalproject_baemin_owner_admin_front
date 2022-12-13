@@ -1,4 +1,10 @@
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
+import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
+import 'package:baemin_owner_admin_front/model/reported_review_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/model/review_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/service/user_session.dart';
+import 'package:http/http.dart';
 
 class ReviewService {
   final HttpConnector httpConnector = HttpConnector();
@@ -7,5 +13,39 @@ class ReviewService {
   ReviewService._single();
   factory ReviewService() {
     return _instance;
+  }
+
+  Future<ResponseDto> fetchGetReviewList() async {
+    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/1/review", UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    if (responseDto.code == 1) {
+      List<dynamic> mapList = responseDto.data;
+      print('통과1');
+      print(responseDto.data);
+      List<ReviewListRespDto> reviewListRespDtos = mapList.map((e) => ReviewListRespDto.fromJson(e)).toList();
+      print('통과2');
+      responseDto.data = reviewListRespDtos;
+      print('통과3');
+    }
+
+    return responseDto;
+  }
+
+  Future<ResponseDto> fetchGetReportedReviewList() async {
+    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/1/review/report", UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    if (responseDto.code == 1) {
+      List<dynamic> mapList = responseDto.data;
+      print('통과1');
+      print(responseDto.data);
+      List<ReportedReviewListRespDto> reportedReviewListRespDtos = mapList.map((e) => ReportedReviewListRespDto.fromJson(e)).toList();
+      print('통과2');
+      responseDto.data = reportedReviewListRespDtos;
+      print('통과3');
+    }
+
+    return responseDto;
   }
 }

@@ -1,8 +1,8 @@
-import 'package:baemin_owner_admin_front/model/order_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/model/menu_list_resp_dto.dart';
 
 class MenuListPageModel {
   // state
-  List<> menuListRespDtos;
+  List<MenuListRespDto> menuListRespDtos;
 
   MenuListPageModel(this.menuListRespDtos);
 }

@@ -1,6 +1,7 @@
 import 'package:baemin_owner_admin_front/core/constant/move.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/order_service.dart';
+import 'package:baemin_owner_admin_front/service/review_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_info/review/reported_review/model/reported_review_list_page_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -10,13 +11,13 @@ final reportedReviewListPageViewModel = StateNotifierProvider.autoDispose<Report
 });
 
 class ReportedReviewListPageViewModel extends StateNotifier<ReportedReviewListPageModel?> {
-  final OrderService orderService = OrderService();
+  final ReviewService reviewService = ReviewService();
   final mContext = navigatorKey.currentContext;
 
   ReportedReviewListPageViewModel(super.state);
 
   Future<void> notifyViewModel() async {
-    ResponseDto responseDto = await orderService.fetchOrderList();
+    ResponseDto responseDto = await reviewService.fetchGetReportedReviewList();
     if (responseDto.code == 1) {
       state = ReportedReviewListPageModel(responseDto.data);
       print('Model에 data 담김');

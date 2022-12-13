@@ -19,7 +19,7 @@ class OrderService {
     Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/1/order", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
-    if (responseDto.msg == "주문 목록보기 완료") {
+    if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
       print('통과1');
       print(responseDto.data);

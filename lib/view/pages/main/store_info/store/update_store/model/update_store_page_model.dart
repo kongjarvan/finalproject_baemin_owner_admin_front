@@ -1,8 +1,8 @@
-import 'package:baemin_owner_admin_front/model/order_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/model/update_store_resp_dto.dart';
 
-class UpdateStoreListPageModel {
+class UpdateStorePageModel {
   // state
-  List<> updateStoreListRespDtos;
+  List<UpdateStoreRespDto> updateStoreListRespDtos;
 
-  UpdateStoreListPageModel(this.updateStoreListRespDtos);
+  UpdateStorePageModel(this.updateStoreListRespDtos);
 }
