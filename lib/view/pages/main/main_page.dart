@@ -29,8 +29,6 @@ class _MainPageState extends ConsumerState<MainPage> {
   bool _isOpen = true;
   @override
   Widget build(BuildContext context) {
-    OrderController orderCT = ref.read(orderController);
-
     final List<Widget> selectedMainView = [
       OrderListPage(),
       StatisticsPage(),
@@ -38,21 +36,15 @@ class _MainPageState extends ConsumerState<MainPage> {
     ];
 
     print('세션: ${UserSession.jwtToken}');
-    return RefreshIndicator(
-      key: refreshKey,
-      onRefresh: () async {
-        orderCT.refreshMainPage();
-      },
-      child: Scaffold(
-        key: scaffoldKey,
-        backgroundColor: kBackgroundColor,
-        appBar: _buildAppBar(),
-        body: Row(
-          children: [
-            _buildMainMenuBar(context),
-            selectedMainView[_selectedIndex],
-          ],
-        ),
+    return Scaffold(
+      key: scaffoldKey,
+      backgroundColor: kBackgroundColor,
+      appBar: _buildAppBar(),
+      body: Row(
+        children: [
+          _buildMainMenuBar(context),
+          selectedMainView[_selectedIndex],
+        ],
       ),
     );
   }

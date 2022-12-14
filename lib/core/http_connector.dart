@@ -13,15 +13,21 @@ class HttpConnector {
   }
   HttpConnector._single();
 
-  Future<Response> getInitSession(String path, String? jwtToken) async {
-    Map<String, String> requestHeader = {...headers, "Authorization": jwtToken!};
+  Future<Response> getInitSession(String path, String jwtToken) async {
+    Map<String, String> requestHeader = {...headers, "Authorization": jwtToken};
+
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().get(uri, headers: requestHeader);
     return response;
   }
 
-  Future<Response> get(String path) async {
-    Map<String, String> requestHeader = UserSession.getJwtTokenHeader(headers);
+  Future<Response> get(String path, {String? jwtToken}) async {
+    Map<String, String> requestHeader;
+    if (jwtToken != null) {
+      requestHeader = {...headers, "Authorization": jwtToken};
+    } else {
+      requestHeader = headers;
+    }
     print('토큰: ${requestHeader.values}');
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().get(uri, headers: requestHeader);
@@ -29,23 +35,38 @@ class HttpConnector {
     return response;
   }
 
-  Future<Response> delete(String path) async {
-    Map<String, String> requestHeader = UserSession.getJwtTokenHeader(headers);
+  Future<Response> delete(String path, {String? jwtToken}) async {
+    Map<String, String> requestHeader;
+    if (jwtToken != null) {
+      requestHeader = {...headers, "Authorization": jwtToken};
+    } else {
+      requestHeader = headers;
+    }
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().delete(uri, headers: requestHeader);
     return response;
   }
 
-  Future<Response> put(String path, String body) async {
-    Map<String, String> requestHeader = UserSession.getJwtTokenHeader(headers);
+  Future<Response> put(String path, String body, {String? jwtToken}) async {
+    Map<String, String> requestHeader;
+    if (jwtToken != null) {
+      requestHeader = {...headers, "Authorization": jwtToken};
+    } else {
+      requestHeader = headers;
+    }
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().put(uri, body: body, headers: requestHeader);
     return response;
   }
 
-  Future<Response> post(String path, String body) async {
+  Future<Response> post(String path, String body, {String? jwtToken}) async {
     print('================httpConnector 진입==============');
-    Map<String, String> requestHeader = UserSession.getJwtTokenHeader(headers);
+    Map<String, String> requestHeader;
+    if (jwtToken != null) {
+      requestHeader = {...headers, "Authorization": jwtToken};
+    } else {
+      requestHeader = headers;
+    }
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().post(uri, body: body, headers: requestHeader);
     print(uri);

@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
+import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_view_model.dart';
@@ -22,10 +23,17 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
 
   var _selectedIndex = 0;
 
+  void changeIndex() {
+    setState(() {
+      _selectedIndex = 0;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     OrderListPageModel? model = ref.watch(mainPageViewModel); // viewmodel 초기화
     MainPageViewModel viewModel = ref.read(mainPageViewModel.notifier);
+
     Logger().d("주문목록페이지 빌드");
 
     return model == null ? CircularProgressIndicator() : _buildBody(model, viewModel);
@@ -53,8 +61,6 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                     ),
                   ),
                   Divider(thickness: 2, height: 2),
-                  _buildDeliveryStatus(),
-                  Divider(thickness: 2, height: 2),
                   Expanded(
                     child: RawScrollbar(
                       thumbColor: kMainColor,
@@ -68,7 +74,13 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                         primary: false,
                         child: Column(
                           children: List.generate(model!.orderListRespDtos.length, (index) {
-                            return _buildOrderInfo(model.orderListRespDtos[index].id, model.orderListRespDtos[index].orderList!.length, index);
+                            return _buildOrderInfo(
+                              model.orderListRespDtos[index].id,
+                              model.orderListRespDtos[index].orderList!.length,
+                              model.orderListRespDtos[index].deliveryState,
+                              model.orderListRespDtos[index].orderState,
+                              index,
+                            );
                           }),
                         ),
                       ),
@@ -79,14 +91,21 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
             ),
           ),
           Flexible(
-            child: OrderDetailPage(model: model, index: _selectedIndex),
+            child: model.orderListRespDtos.length == 0
+                ? Center(
+                    child: Text(
+                      '진행중인 주문이 없습니다.',
+                      style: textTheme().headline1,
+                    ),
+                  )
+                : OrderDetailPage(model: model, fun: changeIndex),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildOrderInfo(orderName, menuCount, index) {
+  Widget _buildOrderInfo(orderId, menuCount, deliveryState, orderState, index) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: gap_s, horizontal: gap_m),
       child: Column(
@@ -94,12 +113,13 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
         children: [
           InkWell(
             onTap: () {
-              setState(() {
-                _selectedIndex = index;
-              });
+              ref.read(mainPageViewModel.notifier).changeIndex(index);
+              // setState(() {
+              //   _selectedIndex = index;
+              // });
             },
             child: Text(
-              '${orderName}',
+              '${deliveryState} ${orderId}',
               style: TextStyle(
                 color: Colors.white,
                 fontSize: 24,
@@ -122,7 +142,13 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                   showDialog(
                     context: context,
                     builder: (context) => StatefulBuilder(
-                      builder: (context, setState) => OrderCancelAlert(deliveryTitle: orderName),
+                      builder: (context, setState) => OrderCancelAlert(
+                        fun: changeIndex,
+                        storeId: 1,
+                        orderId: orderId,
+                        deliveryState: deliveryState,
+                        orderState: orderState,
+                      ),
                     ),
                   );
                 },
@@ -141,33 +167,33 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
     );
   }
 
-  Padding _buildDeliveryStatus() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(
-        vertical: gap_s,
-        horizontal: gap_m,
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            '완료 0건',
-            style: TextStyle(
-              color: kMainColor,
-              fontSize: 22,
-            ),
-          ),
-          Text(
-            '취소 0건',
-            style: TextStyle(
-              color: kButtonSubColor,
-              fontSize: 22,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Padding _buildDeliveryStatus() {
+  //   return Padding(
+  //     padding: const EdgeInsets.symmetric(
+  //       vertical: gap_s,
+  //       horizontal: gap_m,
+  //     ),
+  //     child: Row(
+  //       mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //       children: [
+  //         Text(
+  //           '완료 0건',
+  //           style: TextStyle(
+  //             color: kMainColor,
+  //             fontSize: 22,
+  //           ),
+  //         ),
+  //         Text(
+  //           '취소 0건',
+  //           style: TextStyle(
+  //             color: kButtonSubColor,
+  //             fontSize: 22,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildDeliveryOptionCheck(text, index) {
     return Row(

@@ -1,8 +1,8 @@
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
+import 'package:baemin_owner_admin_front/dto/reported_review_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-import 'package:baemin_owner_admin_front/model/reported_review_list_resp_dto.dart';
-import 'package:baemin_owner_admin_front/model/review_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/review_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 
