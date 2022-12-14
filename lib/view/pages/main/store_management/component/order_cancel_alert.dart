@@ -1,10 +1,18 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/controller/order_controller.dart';
+import 'package:baemin_owner_admin_front/dto/req/order_cancel_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OrderCancelAlert extends StatefulWidget {
-  final deliveryTitle;
-  const OrderCancelAlert({required this.deliveryTitle, Key? key}) : super(key: key);
+  final storeId;
+  final orderId;
+  final deliveryState;
+  final orderState;
+
+  const OrderCancelAlert({required this.storeId, required this.orderId, required this.deliveryState, required this.orderState, Key? key})
+      : super(key: key);
 
   @override
   State<OrderCancelAlert> createState() => _OrderCancelAlertState();
@@ -16,6 +24,8 @@ var _selectedOrderRefuseReason = '기상악화';
 class _OrderCancelAlertState extends State<OrderCancelAlert> {
   @override
   Widget build(BuildContext context) {
+    print(widget.storeId);
+    print(widget.orderId);
     return AlertDialog(
       titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
       title: SizedBox(
@@ -93,46 +103,43 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
                   ),
                 ),
               ),
-              InkWell(
-                onTap: () {
-                  Navigator.pop(context);
+              Consumer(
+                builder: (context, ref, child) {
+                  return InkWell(
+                    onTap: () async {
+                      OrderController orderCT = ref.read(orderController);
 
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
-                    SnackBar(
-                      backgroundColor: Color(0x996D62E8),
-                      content: Text('주문이 거절되었습니다. (${widget.deliveryTitle})'), //snack bar의 내용. icon, button같은것도 가능하다.
-                      duration: Duration(seconds: 3), //올라와있는 시간
-                      action: SnackBarAction(
-                        //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                        label: '확인',
-                        textColor: kWhiteColor, //버튼이름
-                        onPressed: () {}, //버튼 눌렀을때.
+                      // Dto로 만들어야지!!
+                      OrderCancelReqDto orderCancelReqDto = OrderCancelReqDto(state: '주문취소', reason: _selectedOrderRefuseReason);
+
+                      // orderId, storeId, userId
+                      await orderCT.cancelOrder(orderCancelReqDto, widget.orderId, widget.storeId, widget.orderState);
+
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: 240,
+                      decoration: BoxDecoration(
+                        color: kMainColor,
+                        borderRadius: BorderRadius.circular(4),
+                        border: Border.all(color: kMainColor),
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: gap_s),
+                        child: Center(
+                          child: Text(
+                            '네',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 20,
+                              height: 1,
+                            ),
+                          ),
+                        ),
                       ),
                     ),
                   );
                 },
-                child: Container(
-                  width: 240,
-                  decoration: BoxDecoration(
-                    color: kMainColor,
-                    borderRadius: BorderRadius.circular(4),
-                    border: Border.all(color: kMainColor),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: gap_s),
-                    child: Center(
-                      child: Text(
-                        '네',
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          height: 1,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
               ),
             ],
           ),

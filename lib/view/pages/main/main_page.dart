@@ -1,25 +1,25 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/controller/order_controller.dart';
+import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:baemin_owner_admin_front/size.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/store_management/store_management_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_info/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/statistics/statistics_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/order_list_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
-class MainPage extends StatefulWidget {
+class MainPage extends ConsumerStatefulWidget {
   const MainPage({Key? key}) : super(key: key);
 
   @override
-  State<MainPage> createState() => _MainPageState();
+  ConsumerState<MainPage> createState() => _MainPageState();
 }
 
-class _MainPageState extends State<MainPage> {
-  final List<Widget> selectedMainView = [
-    StoreManagementMenu(),
-    StatisticsPage(),
-    StoreInfoMenu(),
-  ];
+class _MainPageState extends ConsumerState<MainPage> {
+  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final refreshKey = GlobalKey<RefreshIndicatorState>();
 
   var _selectedIndex = 0;
 
@@ -29,7 +29,15 @@ class _MainPageState extends State<MainPage> {
   bool _isOpen = true;
   @override
   Widget build(BuildContext context) {
+    final List<Widget> selectedMainView = [
+      OrderListPage(),
+      StatisticsPage(),
+      StoreInfoMenu(),
+    ];
+
+    print('세션: ${UserSession.jwtToken}');
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: kBackgroundColor,
       appBar: _buildAppBar(),
       body: Row(
