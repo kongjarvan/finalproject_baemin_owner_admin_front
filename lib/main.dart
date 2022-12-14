@@ -1,10 +1,17 @@
-import 'package:baemin_owner_admin_front/view/pages/admin/admin_main_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/login/login_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/main/main_page.dart';
+import 'package:baemin_owner_admin_front/core/constant/move.dart';
+import 'package:baemin_owner_admin_front/service/local_service.dart';
+import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await LocalService().fetchJwtToken();
+  runApp(
+    const ProviderScope(
+      child: MyApp(),
+    ),
+  );
 }
 
 class MyApp extends StatelessWidget {
@@ -23,12 +30,9 @@ class MyApp extends StatelessWidget {
         hoverColor: Colors.transparent,
         textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.deepOrange),
       ),
-      routes: {
-        '/main': (context) => MainPage(),
-        '/login': (context) => LoginPage(),
-        '/admin': (context) => AdminMainPage(),
-      },
-      home: LoginPage(),
+      navigatorKey: navigatorKey,
+      initialRoute: UserSession.isLogin ? Move.mainPage : Move.loginPage,
+      routes: getRouters(),
     );
   }
 }

@@ -34,7 +34,6 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
     return Flexible(
       child: Scaffold(
-        backgroundColor: kBackgroundColor,
         body: SizedBox(
           width: getBodyWidth(context),
           child: Column(

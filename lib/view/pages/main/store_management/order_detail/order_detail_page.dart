@@ -1,69 +1,125 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+
+
+import 'package:baemin_owner_admin_front/controller/order_controller.dart';
+import 'package:baemin_owner_admin_front/core/util/my_format.dart';
+import 'package:baemin_owner_admin_front/dto/order_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/delivery_complete_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/order_accept_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/main/store_management/component/order_cancel_alert.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/order_list_page_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class OrderDetailPage extends StatefulWidget {
-  final deliveryTitle;
-
-  const OrderDetailPage({required this.deliveryTitle, Key? key}) : super(key: key);
+class OrderDetailPage extends ConsumerStatefulWidget {
+  const OrderDetailPage({Key? key}) : super(key: key);
 
   @override
-  State<OrderDetailPage> createState() => _OrderDetailPageState();
+  ConsumerState<OrderDetailPage> createState() => _OrderDetailPageState();
 }
 
-class _OrderDetailPageState extends State<OrderDetailPage> {
+class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
   final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
   var _selectedDeliveryTime = '60분';
 
   final ScrollController _scrollController = ScrollController();
+
+
+  int _totalCount(OrderListPageModel model) {
+    int totalCount = 0;
+    int selectedIndex = model.selectedIndex;
+
+    List<Orders>? orderList = model.orderListRespDtos[selectedIndex].orderList;
+
+    if (orderList == null) {
+      return totalCount;
+    } else {
+      for (int i = 0; i < orderList.length; i++) {
+        totalCount = totalCount + orderList[i].count;
+      }
+      return totalCount;
+    }
+  }
+
+  int _totalPrice(OrderListPageModel model) {
+    int totalPrice = 0;
+    int selectedIndex = model.selectedIndex;
+
+    List<Orders>? orderList = model.orderListRespDtos[selectedIndex].orderList;
+
+    if (orderList == null) {
+      return totalPrice;
+    } else {
+      for (int i = 0; i < orderList.length; i++) {
+        totalPrice = totalPrice + orderList[i].price;
+      }
+      return totalPrice;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    OrderListPageModel? model = ref.watch(mainPageViewModel);
     return Scaffold(
-      body: Column(
+      body: buildBody(model),
+    );
+  }
+
+  Widget buildBody(OrderListPageModel? model) {
+    if (model == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return Column(
         children: [
-          Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+          const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
           Padding(
             padding: const EdgeInsets.all(gap_l),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context, widget.deliveryTitle),
-                SizedBox(height: gap_l),
-                SizedBox(
-                  width: getBodyWidth(context),
-                  height: getBodyHeight(context) * 0.7,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: _buildUserRequest(),
-                            ),
-                            SizedBox(height: gap_l),
-                            _buildOrderList(),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: gap_m),
-                      _buildUserInfo(),
-                    ],
-                  ),
-                )
+                _buildOrderDetailHeader(model),
+                _buildOrderDetailBody(model),
               ],
             ),
           ),
+        ],
+      );
+    }
+  }
+
+  Widget _buildOrderDetailBody(OrderListPageModel model) {
+    OrderListRespDto orderListRespDto = model.orderListRespDtos[model.selectedIndex];
+
+    return SizedBox(
+      width: getBodyWidth(context),
+      height: getBodyHeight(context) * 0.7,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: _buildUserRequest(orderListRespDto),
+                ),
+                SizedBox(height: gap_l),
+                _buildOrderList(model),
+              ],
+            ),
+          ),
+          SizedBox(width: gap_m),
+          _buildUserInfo(orderListRespDto),
         ],
       ),
     );
   }
 
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(OrderListRespDto orderListRespDto) {
     return Expanded(
       flex: 4,
       child: Container(
@@ -88,44 +144,45 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               color: kBackgroundColor,
             ),
             Expanded(
-                child: Padding(
-              padding: const EdgeInsets.all(gap_m),
-              child: Column(
-                children: [
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildUserAddress(),
-                        SizedBox(height: gap_m),
-                        _buildCompleteDeliveryButton(),
-                      ],
+              child: Padding(
+                padding: const EdgeInsets.all(gap_m),
+                child: Column(
+                  children: [
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: [
+                          _buildUserAddress(orderListRespDto),
+                          SizedBox(height: gap_m),
+                          _buildCompleteDeliveryButton(orderListRespDto),
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: gap_xl),
-                  Expanded(
-                    flex: 1,
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          children: [
-                            _buildOrderInfoForm('주문번호', '1'),
-                            _buildOrderInfoForm('주문시간', '5/26 (수) 20:00'),
-                            _buildOrderInfoForm('예상배달시간', '${_selectedDeliveryTime}'),
-                            _buildOrderInfoForm('완료시간', '진행중'),
-                          ],
-                        ),
-                        _buildRefuseDeliveryButton(),
-                      ],
+                    SizedBox(height: gap_xl),
+                    Expanded(
+                      flex: 1,
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            children: [
+                              _buildOrderInfoForm('주문번호', '${orderListRespDto.id}'),
+                              _buildOrderInfoForm('주문시간', dateFormat(orderListRespDto.orderTime!)),
+                              _buildOrderInfoForm('예상배달시간', _selectedDeliveryTime),
+                              _buildOrderInfoForm('완료시간', '진행중'),
+                            ],
+                          ),
+                          _buildRefuseDeliveryButton(orderListRespDto),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
-            ))
+            ),
           ],
         ),
       ),
@@ -146,67 +203,23 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildCompleteDeliveryButton() {
+  Widget _buildCompleteDeliveryButton(OrderListRespDto orderListRespDto) {
     return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => StatefulBuilder(
-            builder: (context, setState) => AlertDialog(
-              titlePadding: EdgeInsets.symmetric(horizontal: 120, vertical: 60),
-              title: SizedBox(
-                width: 300,
-                child: Column(
-                  children: [
-                    Text(
-                      '배달완료 알림이',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: kMainColor, fontSize: 32),
-                    ),
-                    Text(
-                      '전송 되었습니다.',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: kMainColor, fontSize: 32),
-                    ),
-                  ],
-                ),
-              ),
-              actions: [
-                Center(
-                  child: Padding(
-                    padding: const EdgeInsets.all(gap_s),
-                    child: InkWell(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        width: 240,
-                        decoration: BoxDecoration(
-                          color: kMainColor,
-                          borderRadius: BorderRadius.circular(4),
-                          border: Border.all(color: kMainColor),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsets.symmetric(vertical: gap_s),
-                          child: Center(
-                            child: Text(
-                              '확인',
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20,
-                                height: 1,
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                )
-              ],
-            ),
-          ),
+      onTap: () async {
+        OrderController orderCT = ref.read(orderController);
+        DeliveryCompleteReqDto deliveryCompleteReqDto = DeliveryCompleteReqDto(
+          state: '배달완료',
         );
+        // orderId, storeId, userId
+        int result = await orderCT.completeDelivery(
+          deliveryCompleteReqDto,
+          orderListRespDto.id,
+          1,
+          orderListRespDto.orderState,
+        );
+        if (result == 1) {
+          _deliveryCompleteAlert(context);
+        }
       },
       child: Container(
         decoration: BoxDecoration(
@@ -228,13 +241,79 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildRefuseDeliveryButton() {
+  void _deliveryCompleteAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => StatefulBuilder(
+        builder: (context, setState) => AlertDialog(
+          titlePadding: EdgeInsets.symmetric(horizontal: 120, vertical: 60),
+          title: SizedBox(
+            width: 300,
+            child: Column(
+              children: [
+                Text(
+                  '배달완료 알림이',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kMainColor, fontSize: 32),
+                ),
+                Text(
+                  '전송 되었습니다.',
+                  textAlign: TextAlign.center,
+                  style: TextStyle(color: kMainColor, fontSize: 32),
+                ),
+              ],
+            ),
+          ),
+          actions: [
+            Center(
+              child: Padding(
+                padding: const EdgeInsets.all(gap_s),
+                child: InkWell(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Container(
+                    width: 240,
+                    decoration: BoxDecoration(
+                      color: kMainColor,
+                      borderRadius: BorderRadius.circular(4),
+                      border: Border.all(color: kMainColor),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: gap_s),
+                      child: Center(
+                        child: Text(
+                          '확인',
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 20,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildRefuseDeliveryButton(OrderListRespDto orderListRespDto) {
     return InkWell(
       onTap: () {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
-            builder: (context, setState) => OrderCancelAlert(deliveryTitle: widget.deliveryTitle),
+            builder: (context, setState) => OrderCancelAlert(
+              storeId: 1,
+              orderId: orderListRespDto.id,
+              deliveryState: orderListRespDto.deliveryState,
+              orderState: orderListRespDto.orderState,
+            ),
           ),
         );
       },
@@ -258,7 +337,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildUserAddress() {
+  Widget _buildUserAddress(OrderListRespDto orderListRespDto) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -273,12 +352,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '[지번] 그린구 그린동 그린아파트 423동 4호',
-                style: textTheme().headline1,
-              ),
-              SizedBox(height: gap_xs),
-              Text(
-                '[도로명] 그린구 그린로 그린아파트 423동 4호',
+                '${orderListRespDto.userAddress}',
                 style: textTheme().headline1,
               ),
             ],
@@ -293,7 +367,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '010-1234-5678',
+                orderListRespDto.userPhone!,
                 style: textTheme().headline1,
               ),
             ],
@@ -303,96 +377,98 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
     );
   }
 
-  Widget _buildOrderList() {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(gap_m),
-              child: Row(
-                children: [
-                  Icon(CupertinoIcons.doc_text),
-                  Text(
-                    '주문내역',
-                    style: textTheme().headline1,
-                  ),
-                ],
+  Widget _buildOrderList(OrderListPageModel model) {
+    List<Orders>? orderList = model.orderListRespDtos[model.selectedIndex].orderList;
+    if (orderList == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return Expanded(
+        flex: 2,
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(gap_m),
+                child: Row(
+                  children: [
+                    Icon(CupertinoIcons.doc_text),
+                    Text(
+                      '주문내역',
+                      style: textTheme().headline1,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Divider(thickness: gap_xxs, height: gap_xxs, color: kBackgroundColor),
-            Expanded(
-              child: RawScrollbar(
-                thumbColor: kUnselectedListColor,
-                radius: Radius.circular(5),
-                controller: _scrollController,
-                thickness: 10,
-                thumbVisibility: true,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
+              Divider(thickness: gap_xxs, height: gap_xxs, color: kBackgroundColor),
+              Expanded(
+                child: RawScrollbar(
+                  thumbColor: kUnselectedListColor,
+                  radius: Radius.circular(5),
                   controller: _scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.all(gap_m),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: [
-                        _buildMenuPrice('메뉴', '수량', '금액'),
-                        _buildMenuPrice('메뉴1', 1, '6,000원'),
-                        _buildMenuPrice('메뉴2', 1, '9,000원'),
-                        _buildMenuPrice('메뉴3', 1, '6,000원'),
-                        _buildMenuPrice('메뉴4', 1, '9,000원'),
-                        _buildMenuPrice('메뉴5', 1, '6,000원'),
-                        _buildMenuPrice('메뉴6', 1, '9,000원'),
-                        _buildMenuPrice('메뉴7', 1, '6,000원'),
-                        _buildMenuPrice('메뉴8', 1, '9,000원'),
-                        _buildMenuPrice('메뉴9', 1, '6,000원'),
-                        _buildMenuPrice('메뉴10', 1, '9,000원'),
-                        _buildMenuPrice('메뉴11', 1, '6,000원'),
-                        _buildMenuPrice('메뉴12', 1, '9,000원'),
-                        _buildTotalPrice(12, '90,000원'),
-                      ],
+                  thickness: 10,
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: _scrollController,
+                    child: Padding(
+                      padding: const EdgeInsets.all(gap_m),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: List.generate(
+                          orderList.length,
+                          (index) {
+                            return _buildMenuPrice(
+                              orderList[index].menuName,
+                              orderList[index].count,
+                              numberPriceFormat('${orderList[index].price}'),
+                            );
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ),
-            )
-          ],
+              _buildTotalPrice(_totalCount(model), numberPriceFormat('${_totalPrice(model)}')),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
-  Column _buildOrderDetailHeader(BuildContext context, deliveryTitle) {
+  Column _buildOrderDetailHeader(OrderListPageModel model) {
+    OrderListRespDto orderListRespDto = model.orderListRespDtos[model.selectedIndex];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${deliveryTitle}',
-          style: TextStyle(color: kMainColor, fontSize: 32),
+          '${orderListRespDto.deliveryState} ${orderListRespDto.id}',
+          style: const TextStyle(color: kMainColor, fontSize: 32),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '메뉴 1개 · 10,000원 (결제완료)',
-              style: TextStyle(fontSize: 22),
+              '메뉴 ${_totalCount(model)}개 · ${numberPriceFormat("${_totalPrice(model)}")} (${orderListRespDto.orderState})',
+              style: const TextStyle(fontSize: 22),
             ),
             Row(
               children: [
                 _buildSetDeliveryTime(),
-                SizedBox(width: gap_m),
-                _buildAcceptDeliveryButton(context),
+                const SizedBox(width: gap_m),
+                _buildAcceptDeliveryButton(orderListRespDto),
               ],
             ),
           ],
         ),
+        const SizedBox(height: gap_l),
       ],
     );
   }
 
-  Container _buildUserRequest() {
+  Widget _buildUserRequest(OrderListRespDto orderListRespDto) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -414,7 +490,7 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
           Padding(
             padding: const EdgeInsets.all(gap_m),
             child: Text(
-              '3인분 같은 2인분 주세요~',
+              '${orderListRespDto.orderComment}',
               style: textTheme().headline1,
             ),
           ),
@@ -463,44 +539,47 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
   }
 
   Widget _buildTotalPrice(amount, price) {
-    return Column(
-      children: [
-        Divider(
-          thickness: 1,
-          height: 1,
-          color: Colors.black,
-        ),
-        SizedBox(height: gap_m),
-        Row(
-          children: [
-            Expanded(flex: 1, child: SizedBox()),
-            Expanded(
-              flex: 1,
-              child: Align(
-                alignment: AlignmentDirectional.center,
-                child: Text(
-                  '${amount}',
-                  style: textTheme().headline1,
+    return Padding(
+      padding: const EdgeInsets.all(gap_m),
+      child: Column(
+        children: [
+          Divider(
+            thickness: 1,
+            height: 1,
+            color: Colors.black,
+          ),
+          SizedBox(height: gap_m),
+          Row(
+            children: [
+              Expanded(flex: 1, child: SizedBox()),
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: AlignmentDirectional.center,
+                  child: Text(
+                    '${amount}',
+                    style: textTheme().headline1,
+                  ),
                 ),
               ),
-            ),
-            Expanded(
-              flex: 1,
-              child: Align(
-                alignment: AlignmentDirectional.centerEnd,
-                child: Text(
-                  '${price}',
-                  style: textTheme().headline1,
+              Expanded(
+                flex: 1,
+                child: Align(
+                  alignment: AlignmentDirectional.centerEnd,
+                  child: Text(
+                    '${price}',
+                    style: textTheme().headline1,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
-      ],
+            ],
+          ),
+        ],
+      ),
     );
   }
 
-  InkWell _buildAcceptDeliveryButton(BuildContext context) {
+  Widget _buildAcceptDeliveryButton(OrderListRespDto orderListRespDto) {
     return InkWell(
       onTap: () {
         showDialog(
@@ -552,22 +631,17 @@ class _OrderDetailPageState extends State<OrderDetailPage> {
                         ),
                       ),
                       InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            //SnackBar 구현하는법 context는 위에 BuildContext에 있는 객체를 그대로 가져오면 됨.
-                            SnackBar(
-                              backgroundColor: Color(0x99FF521C),
-                              content: Text('주문이 접수되었습니다! (${widget.deliveryTitle})'), //snack bar의 내용. icon, button같은것도 가능하다.
-                              duration: Duration(seconds: 3), //올라와있는 시간
-                              action: SnackBarAction(
-                                //추가로 작업을 넣기. 버튼넣기라 생각하면 편하다.
-                                label: '확인',
-                                textColor: kWhiteColor, //버튼이름
-                                onPressed: () {}, //버튼 눌렀을때.
-                              ),
-                            ),
+                        onTap: () async {
+                          OrderController orderCT = ref.read(orderController);
+                          OrderAcceptReqDto orderAcceptReqDto = OrderAcceptReqDto(state: '주문확인', deliveryHour: _selectedDeliveryTime);
+
+                          await orderCT.acceptOrder(
+                            orderAcceptReqDto,
+                            orderListRespDto.id!,
+                            1,
+                            orderListRespDto.orderState,
                           );
+                          Navigator.pop(context);
                         },
                         child: Container(
                           width: 240,
