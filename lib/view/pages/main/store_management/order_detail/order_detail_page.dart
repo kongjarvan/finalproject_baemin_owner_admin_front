@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 
+
 import 'package:baemin_owner_admin_front/controller/order_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/my_format.dart';
 import 'package:baemin_owner_admin_front/dto/order_list_resp_dto.dart';
@@ -26,6 +27,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
   var _selectedDeliveryTime = '60분';
 
   final ScrollController _scrollController = ScrollController();
+
 
   int _totalCount(OrderListPageModel model) {
     int totalCount = 0;
@@ -200,7 +202,6 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
       ],
     );
   }
-
 
   Widget _buildCompleteDeliveryButton(OrderListRespDto orderListRespDto) {
     return InkWell(
