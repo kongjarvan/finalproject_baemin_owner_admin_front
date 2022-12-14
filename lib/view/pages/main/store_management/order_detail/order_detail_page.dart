@@ -12,12 +12,9 @@ import 'package:baemin_owner_admin_front/view/pages/main/store_management/model/
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 class OrderDetailPage extends ConsumerStatefulWidget {
-  final OrderListPageModel model;
-  final Function fun;
-  const OrderDetailPage({required this.model, required this.fun, Key? key}) : super(key: key);
+  const OrderDetailPage({Key? key}) : super(key: key);
 
   @override
   ConsumerState<OrderDetailPage> createState() => _OrderDetailPageState();
@@ -29,71 +26,97 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
 
   final ScrollController _scrollController = ScrollController();
 
-  int totalCount() {
+  int _totalCount(OrderListPageModel model) {
     int totalCount = 0;
-    int temp = widget.model.selectedIndex;
-    for (int i = 0; i < widget.model.orderListRespDtos[temp].orderList!.length; i++) {
-      List<Orders> list = widget.model.orderListRespDtos[temp].orderList!;
-      totalCount = totalCount + list[i].count;
+    int selectedIndex = model.selectedIndex;
+
+    List<Orders>? orderList = model.orderListRespDtos[selectedIndex].orderList;
+
+    if (orderList == null) {
+      return totalCount;
+    } else {
+      for (int i = 0; i < orderList.length; i++) {
+        totalCount = totalCount + orderList[i].count;
+      }
+      return totalCount;
     }
-    return totalCount;
   }
 
-  int totalPrice() {
+  int _totalPrice(OrderListPageModel model) {
     int totalPrice = 0;
-    int temp = widget.model.selectedIndex;
-    for (int i = 0; i < widget.model.orderListRespDtos[temp].orderList!.length; i++) {
-      totalPrice = totalPrice + widget.model.orderListRespDtos[temp].orderList![i].price;
+    int selectedIndex = model.selectedIndex;
+
+    List<Orders>? orderList = model.orderListRespDtos[selectedIndex].orderList;
+
+    if (orderList == null) {
+      return totalPrice;
+    } else {
+      for (int i = 0; i < orderList.length; i++) {
+        totalPrice = totalPrice + orderList[i].price;
+      }
+      return totalPrice;
     }
-    return totalPrice;
   }
 
   @override
   Widget build(BuildContext context) {
-    OrderListPageModel? orderModel = ref.watch(mainPageViewModel);
+    OrderListPageModel? model = ref.watch(mainPageViewModel);
     return Scaffold(
-      body: Column(
+      body: buildBody(model),
+    );
+  }
+
+  Widget buildBody(OrderListPageModel? model) {
+    if (model == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return Column(
         children: [
-          Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+          const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
           Padding(
             padding: const EdgeInsets.all(gap_l),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                _buildOrderDetailHeader(context),
-                SizedBox(height: gap_l),
-                SizedBox(
-                  width: getBodyWidth(context),
-                  height: getBodyHeight(context) * 0.7,
-                  child: Row(
-                    children: [
-                      Expanded(
-                        flex: 5,
-                        child: Column(
-                          children: [
-                            Expanded(
-                              flex: 1,
-                              child: _buildUserRequest(),
-                            ),
-                            SizedBox(height: gap_l),
-                            _buildOrderList(),
-                          ],
-                        ),
-                      ),
-                      SizedBox(width: gap_m),
-                      _buildUserInfo(),
-                    ],
-                  ),
-                )
+                _buildOrderDetailHeader(model),
+                _buildOrderDetailBody(model),
               ],
             ),
           ),
+        ],
+      );
+    }
+  }
+
+  Widget _buildOrderDetailBody(OrderListPageModel model) {
+    OrderListRespDto orderListRespDto = model.orderListRespDtos[model.selectedIndex];
+
+    return SizedBox(
+      width: getBodyWidth(context),
+      height: getBodyHeight(context) * 0.7,
+      child: Row(
+        children: [
+          Expanded(
+            flex: 5,
+            child: Column(
+              children: [
+                Expanded(
+                  flex: 1,
+                  child: _buildUserRequest(orderListRespDto),
+                ),
+                SizedBox(height: gap_l),
+                _buildOrderList(model),
+              ],
+            ),
+          ),
+          SizedBox(width: gap_m),
+          _buildUserInfo(orderListRespDto),
         ],
       ),
     );
   }
 
-  Widget _buildUserInfo() {
+  Widget _buildUserInfo(OrderListRespDto orderListRespDto) {
     return Expanded(
       flex: 4,
       child: Container(
@@ -128,9 +151,9 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          _buildUserAddress(),
+                          _buildUserAddress(orderListRespDto),
                           SizedBox(height: gap_m),
-                          _buildCompleteDeliveryButton(),
+                          _buildCompleteDeliveryButton(orderListRespDto),
                         ],
                       ),
                     ),
@@ -143,13 +166,13 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
                         children: [
                           Column(
                             children: [
-                              _buildOrderInfoForm('주문번호', '${widget.model.orderListRespDtos[widget.model.selectedIndex].id}'),
-                              _buildOrderInfoForm('주문시간', dateFormat(widget.model.orderListRespDtos[widget.model.selectedIndex].orderTime!)),
+                              _buildOrderInfoForm('주문번호', '${orderListRespDto.id}'),
+                              _buildOrderInfoForm('주문시간', dateFormat(orderListRespDto.orderTime!)),
                               _buildOrderInfoForm('예상배달시간', _selectedDeliveryTime),
                               _buildOrderInfoForm('완료시간', '진행중'),
                             ],
                           ),
-                          _buildRefuseDeliveryButton(),
+                          _buildRefuseDeliveryButton(orderListRespDto),
                         ],
                       ),
                     ),
@@ -177,45 +200,41 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
     );
   }
 
-  Widget _buildCompleteDeliveryButton() {
-    return Consumer(
-      builder: (context, ref, child) {
-        return InkWell(
-          onTap: () async {
-            OrderController orderCT = ref.read(orderController);
-            DeliveryCompleteReqDto deliveryCompleteReqDto = DeliveryCompleteReqDto(
-              state: '배달완료',
-            );
-            // orderId, storeId, userId
-            int result = await orderCT.completeDelivery(
-              deliveryCompleteReqDto,
-              widget.model.orderListRespDtos[widget.model.selectedIndex].id,
-              1,
-              widget.model.orderListRespDtos[widget.model.selectedIndex].orderState,
-            );
-            if (result == 1) {
-              _deliveryCompleteAlert(context);
-            }
-          },
-          child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: kMainColor,
-              ),
-              borderRadius: BorderRadius.circular(4),
-            ),
-            child: Center(
-              child: Padding(
-                padding: const EdgeInsets.all(gap_s),
-                child: Text(
-                  '배달완료 알림전송',
-                  style: TextStyle(color: kMainColor, fontSize: 22, height: 1),
-                ),
-              ),
+  Widget _buildCompleteDeliveryButton(OrderListRespDto orderListRespDto) {
+    return InkWell(
+      onTap: () async {
+        OrderController orderCT = ref.read(orderController);
+        DeliveryCompleteReqDto deliveryCompleteReqDto = DeliveryCompleteReqDto(
+          state: '배달완료',
+        );
+        // orderId, storeId, userId
+        int result = await orderCT.completeDelivery(
+          deliveryCompleteReqDto,
+          orderListRespDto.id,
+          1,
+          orderListRespDto.orderState,
+        );
+        if (result == 1) {
+          _deliveryCompleteAlert(context);
+        }
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(
+            color: kMainColor,
+          ),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(gap_s),
+            child: Text(
+              '배달완료 알림전송',
+              style: TextStyle(color: kMainColor, fontSize: 22, height: 1),
             ),
           ),
-        );
-      },
+        ),
+      ),
     );
   }
 
@@ -280,18 +299,17 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
     );
   }
 
-  Widget _buildRefuseDeliveryButton() {
+  Widget _buildRefuseDeliveryButton(OrderListRespDto orderListRespDto) {
     return InkWell(
       onTap: () {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
             builder: (context, setState) => OrderCancelAlert(
-              fun: widget.fun,
               storeId: 1,
-              orderId: widget.model.orderListRespDtos[widget.model.selectedIndex].id,
-              deliveryState: widget.model.orderListRespDtos[widget.model.selectedIndex].deliveryState,
-              orderState: widget.model.orderListRespDtos[widget.model.selectedIndex].orderState,
+              orderId: orderListRespDto.id,
+              deliveryState: orderListRespDto.deliveryState,
+              orderState: orderListRespDto.orderState,
             ),
           ),
         );
@@ -316,7 +334,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
     );
   }
 
-  Widget _buildUserAddress() {
+  Widget _buildUserAddress(OrderListRespDto orderListRespDto) {
     return Expanded(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -331,7 +349,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                '${widget.model.orderListRespDtos[widget.model.selectedIndex].userAddress}',
+                '${orderListRespDto.userAddress}',
                 style: textTheme().headline1,
               ),
             ],
@@ -346,7 +364,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
               ),
               SizedBox(height: gap_s),
               Text(
-                widget.model.orderListRespDtos[widget.model.selectedIndex].userPhone!,
+                orderListRespDto.userPhone!,
                 style: textTheme().headline1,
               ),
             ],
@@ -356,92 +374,98 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
     );
   }
 
-  Widget _buildOrderList() {
-    return Expanded(
-      flex: 2,
-      child: Container(
-        color: Colors.white,
-        child: Column(
-          children: [
-            Padding(
-              padding: const EdgeInsets.all(gap_m),
-              child: Row(
-                children: [
-                  Icon(CupertinoIcons.doc_text),
-                  Text(
-                    '주문내역',
-                    style: textTheme().headline1,
-                  ),
-                ],
+  Widget _buildOrderList(OrderListPageModel model) {
+    List<Orders>? orderList = model.orderListRespDtos[model.selectedIndex].orderList;
+    if (orderList == null) {
+      return const Center(child: CircularProgressIndicator());
+    } else {
+      return Expanded(
+        flex: 2,
+        child: Container(
+          color: Colors.white,
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(gap_m),
+                child: Row(
+                  children: [
+                    Icon(CupertinoIcons.doc_text),
+                    Text(
+                      '주문내역',
+                      style: textTheme().headline1,
+                    ),
+                  ],
+                ),
               ),
-            ),
-            Divider(thickness: gap_xxs, height: gap_xxs, color: kBackgroundColor),
-            Expanded(
-              child: RawScrollbar(
-                thumbColor: kUnselectedListColor,
-                radius: Radius.circular(5),
-                controller: _scrollController,
-                thickness: 10,
-                thumbVisibility: true,
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.vertical,
+              Divider(thickness: gap_xxs, height: gap_xxs, color: kBackgroundColor),
+              Expanded(
+                child: RawScrollbar(
+                  thumbColor: kUnselectedListColor,
+                  radius: Radius.circular(5),
                   controller: _scrollController,
-                  child: Padding(
-                    padding: const EdgeInsets.all(gap_m),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.stretch,
-                      children: List.generate(
-                        widget.model.orderListRespDtos[widget.model.selectedIndex].orderList!.length,
-                        (index) {
-                          return _buildMenuPrice(
-                            widget.model.orderListRespDtos[widget.model.selectedIndex].orderList![index].menuName,
-                            widget.model.orderListRespDtos[widget.model.selectedIndex].orderList![index].count,
-                            numberPriceFormat('${widget.model.orderListRespDtos[widget.model.selectedIndex].orderList![index].price}'),
-                          );
-                        },
+                  thickness: 10,
+                  thumbVisibility: true,
+                  child: SingleChildScrollView(
+                    scrollDirection: Axis.vertical,
+                    controller: _scrollController,
+                    child: Padding(
+                      padding: const EdgeInsets.all(gap_m),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
+                        children: List.generate(
+                          orderList.length,
+                          (index) {
+                            return _buildMenuPrice(
+                              orderList[index].menuName,
+                              orderList[index].count,
+                              numberPriceFormat('${orderList[index].price}'),
+                            );
+                          },
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
-            ),
-            _buildTotalPrice(totalCount(), numberPriceFormat('${totalPrice()}')),
-          ],
+              _buildTotalPrice(_totalCount(model), numberPriceFormat('${_totalPrice(model)}')),
+            ],
+          ),
         ),
-      ),
-    );
+      );
+    }
   }
 
-  Column _buildOrderDetailHeader(BuildContext context) {
-    Logger().d("변경된 index : ${widget.model.selectedIndex}");
+  Column _buildOrderDetailHeader(OrderListPageModel model) {
+    OrderListRespDto orderListRespDto = model.orderListRespDtos[model.selectedIndex];
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${widget.model.orderListRespDtos[widget.model.selectedIndex].deliveryState} ${widget.model.orderListRespDtos[widget.model.selectedIndex].id}',
-          style: TextStyle(color: kMainColor, fontSize: 32),
+          '${orderListRespDto.deliveryState} ${orderListRespDto.id}',
+          style: const TextStyle(color: kMainColor, fontSize: 32),
         ),
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              '메뉴 ${totalCount()}개 · ${numberPriceFormat("${totalPrice()}")} (${widget.model.orderListRespDtos[widget.model.selectedIndex].orderState})',
-              style: TextStyle(fontSize: 22),
+              '메뉴 ${_totalCount(model)}개 · ${numberPriceFormat("${_totalPrice(model)}")} (${orderListRespDto.orderState})',
+              style: const TextStyle(fontSize: 22),
             ),
             Row(
               children: [
                 _buildSetDeliveryTime(),
-                SizedBox(width: gap_m),
-                _buildAcceptDeliveryButton(context),
+                const SizedBox(width: gap_m),
+                _buildAcceptDeliveryButton(orderListRespDto),
               ],
             ),
           ],
         ),
+        const SizedBox(height: gap_l),
       ],
     );
   }
 
-  Container _buildUserRequest() {
+  Widget _buildUserRequest(OrderListRespDto orderListRespDto) {
     return Container(
       color: Colors.white,
       child: Column(
@@ -463,7 +487,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
           Padding(
             padding: const EdgeInsets.all(gap_m),
             child: Text(
-              '${widget.model.orderListRespDtos[widget.model.selectedIndex].orderComment}',
+              '${orderListRespDto.orderComment}',
               style: textTheme().headline1,
             ),
           ),
@@ -552,7 +576,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
     );
   }
 
-  InkWell _buildAcceptDeliveryButton(BuildContext context) {
+  Widget _buildAcceptDeliveryButton(OrderListRespDto orderListRespDto) {
     return InkWell(
       onTap: () {
         showDialog(
@@ -610,11 +634,10 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
 
                           await orderCT.acceptOrder(
                             orderAcceptReqDto,
-                            widget.model.orderListRespDtos[widget.model.selectedIndex].id!,
+                            orderListRespDto.id!,
                             1,
-                            widget.model.orderListRespDtos[widget.model.selectedIndex].orderState,
+                            orderListRespDto.orderState,
                           );
-
                           Navigator.pop(context);
                         },
                         child: Container(

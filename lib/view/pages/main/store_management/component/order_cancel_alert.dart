@@ -10,9 +10,8 @@ class OrderCancelAlert extends StatefulWidget {
   final orderId;
   final deliveryState;
   final orderState;
-  final Function fun;
-  const OrderCancelAlert(
-      {required this.fun, required this.storeId, required this.orderId, required this.deliveryState, required this.orderState, Key? key})
+
+  const OrderCancelAlert({required this.storeId, required this.orderId, required this.deliveryState, required this.orderState, Key? key})
       : super(key: key);
 
   @override
@@ -115,7 +114,7 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
 
                       // orderId, storeId, userId
                       await orderCT.cancelOrder(orderCancelReqDto, widget.orderId, widget.storeId, widget.orderState);
-                      widget.fun();
+
                       Navigator.pop(context);
                     },
                     child: Container(

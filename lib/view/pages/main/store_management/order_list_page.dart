@@ -21,14 +21,6 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
   List<bool> _isChecked = [false, false];
   final ScrollController _scrollController = ScrollController();
 
-  var _selectedIndex = 0;
-
-  void changeIndex() {
-    setState(() {
-      _selectedIndex = 0;
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     OrderListPageModel? model = ref.watch(mainPageViewModel); // viewmodel 초기화
@@ -36,10 +28,10 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
 
     Logger().d("주문목록페이지 빌드");
 
-    return model == null ? CircularProgressIndicator() : _buildBody(model, viewModel);
+    return model == null ? Flexible(child: Center(child: CircularProgressIndicator())) : _buildBody(model, viewModel);
   }
 
-  Widget _buildBody(OrderListPageModel? model, MainPageViewModel viewModel) {
+  Widget _buildBody(OrderListPageModel model, MainPageViewModel viewModel) {
     return Flexible(
       child: Row(
         children: [
@@ -73,7 +65,7 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                         scrollDirection: Axis.vertical,
                         primary: false,
                         child: Column(
-                          children: List.generate(model!.orderListRespDtos.length, (index) {
+                          children: List.generate(model.orderListRespDtos.length, (index) {
                             return _buildOrderInfo(
                               model.orderListRespDtos[index].id,
                               model.orderListRespDtos[index].orderList!.length,
@@ -98,7 +90,7 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                       style: textTheme().headline1,
                     ),
                   )
-                : OrderDetailPage(model: model, fun: changeIndex),
+                : OrderDetailPage(),
           ),
         ],
       ),
@@ -114,9 +106,6 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
           InkWell(
             onTap: () {
               ref.read(mainPageViewModel.notifier).changeIndex(index);
-              // setState(() {
-              //   _selectedIndex = index;
-              // });
             },
             child: Text(
               '${deliveryState} ${orderId}',
@@ -143,7 +132,6 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                     context: context,
                     builder: (context) => StatefulBuilder(
                       builder: (context, setState) => OrderCancelAlert(
-                        fun: changeIndex,
                         storeId: 1,
                         orderId: orderId,
                         deliveryState: deliveryState,
