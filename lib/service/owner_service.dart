@@ -2,13 +2,17 @@ import 'dart:convert';
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
 import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/store_check_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/dto/statistics_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/update_store_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/get_store_info_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/service/local_service.dart';
+import 'package:baemin_owner_admin_front/service/store_session.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 
 class OwnerService {
   final HttpConnector httpConnector = HttpConnector();
@@ -31,9 +35,10 @@ class OwnerService {
 
     ResponseDto responseDto = toResponseDto(response);
 
-    Users user = Users.fromJson(responseDto.data);
-
-    UserSession.successAuthentication(user, jwtToken);
+    if (responseDto.code == 1) {
+      Users user = Users.fromJson(responseDto.data);
+      UserSession.successAuthentication(user, jwtToken);
+    }
 
     return responseDto;
   }
@@ -42,14 +47,11 @@ class OwnerService {
     Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/info", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
+    print('가게정보 응답데이터: ${responseDto.data}');
     if (responseDto.code == 1) {
-      List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
-      List<UpdateStoreRespDto> updateStoreRespDtos = mapList.map((e) => UpdateStoreRespDto.fromJson(e)).toList();
-      print('통과2');
-      responseDto.data = updateStoreRespDtos;
-      print('통과3');
+      GetStoreInfoRespDto updateStoreRespDto = GetStoreInfoRespDto.fromJson(responseDto.data);
+      print('가게정보 RespDto: ${responseDto.data}');
+      responseDto.data = updateStoreRespDto;
     }
 
     return responseDto;
@@ -73,21 +75,39 @@ class OwnerService {
     return responseDto;
   }
 
-  // Future<ResponseDto> fetchGetRegisterOwnerPage() async {
-  //   Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/info/stats", UserSession.jwtToken);
-  //
-  //   ResponseDto responseDto = toResponseDto(response);
-  //   if (responseDto.code == 1) {
-  //     List<dynamic> mapList = responseDto.data;
-  //     print('통과1');
-  //     print(responseDto.data);
-  //
-  //     List<StatisticsRespDto> statisticsRespDtos = mapList.map((e) => StatisticsRespDto.fromJson(e)).toList();
-  //     print('통과2');
-  //     responseDto.data = statisticsRespDtos;
-  //     print('통과3');
-  //   }
-  //
-  //   return responseDto;
-  // }
+  Future<ResponseDto> fetchInsertOwner(RegisterOwnerReqDto registerOwnerReqDto) async {
+    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
+    String requestBody = jsonEncode(registerOwnerReqDto.toJson());
+
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/apply", requestBody, jwtToken: UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    return responseDto;
+  }
+
+  Future<ResponseDto> fetchGetUserState() async {
+    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
+
+    Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/name", jwtToken: UserSession.jwtToken);
+    print('1');
+    ResponseDto responseDto = toResponseDto(response);
+    print('2: ${responseDto.data}');
+    responseDto.data = StoreCheckDto.fromJson(responseDto.data);
+
+    StoreSession.successAuthentication(responseDto.data.id);
+    print('3');
+    return responseDto;
+  }
+
+  fetchgetOwnerInfo() async {
+    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
+
+    Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/info", jwtToken: UserSession.jwtToken);
+    print('이거냐: ${response.body}');
+    ResponseDto responseDto = toResponseDto(response);
+    print('이거냐2: ${responseDto.data}');
+    responseDto.data = GetStoreInfoRespDto.fromJson(responseDto.data);
+    print('이거냐3');
+    return responseDto;
+  }
 }

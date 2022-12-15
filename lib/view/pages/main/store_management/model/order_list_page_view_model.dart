@@ -7,15 +7,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
 
-final mainPageViewModel = StateNotifierProvider.autoDispose<MainPageViewModel, OrderListPageModel?>((ref) {
-  return MainPageViewModel(null)..notifyViewModel();
+final orderListPageViewModel = StateNotifierProvider.autoDispose<OrderListPageViewModel, OrderListPageModel?>((ref) {
+  return OrderListPageViewModel(null)..notifyViewModel();
 });
 
-class MainPageViewModel extends StateNotifier<OrderListPageModel?> {
+class OrderListPageViewModel extends StateNotifier<OrderListPageModel?> {
   final OrderService orderService = OrderService();
   final mContext = navigatorKey.currentContext;
 
-  MainPageViewModel(super.state);
+  OrderListPageViewModel(super.state);
 
   Future<void> changeIndex(int index) async {
     Logger().d("changeIndex 변경됨");
@@ -30,7 +30,7 @@ class MainPageViewModel extends StateNotifier<OrderListPageModel?> {
       state = OrderListPageModel(responseDto.data, 0);
       print('Model에 data 담김');
     } else {
-      print('asdf ${responseDto.msg}');
+      print('${responseDto.msg}');
       ScaffoldMessenger.of(mContext!).showSnackBar(
         const SnackBar(content: Text("Jwt 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.")),
       );

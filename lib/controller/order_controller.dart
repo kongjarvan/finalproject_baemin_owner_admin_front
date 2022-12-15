@@ -21,16 +21,18 @@ class OrderController {
   OrderService orderService = OrderService();
 
   Future<void> refreshMainPage() async {
-    _ref.read(mainPageViewModel.notifier).notifyViewModel();
+    _ref.read(orderListPageViewModel.notifier).notifyViewModel();
   }
 
-  Future<void> cancelOrder(OrderCancelReqDto orderCancelReqDto, int orderId, int storeId, orderState) async {
+  Future<void> cancelOrder(OrderCancelReqDto orderCancelReqDto, int orderId, orderState) async {
     // 통신
     // userId, orderId, storeId
+    print('주문취소 컨트롤러 진입');
     if (orderState == '주문완료') {
-      ResponseDto responseDto = await OrderService().fetchDelete(orderCancelReqDto, orderId, storeId);
+      ResponseDto responseDto = await OrderService().fetchDelete(orderCancelReqDto, orderId);
+      print('응답받음');
       if (responseDto.code == 1) {
-        await _ref.read(mainPageViewModel.notifier).notifyViewModel();
+        await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
         //_ref.read(mainPageViewModel.notifier).delete(orderId);
         ScaffoldMessenger.of(mContext!).showSnackBar(
           SnackBar(
@@ -47,7 +49,7 @@ class OrderController {
         ScaffoldMessenger.of(mContext!).showSnackBar(
           SnackBar(
             backgroundColor: Color(0x996D62E8),
-            content: Text("주문을 취소 할 수 없습니다."),
+            content: Text("주문을 취소 할 수 없습니다. (1)"),
             action: SnackBarAction(
               label: '확인',
               textColor: kWhiteColor,
@@ -60,7 +62,7 @@ class OrderController {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(
           backgroundColor: Color(0x996D62E8),
-          content: Text("주문을 취소 할 수 없습니다."),
+          content: Text("주문을 취소 할 수 없습니다. (2)"),
           action: SnackBarAction(
             label: '확인',
             textColor: kWhiteColor,
@@ -74,10 +76,10 @@ class OrderController {
     //_ref.read(mainPageViewModel.notifier).delete();
   }
 
-  Future<void> acceptOrder(OrderAcceptReqDto orderAcceptReqDto, int orderId, int storeId, orderState) async {
+  Future<void> acceptOrder(OrderAcceptReqDto orderAcceptReqDto, int orderId, orderState) async {
     if (orderState == '주문완료') {
-      ResponseDto responseDto = await OrderService().fetchAcceptOrder(orderAcceptReqDto, orderId, storeId);
-      await _ref.read(mainPageViewModel.notifier).notifyViewModel();
+      ResponseDto responseDto = await OrderService().fetchAcceptOrder(orderAcceptReqDto, orderId);
+      await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(
           backgroundColor: Color(0x99FF521C),
@@ -106,12 +108,12 @@ class OrderController {
 
   Future<int> completeDelivery(DeliveryCompleteReqDto deliveryCompleteReqDto, orderId, int storeId, orderState) async {
     if (orderState == '주문확인') {
-      ResponseDto responseDto = await OrderService().fetchCompleteDelivery(deliveryCompleteReqDto, orderId, storeId);
-      await _ref.read(mainPageViewModel.notifier).notifyViewModel();
+      ResponseDto responseDto = await OrderService().fetchCompleteDelivery(deliveryCompleteReqDto, orderId);
+      await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
       return 1;
     } else if (orderState == '배달중') {
-      ResponseDto responseDto = await OrderService().fetchCompleteDelivery(deliveryCompleteReqDto, orderId, storeId);
-      await _ref.read(mainPageViewModel.notifier).notifyViewModel();
+      ResponseDto responseDto = await OrderService().fetchCompleteDelivery(deliveryCompleteReqDto, orderId);
+      await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
       return 1;
     } else {
       print('주문완료 불가능');
