@@ -4,9 +4,12 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:flutter/material.dart';
 
 class InputTextFormField extends StatelessWidget {
-  final String text;
+  final String text1;
+  final String text2;
   final controller;
-  const InputTextFormField({required this.text, this.controller, Key? key}) : super(key: key);
+  final isReadOnly;
+  const InputTextFormField({required this.text1, required this.text2, required this.controller, required this.isReadOnly, Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -15,19 +18,20 @@ class InputTextFormField extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            text,
+            text1,
             style: textTheme().headline2,
           ),
           SizedBox(height: gap_s),
           TextFormField(
+            readOnly: isReadOnly,
             controller: controller,
-            validator: (value) => value!.isEmpty ? "${text}를 입력 해 주세요" : null,
-            obscureText: text == "Password" ? true : false,
+            validator: (value) => value!.isEmpty ? "${text1}를 입력 해 주세요" : null,
+            obscureText: text1 == "Password" ? true : false,
             decoration: InputDecoration(
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: kMainColor, width: 2),
               ),
-              hintText: "$text 입력",
+              hintText: "$text2",
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(4),
               ),

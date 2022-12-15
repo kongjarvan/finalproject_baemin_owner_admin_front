@@ -23,15 +23,15 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
 
   @override
   Widget build(BuildContext context) {
-    OrderListPageModel? model = ref.watch(mainPageViewModel); // viewmodel 초기화
-    MainPageViewModel viewModel = ref.read(mainPageViewModel.notifier);
+    OrderListPageModel? model = ref.watch(orderListPageViewModel); // viewmodel 초기화
+    OrderListPageViewModel viewModel = ref.read(orderListPageViewModel.notifier);
 
     Logger().d("주문목록페이지 빌드");
 
     return model == null ? Flexible(child: Center(child: CircularProgressIndicator())) : _buildBody(model, viewModel);
   }
 
-  Widget _buildBody(OrderListPageModel model, MainPageViewModel viewModel) {
+  Widget _buildBody(OrderListPageModel model, OrderListPageViewModel viewModel) {
     return Flexible(
       child: Row(
         children: [
@@ -105,7 +105,7 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
         children: [
           InkWell(
             onTap: () {
-              ref.read(mainPageViewModel.notifier).changeIndex(index);
+              ref.read(orderListPageViewModel.notifier).changeIndex(index);
             },
             child: Text(
               '${deliveryState} ${orderId}',
@@ -132,7 +132,6 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
                     context: context,
                     builder: (context) => StatefulBuilder(
                       builder: (context, setState) => OrderCancelAlert(
-                        storeId: 1,
                         orderId: orderId,
                         deliveryState: deliveryState,
                         orderState: orderState,

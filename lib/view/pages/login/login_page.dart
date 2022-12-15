@@ -36,13 +36,17 @@ class _LoginPageState extends ConsumerState<LoginPage> {
             children: [
               Logo(),
               InputTextFormField(
-                text: '아이디',
+                text1: '아이디',
+                text2: '아이디 입력',
                 controller: _username,
+                isReadOnly: false,
               ),
               SizedBox(height: 24),
               InputTextFormField(
-                text: '비밀번호',
+                text1: '비밀번호',
+                text2: '비밀번호 입력',
                 controller: _password,
+                isReadOnly: false,
               ),
               SizedBox(height: 24),
               _buildLoginButton(context, ownerCT),
@@ -97,16 +101,12 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           children: [
             InkWell(
               child: Text('아이디 ', style: textTheme().bodyText2),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => LoginPage()));
-              },
+              onTap: () {},
             ),
             Text('/'),
             InkWell(
               child: Text(' 비밀번호 찾기', style: textTheme().bodyText2),
-              onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => RegisterOwnerPage()));
-              },
+              onTap: () {},
             )
           ],
         ),

@@ -6,13 +6,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OrderCancelAlert extends StatefulWidget {
-  final storeId;
   final orderId;
   final deliveryState;
   final orderState;
 
-  const OrderCancelAlert({required this.storeId, required this.orderId, required this.deliveryState, required this.orderState, Key? key})
-      : super(key: key);
+  const OrderCancelAlert({required this.orderId, required this.deliveryState, required this.orderState, Key? key}) : super(key: key);
 
   @override
   State<OrderCancelAlert> createState() => _OrderCancelAlertState();
@@ -24,7 +22,6 @@ var _selectedOrderRefuseReason = '기상악화';
 class _OrderCancelAlertState extends State<OrderCancelAlert> {
   @override
   Widget build(BuildContext context) {
-    print(widget.storeId);
     print(widget.orderId);
     return AlertDialog(
       titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
@@ -113,7 +110,7 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
                       OrderCancelReqDto orderCancelReqDto = OrderCancelReqDto(state: '주문취소', reason: _selectedOrderRefuseReason);
 
                       // orderId, storeId, userId
-                      await orderCT.cancelOrder(orderCancelReqDto, widget.orderId, widget.storeId, widget.orderState);
+                      await orderCT.cancelOrder(orderCancelReqDto, widget.orderId, widget.orderState);
 
                       Navigator.pop(context);
                     },
@@ -124,8 +121,8 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
                         borderRadius: BorderRadius.circular(4),
                         border: Border.all(color: kMainColor),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(vertical: gap_s),
+                      child: const Padding(
+                        padding: EdgeInsets.symmetric(vertical: gap_s),
                         child: Center(
                           child: Text(
                             '네',

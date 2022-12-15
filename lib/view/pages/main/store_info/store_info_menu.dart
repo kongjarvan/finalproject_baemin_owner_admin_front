@@ -31,8 +31,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
   @override
   Widget build(BuildContext context) {
     final List<Widget> selectedMainView = [
-      RegisterStorePage(notifyParent: (int) => _callbackIndexPage(int)),
-      UpdateStorePage(notifyParent: (int) => _callbackIndexPage(int)),
+      UpdateStorePage(),
       MenuListPage(notifyParent: (int) => _callbackIndexPage(int)),
       InsertMenuPage(notifyParent: (int) => _callbackIndexPage(int)),
       ReviewListPage(notifyParent: (int) => _callbackIndexPage(int)),
@@ -77,36 +76,12 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
                 width: 200,
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: gap_s),
-                  child: Text(textAlign: TextAlign.start, '가게등록', style: textTheme().headline3),
+                  child: Text(textAlign: TextAlign.start, '가게수정', style: textTheme().headline3),
                 ),
               ),
             ),
           ],
         ),
-      ),
-    );
-  }
-
-  Widget _buildUpdateStoreMenu() {
-    return Padding(
-      padding: const EdgeInsets.all(gap_s),
-      child: Row(
-        children: [
-          InkWell(
-            onTap: () {
-              setState(() {
-                _selectedIndex = 1;
-              });
-            },
-            child: SizedBox(
-              width: 200,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: gap_s),
-                child: Text(textAlign: TextAlign.start, '가게수정', style: textTheme().headline3),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
@@ -135,8 +110,8 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
               },
               body: Column(
                 children: [
-                  _buildInfoMenu1('메뉴관리', 2),
-                  _buildInfoMenu2('리뷰관리', 4),
+                  _buildInfoMenu1('메뉴관리', 1),
+                  _buildInfoMenu2('리뷰관리', 3),
                 ],
               ),
               isExpanded: _isOpen,
