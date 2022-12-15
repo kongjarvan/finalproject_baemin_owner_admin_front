@@ -93,9 +93,9 @@ class OwnerService {
     ResponseDto responseDto = toResponseDto(response);
     print('2: ${responseDto.data}');
     responseDto.data = StoreCheckDto.fromJson(responseDto.data);
-
-    StoreSession.successAuthentication(responseDto.data.id);
     print('3');
+    StoreSession.successAuthentication(responseDto.data.storeId);
+    print('4');
     return responseDto;
   }
 

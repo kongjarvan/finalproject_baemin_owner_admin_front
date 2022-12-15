@@ -1,18 +1,18 @@
 class StoreCheckDto {
-  final int id;
+  final int storeId;
   final String name;
   final String role;
   final bool accept;
 
   StoreCheckDto({
-    required this.id,
+    required this.storeId,
     required this.name,
     required this.role,
     required this.accept,
   });
 
   factory StoreCheckDto.fromJson(Map<String, dynamic> json) => StoreCheckDto(
-        id: json["id"],
+        storeId: json["storeId"],
         name: json["name"],
         role: json["role"],
         accept: json["accept"],

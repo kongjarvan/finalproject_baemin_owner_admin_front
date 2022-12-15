@@ -34,8 +34,9 @@ class OwnerController {
     //3. 비지니스 로직 처리
     if (responseDto.code == 1) {
       ResponseDto responseDto = await ownerService.fetchGetUserState();
+      print('UserState 통신완료');
       if (responseDto.code == 1) {
-        print(responseDto.data.id);
+        print('가게 아이디: ${responseDto.data.storeId}');
         if (responseDto.data.name.isEmpty) {
           Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.registerStorePage, (route) => false);
         } else {

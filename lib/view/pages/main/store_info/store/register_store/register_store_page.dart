@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
+import 'package:baemin_owner_admin_front/core/util/time_list.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
@@ -32,6 +33,15 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
   final _closeTime = TextEditingController();
   final _deliveryHour = TextEditingController();
   final _deliveryCost = TextEditingController();
+
+  final _OpenTimeList = timeList();
+  final _CloseTimeList = timeList();
+
+  final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
+  var _selectedDeliveryTime = '60분';
+
+  var _selectedOpenTime = '09시';
+  var _selectedCloseTime = '22시';
 
   @override
   Widget build(BuildContext context) {
@@ -71,15 +81,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
 
   Widget RegisterStoreForm(title) {
     return Column(
-      children: [
-        _buildTitle(title),
-        SizedBox(height: gap_m),
-        _buildOwnerInfo(),
-        SizedBox(height: gap_xl),
-        _buildStoreInfo(),
-        SizedBox(height: gap_xl),
-        _buildConfirmButton(title)
-      ],
+      children: [_buildTitle(title), SizedBox(height: gap_m), _buildOwnerInfo(), SizedBox(height: gap_xl), _buildStoreInfo(), SizedBox(height: gap_xl), _buildConfirmButton(title)],
     );
   }
 
@@ -311,36 +313,76 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
         Row(
           children: [
             Expanded(
-              child: TextFormField(
-                controller: _openTime,
-                validator: (value) => value!.isEmpty ? '${text2}을 입력 해 주세요' : null,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor, width: 2),
+              child: Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: kUnselectedListColor,
                   ),
-                  hintText: '${text2}',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.white,
                 ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    style: textTheme().headline1,
+                    underline: Container(
+                      height: 0,
+                    ),
+                    value: _selectedOpenTime,
+                    items: _OpenTimeList.map(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: gap_xs),
+                            child: Text(value),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedDeliveryTime = value as String;
+                      });
+                    }),
               ),
             ),
             SizedBox(width: gap_m),
             Text('~', style: textTheme().headline2),
             SizedBox(width: gap_m),
             Expanded(
-              child: TextFormField(
-                controller: _closeTime,
-                validator: (value) => value!.isEmpty ? '${text3}을 입력 해 주세요' : null,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor, width: 2),
+              child: Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: kUnselectedListColor,
                   ),
-                  hintText: '${text3}',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.white,
                 ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    style: textTheme().headline1,
+                    underline: Container(
+                      height: 0,
+                    ),
+                    value: _selectedCloseTime,
+                    items: _CloseTimeList.map(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: gap_xs),
+                            child: Text(value),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedDeliveryTime = value as String;
+                      });
+                    }),
               ),
             ),
           ],
@@ -358,18 +400,38 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
         Row(
           children: [
             Expanded(
-              child: TextFormField(
-                controller: _deliveryHour,
-                validator: (value) => value!.isEmpty ? '${text1}을 입력 해 주세요' : null,
-                decoration: InputDecoration(
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(color: kMainColor, width: 2),
+              child: Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: kUnselectedListColor,
                   ),
-                  hintText: '${text1}',
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.white,
                 ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    style: textTheme().headline1,
+                    underline: Container(
+                      height: 0,
+                    ),
+                    value: _selectedDeliveryTime,
+                    items: _deliveryTimeList.map(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: gap_xs),
+                            child: Text(value),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedDeliveryTime = value as String;
+                      });
+                    }),
               ),
             ),
           ],
