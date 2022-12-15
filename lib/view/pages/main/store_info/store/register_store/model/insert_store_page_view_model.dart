@@ -16,9 +16,9 @@ class InsertStorePageViewModel extends StateNotifier<InsertStorePageModel?> {
   InsertStorePageViewModel(super.state);
 
   Future<void> notifyViewModel() async {
-    print('뭔지 모르겠는데 일단 진입');
-    ResponseDto responseDto = await ownerService.fetchgetOwnerInfo();
-    print('뭔가 응답됨');
+    print('가게등록페이지 VM 진입');
+    ResponseDto responseDto = await ownerService.fetchGetOwnerInfo();
+    print('응답: ${responseDto.data}');
     if (responseDto.code == 1) {
       state = InsertStorePageModel(responseDto.data);
       print('Model에 data 담김');

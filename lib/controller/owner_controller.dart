@@ -1,6 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/store_check_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/order_service.dart';
@@ -64,7 +65,7 @@ class OwnerController {
     }
   }
 
-  void registerOwner(RegisterOwnerReqDto registerOwnerReqDto) async {
+  Future<void> registerOwner(RegisterOwnerReqDto registerOwnerReqDto) async {
     ResponseDto responseDto = await OwnerService().fetchInsertOwner(registerOwnerReqDto);
 
     if (responseDto.code == 1) {
@@ -72,6 +73,22 @@ class OwnerController {
     } else {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         const SnackBar(content: Text("사업자 등록 실패")),
+      );
+    }
+  }
+
+  void registerStore(RegisterStoreReqDto registerStoreReqDto) async {
+    ResponseDto responseDto = await OwnerService().fetchInsertStore(registerStoreReqDto);
+    print(responseDto.data);
+
+    if (responseDto.code == 1) {
+      Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        const SnackBar(content: Text("가게 등록이 완료 되었습니다.")),
+      );
+    } else {
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        const SnackBar(content: Text("가게 등록 실패")),
       );
     }
   }

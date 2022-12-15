@@ -1,6 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/time_list.dart';
+import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
@@ -22,6 +23,7 @@ final ScrollController _scrollController = ScrollController();
 
 class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
   final _formKey = GlobalKey<FormState>();
+
   final _ceoName = TextEditingController();
   final _businessNumber = TextEditingController();
   final _businessAddress = TextEditingController();
@@ -29,9 +31,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
   final _phone = TextEditingController();
   final _intro = TextEditingController();
   final _notice = TextEditingController();
-  final _openTime = TextEditingController();
-  final _closeTime = TextEditingController();
-  final _deliveryHour = TextEditingController();
+  final _minAmount = TextEditingController();
   final _deliveryCost = TextEditingController();
 
   final _OpenTimeList = timeList();
@@ -39,6 +39,9 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
 
   final _deliveryTimeList = ['20분', '30분', '40분', '50분', '60분', '70분', '80분'];
   var _selectedDeliveryTime = '60분';
+
+  final _categoryList = ['치킨', '피자', '보쌈', '분식', '일식', '한식', '양식'];
+  var _selectedCategory = '치킨';
 
   var _selectedOpenTime = '09시';
   var _selectedCloseTime = '22시';
@@ -81,7 +84,15 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
 
   Widget RegisterStoreForm(title) {
     return Column(
-      children: [_buildTitle(title), SizedBox(height: gap_m), _buildOwnerInfo(), SizedBox(height: gap_xl), _buildStoreInfo(), SizedBox(height: gap_xl), _buildConfirmButton(title)],
+      children: [
+        _buildTitle(title),
+        SizedBox(height: gap_m),
+        _buildOwnerInfo(),
+        SizedBox(height: gap_xl),
+        _buildStoreInfo(),
+        SizedBox(height: gap_xl),
+        _buildConfirmButton(title),
+      ],
     );
   }
 
@@ -90,7 +101,20 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       builder: (context, ref, child) {
         OwnerController ownerCT = ref.read(ownerController);
         return InkWell(
-          onTap: () {},
+          onTap: () {
+            RegisterStoreReqDto registerStoreReqDto = RegisterStoreReqDto(
+              category: _selectedCategory,
+              name: _name.text.trim(),
+              phone: _phone.text.trim(),
+              openTime: _selectedOpenTime,
+              closeTime: _selectedCloseTime,
+              minAmount: _minAmount.text.trim(),
+              deliveryHour: _selectedDeliveryTime,
+              deliveryCost: _deliveryCost.text.trim(),
+              intro: _intro.text.trim(),
+            );
+            ownerCT.registerStore(registerStoreReqDto);
+          },
           child: Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(gap_xxs),
@@ -268,7 +292,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                       child: InputTextFormField(
                         text1: '최소주문금액',
                         text2: '최소주문금액 입력',
-                        controller: _deliveryCost,
+                        controller: _minAmount,
                         isReadOnly: false,
                       ),
                     ),
@@ -287,16 +311,55 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                   ),
                 ],
               ),
-              Align(
-                alignment: AlignmentDirectional.centerStart,
-                child: Padding(
-                  padding: const EdgeInsets.all(gap_m),
-                  child: SizedBox(
-                    width: 400,
-                    child: _buildDeliveryTime('평균배달시간'),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(
+                      child: Align(
+                        alignment: AlignmentDirectional.centerStart,
+                        child: Padding(
+                          padding: const EdgeInsets.all(gap_m),
+                          child: SizedBox(
+                            width: 400,
+                            child: _buildDeliveryTime('평균배달시간'),
+                          ),
+                        ),
+                      ),
+                    ),
                   ),
-                ),
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(gap_m),
+                      child: SizedBox(
+                        width: 400,
+                        child: _buildCategory('카테고리'),
+                      ),
+                    ),
+                  ),
+                ],
               ),
+              Row(
+                children: [
+                  Expanded(
+                    flex: 1,
+                    child: Padding(
+                      padding: const EdgeInsets.all(gap_m),
+                      child: InputTextFormField(
+                        text1: '배달비용',
+                        text2: '배달비용 입력',
+                        controller: _deliveryCost,
+                        isReadOnly: false,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    flex: 1,
+                    child: SizedBox(),
+                  ),
+                ],
+              )
             ],
           ),
         ),
@@ -430,6 +493,55 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                     onChanged: (value) {
                       setState(() {
                         _selectedDeliveryTime = value as String;
+                      });
+                    }),
+              ),
+            ),
+          ],
+        ),
+      ],
+    );
+  }
+
+  Widget _buildCategory(text1) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text('$text1', style: textTheme().headline2),
+        SizedBox(height: gap_s),
+        Row(
+          children: [
+            Expanded(
+              child: Container(
+                width: 200,
+                decoration: BoxDecoration(
+                  border: Border.all(
+                    color: kUnselectedListColor,
+                  ),
+                  borderRadius: BorderRadius.circular(4),
+                  color: Colors.white,
+                ),
+                child: DropdownButton(
+                    isExpanded: true,
+                    style: textTheme().headline1,
+                    underline: Container(
+                      height: 0,
+                    ),
+                    value: _selectedCategory,
+                    items: _categoryList.map(
+                      (value) {
+                        return DropdownMenuItem(
+                          value: value,
+                          child: Padding(
+                            padding: const EdgeInsets.only(left: gap_xs),
+                            child: Text(value),
+                          ),
+                        );
+                      },
+                    ).toList(),
+                    onChanged: (value) {
+                      setState(() {
+                        _selectedCategory = value as String;
                       });
                     }),
               ),
