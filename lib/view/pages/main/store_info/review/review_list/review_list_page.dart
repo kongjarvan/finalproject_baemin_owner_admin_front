@@ -41,9 +41,9 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 4, text: '전체 리뷰'),
+                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 3, text: '전체 리뷰'),
                       SizedBox(width: gap_s),
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 5, text: '신고된 리뷰'),
+                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 4, text: '신고된 리뷰'),
                     ],
                   ),
                   SizedBox(height: gap_m),

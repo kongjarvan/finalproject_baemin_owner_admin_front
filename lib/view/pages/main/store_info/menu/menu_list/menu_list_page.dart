@@ -176,7 +176,7 @@ class _MenuListPageState extends State<MenuListPage> {
             ),
             SizedBox(width: gap_m),
             InkWell(
-              onTap: () => callback(3),
+              onTap: () => callback(2),
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: kMainColor),

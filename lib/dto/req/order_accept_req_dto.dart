@@ -1,12 +1,13 @@
 class OrderAcceptReqDto {
   final String state;
-  final String deliveryHour;
+  final String deliveryTime;
 
-  OrderAcceptReqDto({required this.state, required this.deliveryHour});
+  OrderAcceptReqDto({required this.state, required this.deliveryTime});
 
   Map<String, dynamic> toJson() {
     return {
       "state": state,
+      "deliveryTime": deliveryTime,
     };
   }
 }

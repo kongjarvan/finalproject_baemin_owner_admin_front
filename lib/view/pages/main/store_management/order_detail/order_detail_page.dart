@@ -1,6 +1,5 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 
-
 import 'package:baemin_owner_admin_front/controller/order_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/my_format.dart';
 import 'package:baemin_owner_admin_front/dto/order_list_resp_dto.dart';
@@ -27,7 +26,6 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
   var _selectedDeliveryTime = '60분';
 
   final ScrollController _scrollController = ScrollController();
-
 
   int _totalCount(OrderListPageModel model) {
     int totalCount = 0;
@@ -63,7 +61,7 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
 
   @override
   Widget build(BuildContext context) {
-    OrderListPageModel? model = ref.watch(mainPageViewModel);
+    OrderListPageModel? model = ref.watch(orderListPageViewModel);
     return Scaffold(
       body: buildBody(model),
     );
@@ -309,7 +307,6 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
           context: context,
           builder: (context) => StatefulBuilder(
             builder: (context, setState) => OrderCancelAlert(
-              storeId: 1,
               orderId: orderListRespDto.id,
               deliveryState: orderListRespDto.deliveryState,
               orderState: orderListRespDto.orderState,
@@ -633,12 +630,11 @@ class _OrderDetailPageState extends ConsumerState<OrderDetailPage> {
                       InkWell(
                         onTap: () async {
                           OrderController orderCT = ref.read(orderController);
-                          OrderAcceptReqDto orderAcceptReqDto = OrderAcceptReqDto(state: '주문확인', deliveryHour: _selectedDeliveryTime);
+                          OrderAcceptReqDto orderAcceptReqDto = OrderAcceptReqDto(state: '주문확인', deliveryTime: _selectedDeliveryTime);
 
                           await orderCT.acceptOrder(
                             orderAcceptReqDto,
                             orderListRespDto.id!,
-                            1,
                             orderListRespDto.orderState,
                           );
                           Navigator.pop(context);

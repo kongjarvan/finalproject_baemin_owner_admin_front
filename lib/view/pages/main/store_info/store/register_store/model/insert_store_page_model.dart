@@ -1,6 +1,7 @@
-class InsertStorePageModel {
-  // state
-  // List<> insertStoreRespDtos;
+import 'package:baemin_owner_admin_front/dto/get_store_info_resp_dto.dart';
 
-  // InsertStorePageModel(this.insertStoreRespDtos);
+class InsertStorePageModel {
+  GetStoreInfoRespDto insertStoreRespDto;
+
+  InsertStorePageModel(this.insertStoreRespDto);
 }
