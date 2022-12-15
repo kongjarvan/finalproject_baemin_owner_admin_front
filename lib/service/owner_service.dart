@@ -5,6 +5,7 @@ import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/store_check_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/dto/statistics_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/get_store_info_resp_dto.dart';
@@ -117,6 +118,16 @@ class OwnerService {
     String requestBody = jsonEncode(registerStoreReqDto.toJson());
 
     Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/save", requestBody, jwtToken: UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    return responseDto;
+  }
+
+  Future<ResponseDto> fetchUpdateStore(UpdateStoreReqDto updateStoreReqDto) async {
+    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
+    String requestBody = jsonEncode(updateStoreReqDto.toJson());
+
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/update", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     return responseDto;

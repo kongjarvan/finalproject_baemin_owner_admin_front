@@ -2,6 +2,7 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/time_list.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
@@ -102,7 +103,7 @@ class _RegisterStorePageState extends ConsumerState<UpdateStorePage> {
         OwnerController ownerCT = ref.read(ownerController);
         return InkWell(
           onTap: () {
-            RegisterStoreReqDto registerStoreReqDto = RegisterStoreReqDto(
+            UpdateStoreReqDto updateStoreReqDto = UpdateStoreReqDto(
               category: _selectedCategory,
               name: _name.text.trim(),
               phone: _phone.text.trim(),
@@ -113,7 +114,7 @@ class _RegisterStorePageState extends ConsumerState<UpdateStorePage> {
               deliveryCost: _deliveryCost.text.trim(),
               intro: _intro.text.trim(),
             );
-            ownerCT.registerStore(registerStoreReqDto);
+            ownerCT.updateStore(updateStoreReqDto);
           },
           child: Container(
             decoration: BoxDecoration(
