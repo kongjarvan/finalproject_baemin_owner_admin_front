@@ -73,6 +73,7 @@ class OwnerController {
     }
   }
 
+
   void registerStore(RegisterStoreReqDto registerStoreReqDto) async {
     ResponseDto responseDto = await OwnerService().fetchInsertStore(registerStoreReqDto);
     print(responseDto.data);
@@ -88,7 +89,3 @@ class OwnerController {
       );
     }
   }
-
-  // 사업자 등록
-  // 영업시작, 영업종료 (toggle)
-}
