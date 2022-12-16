@@ -36,9 +36,9 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      ReviewTypeButton(text: '전체 리뷰'),
+                      ReviewTypeButton(text: '전체 리뷰', index: 3),
                       SizedBox(width: gap_s),
-                      ReviewTypeButton(text: '신고된 리뷰'),
+                      ReviewTypeButton(text: '신고된 리뷰', index: 4),
                     ],
                   ),
                   SizedBox(height: gap_m),
@@ -154,7 +154,7 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  OrderInfo(),
+                  // OrderInfo(),
                   SizedBox(width: gap_xl),
                   _buildSolution(),
                 ],

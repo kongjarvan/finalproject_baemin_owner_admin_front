@@ -2,7 +2,10 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/order_info.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/owner_comment.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/review_type_button.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/review_list/model/review_list_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/review_list/model/review_list_page_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -24,6 +27,8 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
   var _selectedValue2 = '욕설';
   @override
   Widget build(BuildContext context) {
+    ReviewListPageModel? model = ref.watch(reviewListPageViewModel); // viewmodel 초기화
+    ReviewListPageViewModel viewModel = ref.read(reviewListPageViewModel.notifier);
     return Scaffold(
       body: Column(
         children: [
@@ -41,9 +46,9 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      ReviewTypeButton(text: '전체 리뷰'),
+                      ReviewTypeButton(text: '전체 리뷰', index: 3),
                       SizedBox(width: gap_s),
-                      ReviewTypeButton(text: '신고된 리뷰'),
+                      ReviewTypeButton(text: '신고된 리뷰', index: 4),
                     ],
                   ),
                   SizedBox(height: gap_m),
@@ -53,13 +58,9 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                     child: SingleChildScrollView(
                         scrollDirection: Axis.vertical,
                         child: Column(
-                          children: [
-                            _buildReview(),
-                            _buildReview(),
-                            _buildReview(),
-                            _buildReview(),
-                            _buildReview(),
-                          ],
+                          children: List.generate(model!.reviewListRespDtos.length, (index) {
+                            return _buildReview(model, index);
+                          }),
                         )),
                   ),
                 ],
@@ -71,7 +72,7 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
     );
   }
 
-  Widget _buildReview() {
+  Widget _buildReview(ReviewListPageModel model, int index) {
     return Container(
       color: Colors.white,
       width: getBodyWidth(context),
@@ -84,11 +85,9 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
               children: [
                 Row(
                   children: [
-                    Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
-                    Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
-                    Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
-                    Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
-                    Icon(CupertinoIcons.star, color: kMainColor, size: 32),
+                    for (int i = 0; i < model.reviewListRespDtos[index].starPoint; i++) Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
+                    if (model.reviewListRespDtos[index].starPoint < 5)
+                      for (int i = 0; i < 5 - model.reviewListRespDtos[index].starPoint; i++) Icon(CupertinoIcons.star, color: kMainColor, size: 32),
                   ],
                 ),
                 _buildReportButton(),
@@ -100,16 +99,16 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  OrderInfo(),
+                  OrderInfo(index: index),
                   SizedBox(width: gap_xl),
                   Expanded(
                     flex: 2,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildUserReview(context),
+                        _buildUserReview(model, index),
                         SizedBox(height: gap_m),
-                        _buildOwnerComment(context, '사장님 답글'),
+                        OwnerComment(index: index),
                       ],
                     ),
                   ),
@@ -124,146 +123,22 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
     );
   }
 
-  Widget _buildUserReview(context) {
+  Widget _buildUserReview(ReviewListPageModel model, index) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('구매자 리뷰', style: TextStyle(fontSize: 20)),
         SizedBox(height: gap_s),
-        Container(
-          decoration: BoxDecoration(
-            border: Border.all(color: kUnselectedListColor),
-            borderRadius: BorderRadius.circular(4),
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(4),
-            child: RichText(
-              maxLines: 2,
-              overflow: TextOverflow.ellipsis,
-              text: TextSpan(
-                  text:
-                      '구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용, 구매자 리뷰 내용,'),
+        TextFormField(
+          initialValue: model.reviewListRespDtos[index].customerContent,
+          readOnly: true,
+          maxLines: 3,
+          decoration: InputDecoration(
+            focusedBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: kMainColor, width: 2),
             ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildOwnerComment(context, text) {
-    return Column(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text('${text}', style: TextStyle(fontSize: 20)),
-            SizedBox(height: gap_s),
-            TextFormField(
-              maxLines: 7,
-              validator: (value) => value!.isEmpty ? "${text}를 입력 해 주세요" : null,
-              decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: kMainColor, width: 2),
-                ),
-                hintText: "$text 입력",
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(4),
-                ),
-              ),
-            )
-          ],
-        ),
-        SizedBox(height: gap_m),
-        InkWell(
-          onTap: () {
-            showDialog(
-              context: context,
-              builder: (context) => StatefulBuilder(
-                builder: (context, setState) => AlertDialog(
-                  titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-                  title: SizedBox(
-                    width: 300,
-                    child: Text(
-                      '답변을 작성할까요?',
-                      textAlign: TextAlign.center,
-                      style: TextStyle(color: kMainColor, fontSize: 32),
-                    ),
-                  ),
-                  actions: [
-                    Padding(
-                      padding: const EdgeInsets.all(gap_s),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: Container(
-                              width: 240,
-                              decoration: BoxDecoration(
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: kMainColor),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: gap_s),
-                                child: Center(
-                                  child: Text(
-                                    '아니오',
-                                    style: TextStyle(
-                                      color: kMainColor,
-                                      fontSize: 20,
-                                      height: 1,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          InkWell(
-                            onTap: () {
-                              setState(() {
-                                Navigator.pop(context);
-                              });
-                            },
-                            child: Container(
-                              width: 240,
-                              decoration: BoxDecoration(
-                                color: kMainColor,
-                                borderRadius: BorderRadius.circular(4),
-                                border: Border.all(color: kMainColor),
-                              ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: gap_s),
-                                child: Center(
-                                  child: Text(
-                                    '네',
-                                    style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 20,
-                                      height: 1,
-                                    ),
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            );
-          },
-          child: Container(
-            width: getBodyWidth(context) * 0.15,
-            decoration: BoxDecoration(borderRadius: BorderRadius.circular(4), color: kMainColor),
-            child: Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: Align(child: Text('작성하기', style: textTheme().headline3)),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.circular(4),
             ),
           ),
         ),

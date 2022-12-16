@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:http/http.dart';
 
 ResponseDto toResponseDto(Response response) {

@@ -39,7 +39,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
 
   final _deliveryTimeList = ['배달시간을 선택 해 주세요', '20분', '30분', '40분', '50분', '60분', '70분', '80분'];
 
-  final _categoryList = ['카테고리를 선택 해 주세요', '치킨', '피자', '보쌈', '분식', '일식', '한식', '양식'];
+  final _categoryList = ['카테고리를 선택 해 주세요', '치킨', '피자', '보쌈', '버거', '분식', '한식', '중식', '일식', '보쌈', '죽'];
 
   var _selectedDeliveryTime;
   var _selectedCategory;

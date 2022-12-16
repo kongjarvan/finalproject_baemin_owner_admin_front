@@ -1,8 +1,8 @@
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-import 'package:baemin_owner_admin_front/dto/menu_list_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/update_menu_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/menu_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/update_menu_resp_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 

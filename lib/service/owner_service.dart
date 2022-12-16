@@ -1,17 +1,18 @@
 import 'dart:convert';
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
-import 'package:baemin_owner_admin_front/dto/get_store_info_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/store_check_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/get_store_info_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/get_update_store_info_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/register_store_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/statistics_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/update_store_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-import 'package:baemin_owner_admin_front/dto/statistics_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/get_update_store_info_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+
 import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/service/local_service.dart';
 import 'package:baemin_owner_admin_front/service/store_session.dart';

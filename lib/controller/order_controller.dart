@@ -3,7 +3,7 @@ import 'package:baemin_owner_admin_front/core/constant/move.dart';
 import 'package:baemin_owner_admin_front/dto/req/delivery_complete_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/order_accept_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/order_cancel_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/order_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_management/model/order_list_page_view_model.dart';
 import 'package:flutter/material.dart';
