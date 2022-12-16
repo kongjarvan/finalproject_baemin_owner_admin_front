@@ -9,9 +9,14 @@ class InputTextFormField extends StatelessWidget {
   final controller;
   final bool isReadOnly;
   final int maxLine;
-  const InputTextFormField(
-      {required this.text1, required this.text2, required this.controller, required this.isReadOnly, required this.maxLine, Key? key})
-      : super(key: key);
+  const InputTextFormField({
+    required this.text1,
+    required this.text2,
+    required this.controller,
+    required this.isReadOnly,
+    required this.maxLine,
+    Key? key,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,6 +30,7 @@ class InputTextFormField extends StatelessWidget {
           ),
           SizedBox(height: gap_s),
           TextFormField(
+            maxLines: maxLine,
             readOnly: isReadOnly,
             controller: controller,
             validator: (value) => value!.isEmpty ? "${text1}를 입력 해 주세요" : null,

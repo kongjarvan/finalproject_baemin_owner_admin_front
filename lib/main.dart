@@ -1,3 +1,4 @@
+import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/core/constant/move.dart';
 import 'package:baemin_owner_admin_front/service/local_service.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
@@ -24,11 +25,11 @@ class MyApp extends StatelessWidget {
       title: "beamin_owner_ui",
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: null,
         splashColor: Colors.transparent,
         highlightColor: Colors.transparent,
         hoverColor: Colors.transparent,
-        textSelectionTheme: TextSelectionThemeData(cursorColor: Colors.deepOrange),
+        textSelectionTheme: TextSelectionThemeData(cursorColor: kMainColor),
       ),
       navigatorKey: navigatorKey,
       initialRoute: UserSession.isLogin ? Move.mainPage : Move.loginPage,

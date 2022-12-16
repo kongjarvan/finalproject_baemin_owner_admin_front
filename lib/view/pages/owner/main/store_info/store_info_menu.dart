@@ -45,7 +45,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
             width: 232,
             child: Column(
               children: [
-                _buildRegisterStoreMenu(),
+                _buildUpdateStoreMenu(),
                 _buildStoreManageMenu(),
               ],
             ),
@@ -58,7 +58,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     );
   }
 
-  Widget _buildRegisterStoreMenu() {
+  Widget _buildUpdateStoreMenu() {
     return Container(
       color: (_selectedIndex == 0) ? kMainColor : null,
       child: Padding(
