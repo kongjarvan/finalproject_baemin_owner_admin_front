@@ -21,12 +21,8 @@ class ReviewService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
       List<ReviewListRespDto> reviewListRespDtos = mapList.map((e) => ReviewListRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = reviewListRespDtos;
-      print('통과3');
     }
 
     return responseDto;
@@ -38,12 +34,8 @@ class ReviewService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
       List<ReportedReviewListRespDto> reportedReviewListRespDtos = mapList.map((e) => ReportedReviewListRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = reportedReviewListRespDtos;
-      print('통과3');
     }
 
     return responseDto;

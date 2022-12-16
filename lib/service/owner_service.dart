@@ -34,7 +34,6 @@ class OwnerService {
     Response response = await httpConnector.post("/login", requestBody);
 
     String jwtToken = response.headers["authorization"].toString();
-    print('토큰:${jwtToken}');
 
     await secureStorage.write(key: "jwtToken", value: jwtToken);
 
@@ -52,10 +51,8 @@ class OwnerService {
     Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/info", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
-    print('가게정보 응답데이터: ${responseDto.data}');
     if (responseDto.code == 1) {
       GetUpdateStoreInfoRespDto updateStoreRespDto = GetUpdateStoreInfoRespDto.fromJson(responseDto.data);
-      print('가게정보 RespDto: ${responseDto.data}');
       responseDto.data = updateStoreRespDto;
     }
 
@@ -68,20 +65,15 @@ class OwnerService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
 
       List<StatisticsRespDto> statisticsRespDtos = mapList.map((e) => StatisticsRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = statisticsRespDtos;
-      print('통과3');
     }
 
     return responseDto;
   }
 
   Future<ResponseDto> fetchInsertOwner(RegisterOwnerReqDto registerOwnerReqDto) async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
     String requestBody = jsonEncode(registerOwnerReqDto.toJson());
 
     Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/apply", requestBody, jwtToken: UserSession.jwtToken);
@@ -91,33 +83,21 @@ class OwnerService {
   }
 
   Future<ResponseDto> fetchGetUserState() async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
-
     Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/name", jwtToken: UserSession.jwtToken);
-    print('1');
     ResponseDto responseDto = toResponseDto(response);
-    print('2: ${responseDto.data}');
     responseDto.data = StoreCheckDto.fromJson(responseDto.data);
-    print('3');
     StoreSession.successAuthentication(responseDto.data.storeId);
-    print('4');
     return responseDto;
   }
 
   Future<ResponseDto> fetchGetInsertStoreInfo() async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
-
     Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/save/info", jwtToken: UserSession.jwtToken);
-    print('이거냐: ${response.body}');
     ResponseDto responseDto = toResponseDto(response);
-    print('이거냐2: ${responseDto.data}');
     responseDto.data = GetStoreInfoRespDto.fromJson(responseDto.data);
-    print('이거냐3');
     return responseDto;
   }
 
   Future<ResponseDto> fetchInsertStore(RegisterStoreReqDto registerStoreReqDto) async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
     String requestBody = jsonEncode(registerStoreReqDto.toJson());
 
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/save", requestBody, jwtToken: UserSession.jwtToken);
@@ -130,15 +110,11 @@ class OwnerService {
   }
 
   Future<ResponseDto> fetchUpdateStore(UpdateStoreReqDto updateStoreReqDto) async {
-    Logger().d("updateStore : ${UserSession.jwtToken}");
     String requestBody = jsonEncode(updateStoreReqDto.toJson());
-    print('1');
 
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/update", requestBody, jwtToken: UserSession.jwtToken);
-    print(response.body);
 
     ResponseDto responseDto = toResponseDto(response);
-    print('3');
 
     responseDto.data = UpdateStoreRespDto.fromJson(responseDto.data);
 

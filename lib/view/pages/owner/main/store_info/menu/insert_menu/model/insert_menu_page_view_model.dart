@@ -19,10 +19,7 @@ class InsertMenuPageViewModel extends StateNotifier<MenuListPageModel?> {
     ResponseDto responseDto = await menuService.fetchGetInsertMenu();
     if (responseDto.code == 1) {
       state = MenuListPageModel(responseDto.data);
-      print('Model에 data 담김');
     } else {
-      print('asdf ${responseDto.msg}');
-      print('혹시 터졌는지?');
       ScaffoldMessenger.of(mContext!).showSnackBar(
         const SnackBar(content: Text("Jwt 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.")),
       );

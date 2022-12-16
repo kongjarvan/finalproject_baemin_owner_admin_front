@@ -5,16 +5,16 @@ import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/review_type_button.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReviewListPage extends StatefulWidget {
-  final Function(int index) notifyParent;
-  const ReviewListPage({required this.notifyParent, Key? key}) : super(key: key);
+class ReviewListPage extends ConsumerStatefulWidget {
+  const ReviewListPage({Key? key}) : super(key: key);
 
   @override
-  State<ReviewListPage> createState() => _ReviewListPageState();
+  ConsumerState<ReviewListPage> createState() => _ReviewListPageState();
 }
 
-class _ReviewListPageState extends State<ReviewListPage> {
+class _ReviewListPageState extends ConsumerState<ReviewListPage> {
   bool? _isChecked = false;
 
   final _valueList1 = ['최신순', '별점순', '어떤순'];
@@ -41,9 +41,9 @@ class _ReviewListPageState extends State<ReviewListPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 3, text: '전체 리뷰'),
+                      ReviewTypeButton(text: '전체 리뷰'),
                       SizedBox(width: gap_s),
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 4, text: '신고된 리뷰'),
+                      ReviewTypeButton(text: '신고된 리뷰'),
                     ],
                   ),
                   SizedBox(height: gap_m),

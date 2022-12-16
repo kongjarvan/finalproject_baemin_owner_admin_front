@@ -7,8 +7,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class ReportedReviewPage extends StatefulWidget {
-  final Function(int index) notifyParent;
-  const ReportedReviewPage({required this.notifyParent, Key? key}) : super(key: key);
+  const ReportedReviewPage({Key? key}) : super(key: key);
 
   @override
   State<ReportedReviewPage> createState() => _ReportedReviewPageState();
@@ -37,9 +36,9 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
                   SizedBox(height: gap_m),
                   Row(
                     children: [
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 4, text: '전체 리뷰'),
+                      ReviewTypeButton(text: '전체 리뷰'),
                       SizedBox(width: gap_s),
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 5, text: '신고된 리뷰'),
+                      ReviewTypeButton(text: '신고된 리뷰'),
                     ],
                   ),
                   SizedBox(height: gap_m),

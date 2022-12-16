@@ -54,7 +54,6 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
               setState(
                 () {
                   _selectedOrderRefuseReason = value as String;
-                  print(_selectedOrderRefuseReason);
                 },
               );
             },

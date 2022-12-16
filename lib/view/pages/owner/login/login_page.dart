@@ -24,7 +24,7 @@ class _LoginPageState extends ConsumerState<LoginPage> {
   @override
   Widget build(BuildContext context) {
     OwnerController ownerCT = ref.read(ownerController);
-    Logger().d("로그인 페이지 빌드 시작");
+
     return Scaffold(
       backgroundColor: kWhiteColor,
       body: Center(

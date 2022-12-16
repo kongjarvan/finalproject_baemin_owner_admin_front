@@ -3,15 +3,8 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:flutter/material.dart';
 
 class ReviewTypeButton extends StatefulWidget {
-  final Function(int index) notifyParent;
-  final int index;
   final String text;
-  const ReviewTypeButton({
-    required this.notifyParent,
-    required this.index,
-    required this.text,
-    Key? key,
-  }) : super(key: key);
+  const ReviewTypeButton({required this.text, Key? key}) : super(key: key);
 
   @override
   State<ReviewTypeButton> createState() => _ReviewTypeButtonState();
@@ -29,12 +22,12 @@ class _ReviewTypeButtonState extends State<ReviewTypeButton> {
           ),
         ),
         child: InkWell(
-          onTap: () => callback(widget.index),
+          onTap: () {},
           child: Padding(
             padding: const EdgeInsets.all(gap_m),
             child: Center(
               child: Text(
-                '${widget.text}',
+                widget.text,
                 style: TextStyle(fontSize: 20, color: kUnselectedListColor),
               ),
             ),
@@ -42,9 +35,5 @@ class _ReviewTypeButtonState extends State<ReviewTypeButton> {
         ),
       ),
     );
-  }
-
-  void callback(int index) {
-    widget.notifyParent(index);
   }
 }

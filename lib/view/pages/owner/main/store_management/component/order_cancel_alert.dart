@@ -22,7 +22,6 @@ var _selectedOrderRefuseReason = '기상악화';
 class _OrderCancelAlertState extends State<OrderCancelAlert> {
   @override
   Widget build(BuildContext context) {
-    print(widget.orderId);
     return AlertDialog(
       titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
       title: SizedBox(
@@ -62,7 +61,6 @@ class _OrderCancelAlertState extends State<OrderCancelAlert> {
               setState(
                 () {
                   _selectedOrderRefuseReason = value as String;
-                  print(_selectedOrderRefuseReason);
                 },
               );
             },

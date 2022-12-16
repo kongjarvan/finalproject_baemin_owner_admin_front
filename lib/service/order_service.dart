@@ -29,40 +29,25 @@ class OrderService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
       List<OrderListRespDto> OrderListRespDtos = mapList.map((e) => OrderListRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = OrderListRespDtos;
-      print('통과3');
     }
 
     return responseDto;
   }
 
   Future<ResponseDto> fetchDelete(OrderCancelReqDto orderCancelReqDto, int orderId) async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
-    print('가게id: ${StoreSession.storeId}');
-    print('orderId: ${orderId}');
-    print('상태: ${orderCancelReqDto.state}');
-    print('사유: ${orderCancelReqDto.reason}');
     String requestBody = jsonEncode(orderCancelReqDto.toJson());
-    print(requestBody);
+
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody,
         jwtToken: UserSession.jwtToken);
     ResponseDto responseDto = toResponseDto(response);
-    Logger().d("responseDto의 타입 ? : ${responseDto.data.runtimeType}");
+
     return responseDto;
   }
 
   fetchAcceptOrder(OrderAcceptReqDto orderAcceptReqDto, int orderId) async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
-    print('가게id: ${StoreSession.storeId}');
-    print('orderId: ${orderId}');
-    print('상태: ${orderAcceptReqDto.state}');
-    print('사유: ${orderAcceptReqDto.deliveryTime}');
     String requestBody = jsonEncode(orderAcceptReqDto.toJson());
-    print(requestBody);
 
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody,
         jwtToken: UserSession.jwtToken);
@@ -72,7 +57,6 @@ class OrderService {
   }
 
   fetchCompleteDelivery(DeliveryCompleteReqDto deliveryCompleteReqDto, orderId) async {
-    Logger().d("토큰 : UserSession.jwtToken : ${UserSession.jwtToken}");
     String requestBody = jsonEncode(deliveryCompleteReqDto.toJson());
 
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody,
