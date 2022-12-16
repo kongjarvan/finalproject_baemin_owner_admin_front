@@ -90,9 +90,14 @@ class OwnerController {
     if (responseDto.code == 1) {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
       ScaffoldMessenger.of(mContext!).showSnackBar(
-        const SnackBar(
+        SnackBar(
           backgroundColor: Color(0x99FF521C),
           content: Text("가게 등록이 완료 되었습니다."),
+          action: SnackBarAction(
+            label: '확인',
+            textColor: kWhiteColor,
+            onPressed: () {},
+          ),
         ),
       );
     } else {
@@ -110,7 +115,6 @@ class OwnerController {
     }
   }
 
-
   Future<void> updateStore(UpdateStoreReqDto updateStoreReqDto) async {
     ResponseDto responseDto = await OwnerService().fetchUpdateStore(updateStoreReqDto);
     print(responseDto.data);
@@ -118,7 +122,6 @@ class OwnerController {
     if (responseDto.code == 1) {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
       ScaffoldMessenger.of(mContext!).showSnackBar(
-
         SnackBar(
           backgroundColor: Color(0x99FF521C),
           content: Text("가게 수정이 완료 되었습니다."),
