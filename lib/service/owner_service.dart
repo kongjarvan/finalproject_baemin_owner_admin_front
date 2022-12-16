@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
-import 'package:baemin_owner_admin_front/core/util/time_list.dart';
 import 'package:baemin_owner_admin_front/dto/get_store_info_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
@@ -126,6 +125,7 @@ class OwnerService {
     ResponseDto responseDto = toResponseDto(response);
 
     responseDto.data = RegisterStoreRespDto.fromJson(responseDto.data);
+
     return responseDto;
   }
 
@@ -133,11 +133,15 @@ class OwnerService {
     Logger().d("updateStore : ${UserSession.jwtToken}");
     String requestBody = jsonEncode(updateStoreReqDto.toJson());
     print('1');
+
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/update", requestBody, jwtToken: UserSession.jwtToken);
     print(response.body);
+
     ResponseDto responseDto = toResponseDto(response);
     print('3');
+
     responseDto.data = UpdateStoreRespDto.fromJson(responseDto.data);
+
     return responseDto;
   }
 }

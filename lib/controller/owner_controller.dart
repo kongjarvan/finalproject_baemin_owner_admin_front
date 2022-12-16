@@ -7,7 +7,6 @@ import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/owner_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import '../core/constant/move.dart';
 
 final ownerController = Provider<OwnerController>((ref) {
@@ -91,26 +90,22 @@ class OwnerController {
     if (responseDto.code == 1) {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
       ScaffoldMessenger.of(mContext!).showSnackBar(
-        SnackBar(
+        const SnackBar(
           backgroundColor: Color(0x99FF521C),
           content: Text("가게 등록이 완료 되었습니다."),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        SnackBar(
+          backgroundColor: Color(0x996D62E8),
+          content: Text("가게 등록 실패"),
           action: SnackBarAction(
             label: '확인',
             textColor: kWhiteColor,
             onPressed: () {},
           ),
         ),
-      );
-    } else {
-      ScaffoldMessenger.of(mContext!).showSnackBar(
-        SnackBar(
-            backgroundColor: Color(0x996D62E8),
-            content: Text("가게 등록 실패"),
-            action: SnackBarAction(
-              label: '확인',
-              textColor: kWhiteColor,
-              onPressed: () {},
-            )),
       );
     }
   }
@@ -135,13 +130,14 @@ class OwnerController {
     } else {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(
-            backgroundColor: Color(0x996D62E8),
-            content: Text("가게 등록 실패"),
-            action: SnackBarAction(
-              label: '확인',
-              textColor: kWhiteColor,
-              onPressed: () {},
-            )),
+          backgroundColor: Color(0x996D62E8),
+          content: Text("가게 수정 실패"),
+          action: SnackBarAction(
+            label: '확인',
+            textColor: kWhiteColor,
+            onPressed: () {},
+          ),
+        ),
       );
     }
   }

@@ -4,6 +4,5 @@ List<String> timeList() {
     String time = '${i}시';
     list.add(time);
   }
-  print(list);
   return list;
 }
