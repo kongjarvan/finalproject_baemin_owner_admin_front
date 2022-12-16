@@ -2,11 +2,12 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/time_list.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
-import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/register_store/model/insert_store_page_model.dart';
-import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/register_store/model/insert_store_page_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/update_store/model/update_store_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/update_store/model/update_store_page_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -23,35 +24,52 @@ final ScrollController _scrollController = ScrollController();
 class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
   final _formKey = GlobalKey<FormState>();
 
-  final _ceoName = TextEditingController();
-  final _businessNumber = TextEditingController();
-  final _businessAddress = TextEditingController();
-  final _name = TextEditingController();
-  final _phone = TextEditingController();
-  final _intro = TextEditingController();
-  final _notice = TextEditingController();
-  final _minAmount = TextEditingController();
-  final _deliveryCost = TextEditingController();
+  var _ceoName;
+  var _businessNumber;
+  var _businessAddress;
+  var _name;
+  var _phone;
+  var _intro;
+  var _notice;
+  var _minAmount;
+  var _deliveryCost;
 
   final _OpenTimeList = timeList();
   final _CloseTimeList = timeList();
 
   final _deliveryTimeList = ['배달시간을 선택 해 주세요', '20분', '30분', '40분', '50분', '60분', '70분', '80분'];
-  var _selectedDeliveryTime = '배달시간을 선택 해 주세요';
+
 
   final _categoryList = ['카테고리를 선택 해 주세요', '치킨', '피자', '보쌈', '분식', '일식', '한식', '양식'];
-  var _selectedCategory = '치킨';
 
-  var _selectedOpenTime = timeList()[0];
-  var _selectedCloseTime = timeList()[0];
+  var _selectedDeliveryTime;
+  var _selectedCategory;
+  var _selectedOpenTime;
+  var _selectedCloseTime;
 
   @override
   Widget build(BuildContext context) {
-    InsertStorePageModel? model = ref.watch(insertStorePageViewModel);
-    return model == null ? Flexible(child: Center(child: CircularProgressIndicator())) : Scaffold(body: _buildBody(model));
+    UpdateStorePageModel? model = ref.watch(updateStorePageViewModel);
+
+    return model == null ? Center(child: CircularProgressIndicator()) : Scaffold(body: _buildBody(model));
   }
 
-  Widget _buildBody(InsertStorePageModel model) {
+  Widget _buildBody(UpdateStorePageModel model) {
+    _ceoName = TextEditingController(text: model.updateStoreListRespDto.name);
+    _businessNumber = TextEditingController(text: model.updateStoreListRespDto.businessNumber);
+    _businessAddress = TextEditingController(text: model.updateStoreListRespDto.businessAddress);
+    _name = TextEditingController(text: model.updateStoreListRespDto.name);
+    _phone = TextEditingController(text: model.updateStoreListRespDto.phone);
+    _intro = TextEditingController(text: model.updateStoreListRespDto.intro);
+    _notice = TextEditingController(text: model.updateStoreListRespDto.notice);
+    _minAmount = TextEditingController(text: '${model.updateStoreListRespDto.minAmount}');
+    _deliveryCost = TextEditingController(text: '${model.updateStoreListRespDto.deliveryCost}');
+
+    _selectedDeliveryTime = model.updateStoreListRespDto.deliveryHour;
+    _selectedCategory = model.updateStoreListRespDto.category;
+    _selectedOpenTime = model.updateStoreListRespDto.openTime;
+    _selectedCloseTime = model.updateStoreListRespDto.closeTime;
+
     return Column(
       key: _formKey,
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -70,7 +88,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               child: Padding(
                 padding: const EdgeInsets.all(gap_l),
                 child: Column(
-                  children: [RegisterStoreForm('가게등록', model)],
+                  children: [RegisterStoreForm('가게수정', model)],
                 ),
               ),
             ),
@@ -80,7 +98,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Widget RegisterStoreForm(title, InsertStorePageModel model) {
+  Widget RegisterStoreForm(title, UpdateStorePageModel model) {
     return Column(
       children: [
         _buildTitle(title),
@@ -105,7 +123,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Widget _buildOwnerInfo(InsertStorePageModel model) {
+  Widget _buildOwnerInfo(UpdateStorePageModel model) {
     return Column(
       children: [
         ownerFormTitle(),
@@ -142,7 +160,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Row ownerNameAndBusinessNumber(InsertStorePageModel model) {
+  Row ownerNameAndBusinessNumber(UpdateStorePageModel model) {
     return Row(
       children: [
         Flexible(
@@ -151,7 +169,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
             padding: const EdgeInsets.all(gap_m),
             child: InputTextFormField(
               text1: '사업자 이름',
-              text2: '${model.insertStoreRespDto.ceoName}',
+              text2: '사업자 이름 입력',
               isReadOnly: true,
               controller: _ceoName,
               maxLine: 1,
@@ -164,7 +182,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
             padding: const EdgeInsets.all(gap_m),
             child: InputTextFormField(
               text1: '사업자 등록번호',
-              text2: '${model.insertStoreRespDto.businessNumber}',
+              text2: '사업자 등록번호 입력',
               isReadOnly: true,
               controller: _businessNumber,
               maxLine: 1,
@@ -175,12 +193,12 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Padding businessAddress(InsertStorePageModel model) {
+  Padding businessAddress(UpdateStorePageModel model) {
     return Padding(
       padding: const EdgeInsets.all(gap_m),
       child: InputTextFormField(
         text1: '사업자 주소',
-        text2: '${model.insertStoreRespDto.businessAddress}',
+        text2: '사업자 주소 입력',
         isReadOnly: true,
         controller: _businessAddress,
         maxLine: 1,
@@ -188,7 +206,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Widget _buildStoreInfo(InsertStorePageModel model) {
+  Widget _buildStoreInfo(UpdateStorePageModel model) {
     return Column(
       children: [
         storeFormTitle(),
@@ -230,7 +248,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Row nameAndPhone(InsertStorePageModel model) {
+  Row nameAndPhone(UpdateStorePageModel model) {
     return Row(
       children: [
         Flexible(
@@ -263,7 +281,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Padding intro(InsertStorePageModel model) {
+  Padding intro(UpdateStorePageModel model) {
     return Padding(
       padding: const EdgeInsets.all(gap_m),
       child: InputTextFormField(
@@ -276,7 +294,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Padding notice(InsertStorePageModel model) {
+  Widget notice(UpdateStorePageModel model) {
     return Padding(
       padding: const EdgeInsets.all(gap_m),
       child: InputTextFormField(
@@ -289,7 +307,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Row minAmountAndDeliveryCost(InsertStorePageModel model) {
+  Row minAmountAndDeliveryCost(UpdateStorePageModel model) {
     return Row(
       children: [
         Flexible(
@@ -548,8 +566,8 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
       builder: (context, ref, child) {
         OwnerController ownerCT = ref.read(ownerController);
         return InkWell(
-          onTap: () {
-            RegisterStoreReqDto registerStoreReqDto = RegisterStoreReqDto(
+          onTap: () async {
+            UpdateStoreReqDto registerStoreReqDto = UpdateStoreReqDto(
               category: _selectedCategory,
               name: _name.text.trim(),
               phone: _phone.text.trim(),
@@ -559,8 +577,9 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               deliveryHour: _selectedDeliveryTime,
               deliveryCost: _deliveryCost.text.trim(),
               intro: _intro.text.trim(),
+              notice: _notice.text.trim(),
             );
-            ownerCT.registerStore(registerStoreReqDto);
+            await ownerCT.updateStore(registerStoreReqDto);
           },
           child: Container(
             decoration: BoxDecoration(

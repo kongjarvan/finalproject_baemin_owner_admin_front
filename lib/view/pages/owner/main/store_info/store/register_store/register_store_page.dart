@@ -548,7 +548,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       builder: (context, ref, child) {
         OwnerController ownerCT = ref.read(ownerController);
         return InkWell(
-          onTap: () {
+          onTap: () async {
             RegisterStoreReqDto registerStoreReqDto = RegisterStoreReqDto(
               category: _selectedCategory,
               name: _name.text.trim(),
@@ -562,7 +562,8 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
               intro: _intro.text.trim(),
               notice: _notice.text.trim(),
             );
-            ownerCT.registerStore(registerStoreReqDto);
+
+            await ownerCT.registerStore(registerStoreReqDto);
           },
           child: Container(
             decoration: BoxDecoration(
