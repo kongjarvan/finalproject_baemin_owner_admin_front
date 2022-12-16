@@ -7,8 +7,10 @@ class InputTextFormField extends StatelessWidget {
   final String text1;
   final String text2;
   final controller;
-  final isReadOnly;
-  const InputTextFormField({required this.text1, required this.text2, required this.controller, required this.isReadOnly, Key? key})
+  final bool isReadOnly;
+  final int maxLine;
+  const InputTextFormField(
+      {required this.text1, required this.text2, required this.controller, required this.isReadOnly, required this.maxLine, Key? key})
       : super(key: key);
 
   @override

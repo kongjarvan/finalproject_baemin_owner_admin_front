@@ -1,12 +1,9 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/req/store_check_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-import 'package:baemin_owner_admin_front/service/order_service.dart';
 import 'package:baemin_owner_admin_front/service/owner_service.dart';
-import 'package:baemin_owner_admin_front/service/user_session.dart';
-import 'package:baemin_owner_admin_front/view/pages/model/main_page_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -34,8 +31,9 @@ class OwnerController {
     //3. 비지니스 로직 처리
     if (responseDto.code == 1) {
       ResponseDto responseDto = await ownerService.fetchGetUserState();
+      print('UserState 통신완료');
       if (responseDto.code == 1) {
-        print(responseDto.data.id);
+        print('가게 아이디: ${responseDto.data.storeId}');
         if (responseDto.data.name.isEmpty) {
           Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.registerStorePage, (route) => false);
         } else {
@@ -63,7 +61,7 @@ class OwnerController {
     }
   }
 
-  void registerOwner(RegisterOwnerReqDto registerOwnerReqDto) async {
+  Future<void> registerOwner(RegisterOwnerReqDto registerOwnerReqDto) async {
     ResponseDto responseDto = await OwnerService().fetchInsertOwner(registerOwnerReqDto);
 
     if (responseDto.code == 1) {
@@ -75,6 +73,19 @@ class OwnerController {
     }
   }
 
-  // 사업자 등록
-  // 영업시작, 영업종료 (toggle)
-}
+
+  void registerStore(RegisterStoreReqDto registerStoreReqDto) async {
+    ResponseDto responseDto = await OwnerService().fetchInsertStore(registerStoreReqDto);
+    print(responseDto.data);
+
+    if (responseDto.code == 1) {
+      Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        const SnackBar(content: Text("가게 등록이 완료 되었습니다.")),
+      );
+    } else {
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        const SnackBar(content: Text("가게 등록 실패")),
+      );
+    }
+  }
