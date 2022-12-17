@@ -1,4 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/controller/review_controller.dart';
+import 'package:baemin_owner_admin_front/dto/req/report_review_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/order_info.dart';
@@ -30,35 +32,35 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
     ReviewListPageModel? model = ref.watch(reviewListPageViewModel); // viewmodel 초기화
     ReviewListPageViewModel viewModel = ref.read(reviewListPageViewModel.notifier);
     return Scaffold(
-      body: model == null ? Center(child: CircularProgressIndicator()) : _buildBody(model),
+      body: model == null ? const Center(child: CircularProgressIndicator()) : _buildBody(model),
     );
   }
 
   Widget _buildBody(ReviewListPageModel? model) {
     return Column(
       children: [
-        Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+        const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
         Expanded(
           child: Padding(
             padding: const EdgeInsets.all(gap_l),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                const Text(
                   '리뷰관리',
                   style: TextStyle(fontSize: 32),
                 ),
-                SizedBox(height: gap_m),
+                const SizedBox(height: gap_m),
                 Row(
-                  children: [
+                  children: const [
                     ReviewTypeButton(text: '전체 리뷰', index: 3),
                     SizedBox(width: gap_s),
                     ReviewTypeButton(text: '신고된 리뷰', index: 4),
                   ],
                 ),
-                SizedBox(height: gap_m),
+                const SizedBox(height: gap_m),
                 _buildReviewFilterForm(),
-                SizedBox(height: gap_m),
+                const SizedBox(height: gap_m),
                 Expanded(
                   child: SingleChildScrollView(
                       scrollDirection: Axis.vertical,
@@ -89,29 +91,29 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
               children: [
                 Row(
                   children: [
-                    for (int i = 0; i < model.reviewListRespDtos[index].starPoint; i++) Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
+                    for (int i = 0; i < model.reviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
                     if (model.reviewListRespDtos[index].starPoint < 5)
-                      for (int i = 0; i < 5 - model.reviewListRespDtos[index].starPoint; i++) Icon(CupertinoIcons.star, color: kMainColor, size: 32),
+                      for (int i = 0; i < 5 - model.reviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star, color: kMainColor, size: 32),
                   ],
                 ),
-                _buildReportButton(),
+                _buildReportButton(index),
               ],
             ),
-            SizedBox(height: gap_m),
-            Container(
+            const SizedBox(height: gap_m),
+            SizedBox(
               width: getBodyWidth(context),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   OrderInfo(index: index),
-                  SizedBox(width: gap_xl),
+                  const SizedBox(width: gap_xl),
                   Expanded(
                     flex: 2,
                     child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         _buildUserReview(model, index),
-                        SizedBox(height: gap_m),
+                        const SizedBox(height: gap_m),
                         OwnerComment(index: index),
                       ],
                     ),
@@ -119,8 +121,8 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                 ],
               ),
             ),
-            SizedBox(height: gap_m),
-            Divider(thickness: 2)
+            const SizedBox(height: gap_m),
+            const Divider(thickness: 2)
           ],
         ),
       ),
@@ -131,14 +133,14 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('구매자 리뷰', style: TextStyle(fontSize: 20)),
-        SizedBox(height: gap_s),
+        const Text('구매자 리뷰', style: TextStyle(fontSize: 20)),
+        const SizedBox(height: gap_s),
         TextFormField(
           initialValue: model.reviewListRespDtos[index].customerContent,
           readOnly: true,
           maxLines: 3,
           decoration: InputDecoration(
-            focusedBorder: OutlineInputBorder(
+            focusedBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: kMainColor, width: 2),
             ),
             border: OutlineInputBorder(
@@ -150,15 +152,15 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
     );
   }
 
-  InkWell _buildReportButton() {
+  InkWell _buildReportButton(int index) {
     return InkWell(
       onTap: () {
         showDialog(
           context: context,
           builder: (context) => StatefulBuilder(
             builder: (context, setState) => AlertDialog(
-              titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-              title: SizedBox(
+              titlePadding: const EdgeInsets.only(left: 120, right: 120, top: 60),
+              title: const SizedBox(
                 width: 300,
                 child: Text(
                   '해당 리뷰를 신고할까요?',
@@ -219,8 +221,8 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                             borderRadius: BorderRadius.circular(4),
                             border: Border.all(color: kMainColor),
                           ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: gap_s),
+                          child: const Padding(
+                            padding: EdgeInsets.symmetric(vertical: gap_s),
                             child: Center(
                               child: Text(
                                 '아니오',
@@ -234,33 +236,41 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                           ),
                         ),
                       ),
-                      InkWell(
-                        onTap: () {
-                          setState(() {
-                            Navigator.pop(context);
-                          });
-                        },
-                        child: Container(
-                          width: 240,
-                          decoration: BoxDecoration(
-                            color: kMainColor,
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: kMainColor),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: gap_s),
-                            child: Center(
-                              child: Text(
-                                '네',
-                                style: TextStyle(
-                                  color: Colors.white,
-                                  fontSize: 20,
-                                  height: 1,
+                      Consumer(
+                        builder: (context, ref, child) {
+                          ReviewController reviewCT = ref.read(reviewController);
+                          ReviewListPageModel? model = ref.watch(reviewListPageViewModel);
+                          return InkWell(
+                            onTap: () async {
+                              ReportReviewReqDto reportReviewReqDto = ReportReviewReqDto('사업자 회원', _selectedValue2);
+
+                              await reviewCT.reportReview(reportReviewReqDto, model!.reviewListRespDtos[index].id);
+                              Navigator.pop(context);
+                              ref.read(reviewListPageViewModel.notifier).notifyViewModel();
+                            },
+                            child: Container(
+                              width: 240,
+                              decoration: BoxDecoration(
+                                color: kMainColor,
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: kMainColor),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: gap_s),
+                                child: Center(
+                                  child: Text(
+                                    '네',
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 20,
+                                      height: 1,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       ),
                     ],
                   ),
@@ -275,8 +285,8 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
           border: Border.all(color: kUnselectedListColor, width: 2),
           borderRadius: BorderRadius.circular(6),
         ),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: gap_m, vertical: gap_xs),
+        child: const Padding(
+          padding: EdgeInsets.symmetric(horizontal: gap_m, vertical: gap_xs),
           child: Text(
             '신고하기',
             style: TextStyle(color: kUnselectedListColor, fontSize: 18),

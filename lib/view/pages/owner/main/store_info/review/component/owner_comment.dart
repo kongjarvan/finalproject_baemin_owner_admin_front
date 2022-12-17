@@ -9,7 +9,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OwnerComment extends StatelessWidget {
-  final index;
+  final int index;
   const OwnerComment({required this.index, Key? key}) : super(key: key);
 
   @override
@@ -22,14 +22,14 @@ class OwnerComment extends StatelessWidget {
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('사장님 답글', style: TextStyle(fontSize: 20)),
-            SizedBox(height: gap_s),
+            const Text('사장님 답글', style: TextStyle(fontSize: 20)),
+            const SizedBox(height: gap_s),
             TextFormField(
               controller: _ceoContent,
               maxLines: 7,
               validator: (value) => value!.isEmpty ? "사장님 댓글을 입력 해 주세요" : null,
               decoration: InputDecoration(
-                focusedBorder: OutlineInputBorder(
+                focusedBorder: const OutlineInputBorder(
                   borderSide: BorderSide(color: kMainColor, width: 2),
                 ),
                 hintText: "사장님 답글 입력",
@@ -40,15 +40,15 @@ class OwnerComment extends StatelessWidget {
             )
           ],
         ),
-        SizedBox(height: gap_m),
+        const SizedBox(height: gap_m),
         InkWell(
           onTap: () {
             showDialog(
               context: context,
               builder: (context) => StatefulBuilder(
                 builder: (context, setState) => AlertDialog(
-                  titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-                  title: SizedBox(
+                  titlePadding: const EdgeInsets.only(left: 120, right: 120, top: 60),
+                  title: const SizedBox(
                     width: 300,
                     child: Text(
                       '답변을 작성할까요?',
@@ -74,8 +74,8 @@ class OwnerComment extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(4),
                                 border: Border.all(color: kMainColor),
                               ),
-                              child: Padding(
-                                padding: const EdgeInsets.symmetric(vertical: gap_s),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: gap_s),
                                 child: Center(
                                   child: Text(
                                     '아니오',
@@ -99,6 +99,7 @@ class OwnerComment extends StatelessWidget {
 
                                   await reviewCT.insertCeoComment(insertCeoCommentReqDto, model!.reviewListRespDtos[index].id);
                                   Navigator.pop(context);
+                                  ref.read(reviewListPageViewModel.notifier).notifyViewModel();
                                 },
                                 child: Container(
                                   width: 240,
@@ -107,8 +108,8 @@ class OwnerComment extends StatelessWidget {
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(color: kMainColor),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: gap_s),
                                     child: Center(
                                       child: Text(
                                         '네',

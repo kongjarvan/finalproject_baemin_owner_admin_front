@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
 import 'package:baemin_owner_admin_front/dto/req/insert_ceo_comment_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/report_review_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/insert_ceo_comment_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/reported_review_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
@@ -47,10 +48,23 @@ class ReviewService {
   }
 
   Future<ResponseDto> fetchInsertCeoComment(InsertCeoCommentReqDto insertCeoCommentReqDto, int reviewId) async {
-    Logger().d("reviewService 진입");
     String requestBody = jsonEncode(insertCeoCommentReqDto.toJson());
-    Logger().d("requestBody: ${requestBody}");
     Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/${reviewId}/review", requestBody, jwtToken: UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    if (responseDto.code == 1) {
+      InsertCeoCommentRespDto insertCeoCommentRespDto = InsertCeoCommentRespDto.fromJson(responseDto.data);
+      responseDto.data = insertCeoCommentRespDto;
+    }
+
+    return responseDto;
+  }
+
+  Future<ResponseDto> fetchReportReview(ReportReviewReqDto reportReviewReqDto, int reviewId) async {
+    Logger().d("reviewService 진입");
+    String requestBody = jsonEncode(reportReviewReqDto.toJson());
+    Logger().d("requestBody: ${requestBody}");
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/review/${reviewId}/report", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     Logger().d("responseDto 데이터: ${responseDto.data}");
