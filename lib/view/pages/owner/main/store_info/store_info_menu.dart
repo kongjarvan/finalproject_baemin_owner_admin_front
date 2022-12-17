@@ -52,7 +52,7 @@ class _StoreInfoMenuState extends ConsumerState<StoreInfoMenu> {
             ),
           ),
           Flexible(
-            child: selectedMainView[model!.selectedIndex],
+            child: selectedMainView[model.selectedIndex],
           ),
         ],
       ),
@@ -153,7 +153,7 @@ class _StoreInfoMenuState extends ConsumerState<StoreInfoMenu> {
 
   Widget _buildInfoMenu2(StoreInfoPageModel model, text, index) {
     return Container(
-      color: (model.selectedIndex == index || model.selectedIndex == 5) ? kMainColor : kMenuBarMainColor,
+      color: (model.selectedIndex == index || model.selectedIndex == 4) ? kMainColor : kMenuBarMainColor,
       child: Padding(
         padding: const EdgeInsets.all(gap_s),
         child: InkWell(
@@ -167,7 +167,7 @@ class _StoreInfoMenuState extends ConsumerState<StoreInfoMenu> {
               child: Text(
                 '${text}',
                 style: TextStyle(
-                  color: (model.selectedIndex == index || model.selectedIndex == 5) ? kWhiteColor : kMenuIconColor,
+                  color: (model.selectedIndex == index || model.selectedIndex == 4) ? kWhiteColor : kMenuIconColor,
                   fontSize: 16,
                   height: 1,
                 ),

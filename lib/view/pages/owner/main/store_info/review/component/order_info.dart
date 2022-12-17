@@ -31,7 +31,7 @@ class OrderInfo extends ConsumerWidget {
           SizedBox(height: gap_s),
           Text('주문일자: ${model.reviewListRespDtos[index].orderCreatedAt}', style: textTheme().bodyText2),
           SizedBox(height: gap_s),
-          Text('공개여부: ${model.reviewListRespDtos[index].closure}', style: textTheme().bodyText2),
+          Text('공개여부: ${model.reviewListRespDtos[index].closure == false ? "공개" : "비공개"} ', style: textTheme().bodyText2),
         ],
       ),
     );

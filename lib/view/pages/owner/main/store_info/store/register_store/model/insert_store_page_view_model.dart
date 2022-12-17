@@ -20,10 +20,6 @@ class InsertStorePageViewModel extends StateNotifier<InsertStorePageModel?> {
 
     if (responseDto.code == 1) {
       state = InsertStorePageModel(responseDto.data);
-    } else {
-      ScaffoldMessenger.of(mContext!).showSnackBar(
-        const SnackBar(content: Text("가게 등록 페이지 로딩 오류!")),
-      );
     }
   }
 }

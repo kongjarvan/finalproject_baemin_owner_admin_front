@@ -3,9 +3,7 @@ import 'package:baemin_owner_admin_front/dto/resp/order_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/order_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_management/model/order_list_page_model.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 final orderListPageViewModel = StateNotifierProvider.autoDispose<OrderListPageViewModel, OrderListPageModel?>((ref) {
   return OrderListPageViewModel(null)..notifyViewModel();
@@ -27,10 +25,6 @@ class OrderListPageViewModel extends StateNotifier<OrderListPageModel?> {
     ResponseDto responseDto = await orderService.fetchOrderList();
     if (responseDto.code == 1) {
       state = OrderListPageModel(responseDto.data, 0);
-    } else {
-      ScaffoldMessenger.of(mContext!).showSnackBar(
-        const SnackBar(content: Text("Jwt 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.")),
-      );
     }
   }
 

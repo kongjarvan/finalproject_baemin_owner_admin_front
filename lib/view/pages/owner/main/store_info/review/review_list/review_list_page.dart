@@ -23,52 +23,56 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
   final _valueList1 = ['최신순', '별점순', '어떤순'];
   var _selectedValue1 = '최신순';
 
-  final _valueList2 = ['욕설', '기타'];
-  var _selectedValue2 = '욕설';
+  final _valueList2 = ['명예훼손', '초상권침해', '상표권침해', '기타사유'];
+  var _selectedValue2 = '명예훼손';
   @override
   Widget build(BuildContext context) {
     ReviewListPageModel? model = ref.watch(reviewListPageViewModel); // viewmodel 초기화
     ReviewListPageViewModel viewModel = ref.read(reviewListPageViewModel.notifier);
     return Scaffold(
-      body: Column(
-        children: [
-          Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(gap_l),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '리뷰관리',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                  SizedBox(height: gap_m),
-                  Row(
-                    children: [
-                      ReviewTypeButton(text: '전체 리뷰', index: 3),
-                      SizedBox(width: gap_s),
-                      ReviewTypeButton(text: '신고된 리뷰', index: 4),
-                    ],
-                  ),
-                  SizedBox(height: gap_m),
-                  _buildReviewFilterForm(),
-                  SizedBox(height: gap_m),
-                  Expanded(
-                    child: SingleChildScrollView(
-                        scrollDirection: Axis.vertical,
-                        child: Column(
-                          children: List.generate(model!.reviewListRespDtos.length, (index) {
-                            return _buildReview(model, index);
-                          }),
-                        )),
-                  ),
-                ],
-              ),
+      body: model == null ? Center(child: CircularProgressIndicator()) : _buildBody(model),
+    );
+  }
+
+  Widget _buildBody(ReviewListPageModel? model) {
+    return Column(
+      children: [
+        Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(gap_l),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '리뷰관리',
+                  style: TextStyle(fontSize: 32),
+                ),
+                SizedBox(height: gap_m),
+                Row(
+                  children: [
+                    ReviewTypeButton(text: '전체 리뷰', index: 3),
+                    SizedBox(width: gap_s),
+                    ReviewTypeButton(text: '신고된 리뷰', index: 4),
+                  ],
+                ),
+                SizedBox(height: gap_m),
+                _buildReviewFilterForm(),
+                SizedBox(height: gap_m),
+                Expanded(
+                  child: SingleChildScrollView(
+                      scrollDirection: Axis.vertical,
+                      child: Column(
+                        children: List.generate(model!.reviewListRespDtos.length, (index) {
+                          return _buildReview(model, index);
+                        }),
+                      )),
+                ),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

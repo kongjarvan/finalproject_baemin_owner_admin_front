@@ -19,10 +19,6 @@ class UpdateMenuPageViewModel extends StateNotifier<UpdateMenuPageModel?> {
     ResponseDto responseDto = await menuService.fetchGetMenuDetail();
     if (responseDto.code == 1) {
       state = UpdateMenuPageModel(responseDto.data);
-    } else {
-      ScaffoldMessenger.of(mContext!).showSnackBar(
-        const SnackBar(content: Text("Jwt 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.")),
-      );
     }
   }
 }

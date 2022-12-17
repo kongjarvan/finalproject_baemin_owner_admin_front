@@ -19,10 +19,6 @@ class StatisticsPageViewModel extends StateNotifier<StatisticsPageModel?> {
     ResponseDto responseDto = await ownerService.fetchGetStatistics();
     if (responseDto.code == 1) {
       state = StatisticsPageModel(responseDto.data);
-    } else {
-      ScaffoldMessenger.of(mContext!).showSnackBar(
-        const SnackBar(content: Text("Jwt 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.")),
-      );
     }
   }
 }

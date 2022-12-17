@@ -19,10 +19,6 @@ class OrderDetailPageViewModel extends StateNotifier<OrderDetailPageModel?> {
     ResponseDto responseDto = await orderService.fetchOrderList();
     if (responseDto.code == 1) {
       state = OrderDetailPageModel(responseDto.data);
-    } else {
-      ScaffoldMessenger.of(mContext!).showSnackBar(
-        const SnackBar(content: Text("Jwt 토큰이 만료되었습니다. 로그인 페이지로 이동합니다.")),
-      );
     }
   }
 }
