@@ -8,7 +8,6 @@ class HttpConnector {
 
   static final HttpConnector _instance = HttpConnector._single();
   factory HttpConnector() {
-    Logger().d("HttpConnector 생성자");
     return _instance;
   }
   HttpConnector._single();
@@ -28,7 +27,6 @@ class HttpConnector {
     } else {
       requestHeader = headers;
     }
-    print('토큰: ${requestHeader.values}');
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().get(uri, headers: requestHeader);
 
@@ -60,7 +58,6 @@ class HttpConnector {
   }
 
   Future<Response> post(String path, String body, {String? jwtToken}) async {
-    print('================httpConnector 진입==============');
     Map<String, String> requestHeader;
     if (jwtToken != null) {
       requestHeader = {...headers, "Authorization": jwtToken};
@@ -69,9 +66,6 @@ class HttpConnector {
     }
     Uri uri = Uri.parse("${host}${path}");
     Response response = await Client().post(uri, body: body, headers: requestHeader);
-    print(uri);
-    print(body);
-    print(requestHeader);
     return response;
   }
 }

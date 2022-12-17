@@ -3,40 +3,41 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/insert_menu/insert_menu_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/menu_list/menu_list_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/reported_review/reported_review_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/review_list/review_list_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/update_store/update_store_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
-class StoreInfoMenu extends StatefulWidget {
+class StoreInfoMenu extends ConsumerStatefulWidget {
   const StoreInfoMenu({Key? key}) : super(key: key);
 
   @override
-  State<StoreInfoMenu> createState() => _StoreInfoMenuState();
+  ConsumerState<StoreInfoMenu> createState() => _StoreInfoMenuState();
 }
-
-var _selectedIndex = 0;
 
 bool _isOpen = false;
 
-class _StoreInfoMenuState extends State<StoreInfoMenu> {
-  void _callbackIndexPage(int index) {
-    setState(() {
-      _selectedIndex = index;
-    });
-  }
-
+class _StoreInfoMenuState extends ConsumerState<StoreInfoMenu> {
   @override
   Widget build(BuildContext context) {
+    StoreInfoPageModel? model = ref.watch(storeInfoPageViewModel);
     final List<Widget> selectedMainView = [
       UpdateStorePage(),
-      MenuListPage(notifyParent: (int) => _callbackIndexPage(int)),
-      InsertMenuPage(notifyParent: (int) => _callbackIndexPage(int)),
-      ReviewListPage(notifyParent: (int) => _callbackIndexPage(int)),
-      ReportedReviewPage(notifyParent: (int) => _callbackIndexPage(int)),
+      MenuListPage(),
+      InsertMenuPage(),
+      ReviewListPage(),
+      ReportedReviewPage(),
     ];
 
+    return model == null ? Flexible(child: Center(child: CircularProgressIndicator())) : _buildBody(model, selectedMainView);
+  }
+
+  Flexible _buildBody(StoreInfoPageModel model, List<Widget> selectedMainView) {
     return Flexible(
       child: Row(
         children: [
@@ -45,31 +46,29 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
             width: 232,
             child: Column(
               children: [
-                _buildUpdateStoreMenu(),
-                _buildStoreManageMenu(),
+                _buildUpdateStoreMenu(model),
+                _buildStoreManageMenu(model),
               ],
             ),
           ),
           Flexible(
-            child: selectedMainView[_selectedIndex],
+            child: selectedMainView[model.selectedIndex],
           ),
         ],
       ),
     );
   }
 
-  Widget _buildUpdateStoreMenu() {
+  Widget _buildUpdateStoreMenu(StoreInfoPageModel model) {
     return Container(
-      color: (_selectedIndex == 0) ? kMainColor : null,
+      color: (model.selectedIndex == 0) ? kMainColor : null,
       child: Padding(
         padding: const EdgeInsets.all(gap_s),
         child: Row(
           children: [
             InkWell(
               onTap: () {
-                setState(() {
-                  _selectedIndex = 0;
-                });
+                ref.read(storeInfoPageViewModel.notifier).changeIndex(0);
               },
               child: SizedBox(
                 width: 200,
@@ -85,7 +84,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     );
   }
 
-  Widget _buildStoreManageMenu() {
+  Widget _buildStoreManageMenu(StoreInfoPageModel model) {
     return SingleChildScrollView(
       primary: false,
       child: ExpansionPanelList(
@@ -109,8 +108,8 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
               },
               body: Column(
                 children: [
-                  _buildInfoMenu1('메뉴관리', 1),
-                  _buildInfoMenu2('리뷰관리', 3),
+                  _buildInfoMenu1(model, '메뉴관리', 1),
+                  _buildInfoMenu2(model, '리뷰관리', 3),
                 ],
               ),
               isExpanded: _isOpen,
@@ -124,16 +123,14 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     );
   }
 
-  Widget _buildInfoMenu1(text, index) {
+  Widget _buildInfoMenu1(StoreInfoPageModel model, text, index) {
     return Container(
-      color: (_selectedIndex == index) ? kMainColor : kMenuBarMainColor,
+      color: (model.selectedIndex == index) ? kMainColor : kMenuBarMainColor,
       child: Padding(
         padding: const EdgeInsets.all(gap_s),
         child: InkWell(
           onTap: () {
-            setState(() {
-              _selectedIndex = index;
-            });
+            ref.read(storeInfoPageViewModel.notifier).changeIndex(index);
           },
           child: SizedBox(
             width: 200,
@@ -142,7 +139,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
               child: Text(
                 '${text}',
                 style: TextStyle(
-                  color: (_selectedIndex == index) ? kWhiteColor : kMenuIconColor,
+                  color: (model.selectedIndex == index) ? kWhiteColor : kMenuIconColor,
                   fontSize: 16,
                   height: 1,
                 ),
@@ -154,16 +151,14 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     );
   }
 
-  Widget _buildInfoMenu2(text, index) {
+  Widget _buildInfoMenu2(StoreInfoPageModel model, text, index) {
     return Container(
-      color: (_selectedIndex == index || _selectedIndex == 5) ? kMainColor : kMenuBarMainColor,
+      color: (model.selectedIndex == index || model.selectedIndex == 4) ? kMainColor : kMenuBarMainColor,
       child: Padding(
         padding: const EdgeInsets.all(gap_s),
         child: InkWell(
           onTap: () {
-            setState(() {
-              _selectedIndex = index;
-            });
+            ref.read(storeInfoPageViewModel.notifier).changeIndex(index);
           },
           child: SizedBox(
             width: 200,
@@ -172,7 +167,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
               child: Text(
                 '${text}',
                 style: TextStyle(
-                  color: (_selectedIndex == index || _selectedIndex == 5) ? kWhiteColor : kMenuIconColor,
+                  color: (model.selectedIndex == index || model.selectedIndex == 4) ? kWhiteColor : kMenuIconColor,
                   fontSize: 16,
                   height: 1,
                 ),
@@ -184,16 +179,14 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
     );
   }
 
-  Widget _buildInfoMenu(text, index) {
+  Widget _buildInfoMenu(StoreInfoPageModel model, text, index) {
     return Container(
-      color: (_selectedIndex == index) ? kMainColor : kMenuBarMainColor,
+      color: (model.selectedIndex == index) ? kMainColor : kMenuBarMainColor,
       child: Padding(
         padding: const EdgeInsets.all(gap_s),
         child: InkWell(
           onTap: () {
-            setState(() {
-              _selectedIndex = index;
-            });
+            ref.read(storeInfoPageViewModel.notifier).changeIndex(index);
           },
           child: SizedBox(
             width: 200,
@@ -201,7 +194,7 @@ class _StoreInfoMenuState extends State<StoreInfoMenu> {
               padding: const EdgeInsets.symmetric(horizontal: gap_m),
               child: Text('${text}',
                   style: TextStyle(
-                    color: (_selectedIndex == index) ? kWhiteColor : kMenuIconColor,
+                    color: (model.selectedIndex == index) ? kWhiteColor : kMenuIconColor,
                     fontSize: 16,
                     height: 1,
                   )),

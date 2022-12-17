@@ -8,6 +8,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:logger/logger.dart';
 
 class MainPage extends ConsumerStatefulWidget {
   const MainPage({Key? key}) : super(key: key);
@@ -34,7 +35,6 @@ class _MainPageState extends ConsumerState<MainPage> {
       StoreInfoMenu(),
     ];
 
-    print('세션: ${UserSession.jwtToken}');
     return Scaffold(
       key: scaffoldKey,
       appBar: _buildAppBar(),

@@ -12,6 +12,5 @@ class StoreSession {
 
   static Future<void> deleteStoreId(int storeId) async {
     _storeId = -1;
-    Logger().d("세션 종료 및 디바이스 토큰 삭제");
   }
 }
