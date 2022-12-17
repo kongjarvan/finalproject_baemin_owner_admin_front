@@ -1,9 +1,9 @@
 import 'package:baemin_owner_admin_front/constants.dart';
-import 'package:baemin_owner_admin_front/dto/login_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/owner_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -33,9 +33,8 @@ class OwnerController {
     //3. 비지니스 로직 처리
     if (responseDto.code == 1) {
       ResponseDto responseDto = await ownerService.fetchGetUserState();
-      print('UserState 통신완료');
+
       if (responseDto.code == 1) {
-        print('가게 아이디: ${responseDto.data.storeId}');
         if (responseDto.data.name.isEmpty) {
           Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.registerStorePage, (route) => false);
         } else {
@@ -85,7 +84,6 @@ class OwnerController {
 
   Future<void> registerStore(RegisterStoreReqDto registerStoreReqDto) async {
     ResponseDto responseDto = await OwnerService().fetchInsertStore(registerStoreReqDto);
-    print(responseDto.data);
 
     if (responseDto.code == 1) {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
@@ -117,7 +115,6 @@ class OwnerController {
 
   Future<void> updateStore(UpdateStoreReqDto updateStoreReqDto) async {
     ResponseDto responseDto = await OwnerService().fetchUpdateStore(updateStoreReqDto);
-    print(responseDto.data);
 
     if (responseDto.code == 1) {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);

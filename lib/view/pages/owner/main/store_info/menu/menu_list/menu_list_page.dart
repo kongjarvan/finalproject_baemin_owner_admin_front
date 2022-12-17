@@ -4,8 +4,7 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:flutter/material.dart';
 
 class MenuListPage extends StatefulWidget {
-  final Function(int index) notifyParent;
-  const MenuListPage({required this.notifyParent, Key? key}) : super(key: key);
+  const MenuListPage({Key? key}) : super(key: key);
 
   @override
   State<MenuListPage> createState() => _MenuListPageState();
@@ -176,7 +175,7 @@ class _MenuListPageState extends State<MenuListPage> {
             ),
             SizedBox(width: gap_m),
             InkWell(
-              onTap: () => callback(2),
+              onTap: () {},
               child: Container(
                 decoration: BoxDecoration(
                   border: Border.all(color: kMainColor),
@@ -276,9 +275,5 @@ class _MenuListPageState extends State<MenuListPage> {
         ],
       ),
     );
-  }
-
-  void callback(int index) {
-    widget.notifyParent(index);
   }
 }

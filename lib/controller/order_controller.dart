@@ -3,7 +3,7 @@ import 'package:baemin_owner_admin_front/core/constant/move.dart';
 import 'package:baemin_owner_admin_front/dto/req/delivery_complete_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/order_accept_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/order_cancel_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/order_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_management/model/order_list_page_view_model.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +27,10 @@ class OrderController {
   Future<void> cancelOrder(OrderCancelReqDto orderCancelReqDto, int orderId, orderState) async {
     // 통신
     // userId, orderId, storeId
-    print('주문취소 컨트롤러 진입');
+
     if (orderState == '주문완료') {
       ResponseDto responseDto = await OrderService().fetchDelete(orderCancelReqDto, orderId);
-      print('응답받음');
+
       if (responseDto.code == 1) {
         await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
         //_ref.read(mainPageViewModel.notifier).delete(orderId);
@@ -116,7 +116,6 @@ class OrderController {
       await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
       return 1;
     } else {
-      print('주문완료 불가능');
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(
           backgroundColor: Color(0x996D62E8),

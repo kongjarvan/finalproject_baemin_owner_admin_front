@@ -1,10 +1,9 @@
 import 'package:baemin_owner_admin_front/constants.dart';
-
 import 'package:baemin_owner_admin_front/controller/order_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/my_format.dart';
-import 'package:baemin_owner_admin_front/dto/order_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/delivery_complete_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/order_accept_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/order_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_management/component/order_cancel_alert.dart';

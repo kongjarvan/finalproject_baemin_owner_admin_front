@@ -26,8 +26,6 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
     OrderListPageModel? model = ref.watch(orderListPageViewModel); // viewmodel 초기화
     OrderListPageViewModel viewModel = ref.read(orderListPageViewModel.notifier);
 
-    Logger().d("주문목록페이지 빌드");
-
     return model == null ? Flexible(child: Center(child: CircularProgressIndicator())) : _buildBody(model, viewModel);
   }
 

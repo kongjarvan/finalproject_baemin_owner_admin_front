@@ -1,8 +1,8 @@
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
-import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-import 'package:baemin_owner_admin_front/dto/menu_list_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/update_menu_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/menu_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/update_menu_resp_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 
@@ -21,12 +21,8 @@ class MenuService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
       List<MenuListRespDto> menuListRespDtos = mapList.map((e) => MenuListRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = menuListRespDtos;
-      print('통과3');
     }
 
     return responseDto;
@@ -38,12 +34,8 @@ class MenuService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
       List<UpdateMenuRespDto> updateMenuRespDtos = mapList.map((e) => UpdateMenuRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = updateMenuRespDtos;
-      print('통과3');
     }
 
     return responseDto;
@@ -55,12 +47,8 @@ class MenuService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      print('통과1');
-      print(responseDto.data);
       List<UpdateMenuRespDto> updateMenuRespDtos = mapList.map((e) => UpdateMenuRespDto.fromJson(e)).toList();
-      print('통과2');
       responseDto.data = updateMenuRespDtos;
-      print('통과3');
     }
 
     return responseDto;

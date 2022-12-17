@@ -1,4 +1,4 @@
-import 'package:baemin_owner_admin_front/dto/review_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/review_list_resp_dto.dart';
 
 class ReviewListPageModel {
   // state

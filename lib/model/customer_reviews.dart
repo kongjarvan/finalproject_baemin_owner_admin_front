@@ -1,4 +1,4 @@
-import 'package:baemin_owner_admin_front/dto/order_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/order_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/model/ceo_reviews.dart';
 import 'package:baemin_owner_admin_front/model/stores.dart';

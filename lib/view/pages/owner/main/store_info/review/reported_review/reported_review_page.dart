@@ -1,70 +1,82 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
-import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/order_info.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/component/review_type_button.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/reported_review/model/reported_review_list_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/reported_review/model/reported_review_list_page_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReportedReviewPage extends StatefulWidget {
-  final Function(int index) notifyParent;
-  const ReportedReviewPage({required this.notifyParent, Key? key}) : super(key: key);
+class ReportedReviewPage extends ConsumerStatefulWidget {
+  const ReportedReviewPage({Key? key}) : super(key: key);
 
   @override
-  State<ReportedReviewPage> createState() => _ReportedReviewPageState();
+  ConsumerState<ReportedReviewPage> createState() => _ReportedReviewPageState();
 }
 
-class _ReportedReviewPageState extends State<ReportedReviewPage> {
+class _ReportedReviewPageState extends ConsumerState<ReportedReviewPage> {
   bool? _isChecked = false;
-  final _valueList = ['최신순', '별점순', '어떤순'];
+  final _valueList = ['최신순', '별점순'];
   var _selectedValue = '최신순';
   @override
   Widget build(BuildContext context) {
+    ReportedReviewListPageModel? model = ref.watch(reportedReviewListPageViewModel); // viewmodel 초기화
     return Scaffold(
-      body: Column(
-        children: [
-          Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(gap_l),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    '리뷰관리',
-                    style: TextStyle(fontSize: 32),
-                  ),
-                  SizedBox(height: gap_m),
-                  Row(
-                    children: [
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 4, text: '전체 리뷰'),
-                      SizedBox(width: gap_s),
-                      ReviewTypeButton(notifyParent: widget.notifyParent, index: 5, text: '신고된 리뷰'),
-                    ],
-                  ),
-                  SizedBox(height: gap_m),
-                  _buildReviewFilterForm(),
-                  SizedBox(height: gap_m),
-                  Expanded(
-                    child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: [
-                          _buildReportedReview(),
-                          _buildReportedReview(),
-                          _buildReportedReview(),
-                          _buildReportedReview(),
-                          _buildReportedReview(),
-                        ],
-                      ),
-                    ),
-                  )
-                ],
-              ),
+      body: model == null ? const Center(child: CircularProgressIndicator()) : _buildBody1(model),
+    );
+  }
+
+  Column _buildBody1(ReportedReviewListPageModel model) {
+    return Column(
+      children: [
+        Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(gap_l),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  '리뷰관리',
+                  style: TextStyle(fontSize: 32),
+                ),
+                SizedBox(height: gap_m),
+                Row(
+                  children: [
+                    ReviewTypeButton(text: '전체 리뷰', index: 3),
+                    SizedBox(width: gap_s),
+                    ReviewTypeButton(text: '신고된 리뷰', index: 4),
+                  ],
+                ),
+                SizedBox(height: gap_m),
+                _buildReviewFilterForm(),
+                SizedBox(height: gap_m),
+                Expanded(
+                  child: model.reportedReviewListRespDtos.length == 0
+                      ? const Center(
+                          child: Text(
+                            '신고 된 리뷰가 없습니다.',
+                            style: TextStyle(fontSize: 32, color: kMainColor, height: 1),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            children: List.generate(
+                              model.reportedReviewListRespDtos.length,
+                              (index) {
+                                return _buildReportedReview(model, index);
+                              },
+                            ),
+                          ),
+                        ),
+                )
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -131,7 +143,7 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
     );
   }
 
-  Widget _buildReportedReview() {
+  Widget _buildReportedReview(ReportedReviewListPageModel model, int index) {
     return Container(
       color: Colors.white,
       width: getBodyWidth(context),
@@ -142,11 +154,9 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
-                Icon(CupertinoIcons.star, color: kMainColor, size: 32),
-                Icon(CupertinoIcons.star, color: kMainColor, size: 32),
-                Icon(CupertinoIcons.star, color: kMainColor, size: 32),
-                Icon(CupertinoIcons.star, color: kMainColor, size: 32),
+                for (int i = 0; i < model.reportedReviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
+                if (model.reportedReviewListRespDtos[index].starPoint < 5)
+                  for (int i = 0; i < 5 - model.reportedReviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star, color: kMainColor, size: 32),
               ],
             ),
             SizedBox(height: gap_m),
@@ -155,9 +165,9 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  OrderInfo(),
+                  // OrderInfo(),
                   SizedBox(width: gap_xl),
-                  _buildSolution(),
+                  _buildSolution(model, index),
                 ],
               ),
             ),
@@ -169,7 +179,7 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
     );
   }
 
-  Expanded _buildSolution() {
+  Expanded _buildSolution(ReportedReviewListPageModel model, int index) {
     return Expanded(
       flex: 2,
       child: Column(
@@ -188,11 +198,18 @@ class _ReportedReviewPageState extends State<ReportedReviewPage> {
                 height: getBodyHeight(context) * 0.3,
                 child: Padding(
                   padding: const EdgeInsets.all(4),
-                  child: RichText(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 7,
-                    text: TextSpan(text: '별점 1점줬다고 신고를 하는놈이 어딨누'),
-                  ),
+                  child: model.reportedReviewListRespDtos[index].adminComment == null
+                      ? Center(
+                          child: Text(
+                            '해당 리뷰는 검토중입니다.',
+                            style: TextStyle(color: kMainColor, fontSize: 24),
+                          ),
+                        )
+                      : RichText(
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 7,
+                          text: TextSpan(text: '${model.reportedReviewListRespDtos[index].adminComment}'),
+                        ),
                 ),
               ),
             ],

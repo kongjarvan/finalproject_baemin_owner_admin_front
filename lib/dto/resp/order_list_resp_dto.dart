@@ -29,9 +29,7 @@ class OrderListRespDto {
 
   factory OrderListRespDto.fromJson(Map<String, dynamic> json) {
     var list = json['orderList'] as List;
-    print('런타임 타입: ${list.runtimeType}');
     List<Orders> ordersList = list.map((e) => Orders.fromJson(e)).toList();
-    print('안터졌음 ${ordersList[0].menuName}');
 
     return OrderListRespDto(
       id: json["id"],
