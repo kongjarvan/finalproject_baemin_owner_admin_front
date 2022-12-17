@@ -23,11 +23,11 @@ class _ReportedReviewPageState extends ConsumerState<ReportedReviewPage> {
   Widget build(BuildContext context) {
     ReportedReviewListPageModel? model = ref.watch(reportedReviewListPageViewModel); // viewmodel 초기화
     return Scaffold(
-      body: model == null ? const Center(child: CircularProgressIndicator()) : _buildBody(model),
+      body: model == null ? const Center(child: CircularProgressIndicator()) : _buildBody1(model),
     );
   }
 
-  Column _buildBody(ReportedReviewListPageModel model) {
+  Column _buildBody1(ReportedReviewListPageModel model) {
     return Column(
       children: [
         Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
@@ -53,17 +53,24 @@ class _ReportedReviewPageState extends ConsumerState<ReportedReviewPage> {
                 _buildReviewFilterForm(),
                 SizedBox(height: gap_m),
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: List.generate(
-                        model.reportedReviewListRespDtos.length,
-                        (index) {
-                          return _buildReportedReview(model, index);
-                        },
-                      ),
-                    ),
-                  ),
+                  child: model.reportedReviewListRespDtos.length == 0
+                      ? const Center(
+                          child: Text(
+                            '신고 된 리뷰가 없습니다.',
+                            style: TextStyle(fontSize: 32, color: kMainColor, height: 1),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            children: List.generate(
+                              model.reportedReviewListRespDtos.length,
+                              (index) {
+                                return _buildReportedReview(model, index);
+                              },
+                            ),
+                          ),
+                        ),
                 )
               ],
             ),
@@ -191,11 +198,18 @@ class _ReportedReviewPageState extends ConsumerState<ReportedReviewPage> {
                 height: getBodyHeight(context) * 0.3,
                 child: Padding(
                   padding: const EdgeInsets.all(4),
-                  child: RichText(
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 7,
-                    text: TextSpan(text: '${model.reportedReviewListRespDtos[index].adminComment}'),
-                  ),
+                  child: model.reportedReviewListRespDtos[index].adminComment == null
+                      ? Center(
+                          child: Text(
+                            '해당 리뷰는 검토중입니다.',
+                            style: TextStyle(color: kMainColor, fontSize: 24),
+                          ),
+                        )
+                      : RichText(
+                          overflow: TextOverflow.ellipsis,
+                          maxLines: 7,
+                          text: TextSpan(text: '${model.reportedReviewListRespDtos[index].adminComment}'),
+                        ),
                 ),
               ),
             ],

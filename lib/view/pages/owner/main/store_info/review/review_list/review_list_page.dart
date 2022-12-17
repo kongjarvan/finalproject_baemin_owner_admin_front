@@ -62,17 +62,24 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                 _buildReviewFilterForm(),
                 const SizedBox(height: gap_m),
                 Expanded(
-                  child: SingleChildScrollView(
-                    scrollDirection: Axis.vertical,
-                    child: Column(
-                      children: List.generate(
-                        model!.reviewListRespDtos.length,
-                        (index) {
-                          return _buildReview(model, index);
-                        },
-                      ),
-                    ),
-                  ),
+                  child: model!.reviewListRespDtos.length == 0
+                      ? const Center(
+                          child: Text(
+                            '리뷰가 없습니다.',
+                            style: TextStyle(fontSize: 32, color: kMainColor, height: 1),
+                          ),
+                        )
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.vertical,
+                          child: Column(
+                            children: List.generate(
+                              model.reviewListRespDtos.length,
+                              (index) {
+                                return _buildReview(model, index);
+                              },
+                            ),
+                          ),
+                        ),
                 ),
               ],
             ),

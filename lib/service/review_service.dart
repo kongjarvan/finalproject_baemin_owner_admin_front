@@ -8,6 +8,7 @@ import 'package:baemin_owner_admin_front/dto/resp/insert_ceo_comment_resp_dto.da
 import 'package:baemin_owner_admin_front/dto/resp/reported_review_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/review_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/service/store_session.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
@@ -22,7 +23,7 @@ class ReviewService {
   }
 
   Future<ResponseDto> fetchGetReviewList() async {
-    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/1/review", UserSession.jwtToken);
+    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/review", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
@@ -35,7 +36,7 @@ class ReviewService {
   }
 
   Future<ResponseDto> fetchGetReportedReviewList() async {
-    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/1/review/report", UserSession.jwtToken);
+    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/review/report", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
