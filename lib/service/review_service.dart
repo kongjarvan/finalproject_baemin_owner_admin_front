@@ -64,7 +64,7 @@ class ReviewService {
     Logger().d("reviewService 진입");
     String requestBody = jsonEncode(reportReviewReqDto.toJson());
     Logger().d("requestBody: ${requestBody}");
-    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/review/${reviewId}/report", requestBody, jwtToken: UserSession.jwtToken);
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/review/${reviewId}/report", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     Logger().d("responseDto 데이터: ${responseDto.data}");

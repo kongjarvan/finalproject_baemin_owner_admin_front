@@ -22,7 +22,7 @@ class ReviewListPage extends ConsumerStatefulWidget {
 class _ReviewListPageState extends ConsumerState<ReviewListPage> {
   bool? _isChecked = false;
 
-  final _valueList1 = ['최신순', '별점순', '어떤순'];
+  final _valueList1 = ['최신순', '별점순'];
   var _selectedValue1 = '최신순';
 
   final _valueList2 = ['명예훼손', '초상권침해', '상표권침해', '기타사유'];
@@ -63,12 +63,16 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                 const SizedBox(height: gap_m),
                 Expanded(
                   child: SingleChildScrollView(
-                      scrollDirection: Axis.vertical,
-                      child: Column(
-                        children: List.generate(model!.reviewListRespDtos.length, (index) {
+                    scrollDirection: Axis.vertical,
+                    child: Column(
+                      children: List.generate(
+                        model!.reviewListRespDtos.length,
+                        (index) {
                           return _buildReview(model, index);
-                        }),
-                      )),
+                        },
+                      ),
+                    ),
+                  ),
                 ),
               ],
             ),
@@ -242,7 +246,7 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                           ReviewListPageModel? model = ref.watch(reviewListPageViewModel);
                           return InkWell(
                             onTap: () async {
-                              ReportReviewReqDto reportReviewReqDto = ReportReviewReqDto('사업자 회원', _selectedValue2);
+                              ReportReviewReqDto reportReviewReqDto = ReportReviewReqDto(_selectedValue2);
 
                               await reviewCT.reportReview(reportReviewReqDto, model!.reviewListRespDtos[index].id);
                               Navigator.pop(context);

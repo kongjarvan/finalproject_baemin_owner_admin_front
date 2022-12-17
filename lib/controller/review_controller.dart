@@ -53,7 +53,7 @@ class ReviewController {
   Future<void> reportReview(ReportReviewReqDto reportReviewReqDto, int reviewId) async {
     Logger().d("reviewController 진입");
     Logger().d("리뷰넘버: ${reviewId}");
-    Logger().d("insertCeoCommentReqDto: ${reportReviewReqDto.userKind} ${reportReviewReqDto.reason}");
+    Logger().d("insertCeoCommentReqDto: ${reportReviewReqDto.reason}");
     ResponseDto responseDto = await ReviewService().fetchReportReview(reportReviewReqDto, reviewId);
     Logger().d("reviewService 응답됨 : ${responseDto.data}");
     if (responseDto.code == 1) {
