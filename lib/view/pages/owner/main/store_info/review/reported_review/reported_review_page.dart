@@ -148,25 +148,30 @@ class _ReportedReviewPageState extends ConsumerState<ReportedReviewPage> {
       color: Colors.white,
       width: getBodyWidth(context),
       child: Padding(
-        padding: const EdgeInsets.all(gap_m),
+        padding: const EdgeInsets.all(gap_l),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              mainAxisAlignment: MainAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                for (int i = 0; i < model.reportedReviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
-                if (model.reportedReviewListRespDtos[index].starPoint < 5)
-                  for (int i = 0; i < 5 - model.reportedReviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star, color: kMainColor, size: 32),
+                Text('주문번호: ${model.reportedReviewListRespDtos[index].orderId}', style: TextStyle(fontSize: 20)),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  children: [
+                    for (int i = 0; i < model.reportedReviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star_fill, color: kMainColor, size: 32),
+                    if (model.reportedReviewListRespDtos[index].starPoint < 5)
+                      for (int i = 0; i < 5 - model.reportedReviewListRespDtos[index].starPoint; i++) const Icon(CupertinoIcons.star, color: kMainColor, size: 32),
+                  ],
+                ),
               ],
             ),
             SizedBox(height: gap_m),
-            Container(
+            SizedBox(
               width: getBodyWidth(context),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // OrderInfo(),
-                  SizedBox(width: gap_xl),
                   _buildSolution(model, index),
                 ],
               ),
@@ -181,7 +186,6 @@ class _ReportedReviewPageState extends ConsumerState<ReportedReviewPage> {
 
   Expanded _buildSolution(ReportedReviewListPageModel model, int index) {
     return Expanded(
-      flex: 2,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [

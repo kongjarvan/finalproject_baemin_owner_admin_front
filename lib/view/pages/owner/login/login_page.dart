@@ -5,7 +5,6 @@ import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_f
 import 'package:baemin_owner_admin_front/view/pages/components/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   LoginPage({super.key});
