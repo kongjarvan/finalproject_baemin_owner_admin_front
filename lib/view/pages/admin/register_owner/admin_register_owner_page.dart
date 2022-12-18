@@ -128,6 +128,7 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
     );
   }
 
+
   Widget _buildApplierHeader() {
     return SizedBox(
       height: 32,
