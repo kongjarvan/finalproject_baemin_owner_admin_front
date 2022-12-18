@@ -1,12 +1,12 @@
-class UpdateMenuRespDto {
-  final String category;
-  final String name;
-  final String intro;
-  final String price;
-  final dynamic thumbnail;
-  final bool closure;
+class MenuDetailRespDto {
+  String category;
+  String name;
+  String intro;
+  int price;
+  String? thumbnail;
+  bool closure;
 
-  UpdateMenuRespDto({
+  MenuDetailRespDto({
     required this.category,
     required this.name,
     required this.intro,
@@ -15,7 +15,7 @@ class UpdateMenuRespDto {
     required this.closure,
   });
 
-  factory UpdateMenuRespDto.fromJson(Map<String, dynamic> json) => UpdateMenuRespDto(
+  factory MenuDetailRespDto.fromJson(Map<String, dynamic> json) => MenuDetailRespDto(
         category: json["category"],
         name: json["name"],
         intro: json["intro"],

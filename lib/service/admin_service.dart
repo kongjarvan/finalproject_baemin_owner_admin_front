@@ -65,13 +65,9 @@ class AdminService {
     Response response = await httpConnector.getInitSession("/api/admin/review/$reportReviewId/report/detail", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
-    Logger().d('responseDto msg : ${responseDto.msg}');
     if (responseDto.code == 1) {
-      Logger().d('코드 1 리턴, 파싱 시작');
       AdminReportedReviewDetailRespDto adminReportedReviewDetailRespDto = AdminReportedReviewDetailRespDto.fromJson(responseDto.data);
-      Logger().d('파싱 끝 : ${adminReportedReviewDetailRespDto.comment}');
       responseDto.data = adminReportedReviewDetailRespDto;
-      Logger().d('???');
     }
 
     return responseDto;
@@ -83,9 +79,7 @@ class AdminService {
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
-      Logger().d('코드 1 리턴, 파싱 시작');
       AdminResolveReviewRespDto adminResolveReviewRespDto = AdminResolveReviewRespDto.fromJson(responseDto.data);
-      Logger().d('파싱 끝 : $adminResolveReviewRespDto');
       responseDto.data = adminResolveReviewRespDto;
     }
 
