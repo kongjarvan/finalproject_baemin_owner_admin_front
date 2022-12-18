@@ -1,6 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/admin_controller.dart';
-import 'package:baemin_owner_admin_front/dto/req/accept_owner_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/admin_accept_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/model/admin_register_owner_page_model.dart';
@@ -127,7 +127,6 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
       ),
     );
   }
-
 
   Widget _buildApplierHeader() {
     return SizedBox(
@@ -262,8 +261,8 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
         return InkWell(
           onTap: () {
             AdminController reviewCT = ref.read(adminController);
-            AcceptOwnerReqDto acceptOwnerReqDto = AcceptOwnerReqDto(model.adminRegisterOwnerListRespDtos[index].accept);
-            reviewCT.acceptOwner(acceptOwnerReqDto, model.adminRegisterOwnerListRespDtos[index].id);
+            AdminAcceptOwnerReqDto adminAcceptOwnerReqDto = AdminAcceptOwnerReqDto(model.adminRegisterOwnerListRespDtos[index].accept);
+            reviewCT.acceptOwner(adminAcceptOwnerReqDto, model.adminRegisterOwnerListRespDtos[index].id);
           },
           child: Container(
               decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),

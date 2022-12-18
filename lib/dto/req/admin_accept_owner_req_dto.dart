@@ -1,7 +1,7 @@
-class AcceptOwnerReqDto {
+class AdminAcceptOwnerReqDto {
   final bool accept;
 
-  AcceptOwnerReqDto(this.accept);
+  AdminAcceptOwnerReqDto(this.accept);
 
   Map<String, dynamic> toJson() {
     return {

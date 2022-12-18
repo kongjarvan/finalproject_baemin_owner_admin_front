@@ -16,7 +16,11 @@ class AdminMainPageViewModel extends StateNotifier<AdminMainPageModel?> {
     state = AdminMainPageModel(selectedIndex);
   }
 
-  Future<void> moveToReviewDetailPage(int index) async {
-    state = AdminMainPageModel(4, reviewId: index);
+  Future<void> moveToReviewDetailPage() async {
+    state = AdminMainPageModel(4);
+  }
+
+  Future<void> moveToReviewListPage() async {
+    state = AdminMainPageModel(3);
   }
 }
