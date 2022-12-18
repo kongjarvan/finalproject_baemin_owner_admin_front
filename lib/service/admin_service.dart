@@ -2,9 +2,12 @@ import 'dart:convert';
 
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
-import 'package:baemin_owner_admin_front/dto/req/accept_owner_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/admin_accept_owner_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/admin_resolve_review_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/admin_register_owner_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/admin_reported_review_detail_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/admin_reported_review_list_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/admin_resolve_review_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
@@ -34,11 +37,10 @@ class AdminService {
     return responseDto;
   }
 
-  Future<ResponseDto> fetchAcceptOwner(AcceptOwnerReqDto acceptOwnerReqDto, int storeId) async {
-    String requestBody = jsonEncode(acceptOwnerReqDto.toJson());
+  Future<ResponseDto> fetchAcceptOwner(AdminAcceptOwnerReqDto adminAcceptOwnerReqDto, int storeId) async {
+    String requestBody = jsonEncode(adminAcceptOwnerReqDto.toJson());
 
     Response response = await httpConnector.put("/api/admin/store/$storeId/apply/accept", requestBody, jwtToken: UserSession.jwtToken);
-    Logger().d('응답됨 : ${response.body}');
 
     ResponseDto responseDto = toResponseDto(response);
 
@@ -51,10 +53,40 @@ class AdminService {
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      Logger().d('바디데이터: ${responseDto.data}');
       List<AdminRegisterOwnerListRespDto> adminRegisterOwnerListRespDtos = mapList.map((e) => AdminRegisterOwnerListRespDto.fromJson(e)).toList();
 
       responseDto.data = adminRegisterOwnerListRespDtos;
+    }
+
+    return responseDto;
+  }
+
+  fetchGetReportedReviewDetail(int reportReviewId) async {
+    Response response = await httpConnector.getInitSession("/api/admin/review/$reportReviewId/report/detail", UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    Logger().d('responseDto msg : ${responseDto.msg}');
+    if (responseDto.code == 1) {
+      Logger().d('코드 1 리턴, 파싱 시작');
+      AdminReportedReviewDetailRespDto adminReportedReviewDetailRespDto = AdminReportedReviewDetailRespDto.fromJson(responseDto.data);
+      Logger().d('파싱 끝 : ${adminReportedReviewDetailRespDto.comment}');
+      responseDto.data = adminReportedReviewDetailRespDto;
+      Logger().d('???');
+    }
+
+    return responseDto;
+  }
+
+  fetchResolveReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
+    String requestBody = jsonEncode(adminResolveReviewReqDto.toJson());
+    Response response = await httpConnector.put("/api/admin/review/$reportedReviewId/resolve", requestBody, jwtToken: UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    if (responseDto.code == 1) {
+      Logger().d('코드 1 리턴, 파싱 시작');
+      AdminResolveReviewRespDto adminResolveReviewRespDto = AdminResolveReviewRespDto.fromJson(responseDto.data);
+      Logger().d('파싱 끝 : $adminResolveReviewRespDto');
+      responseDto.data = adminResolveReviewRespDto;
     }
 
     return responseDto;
