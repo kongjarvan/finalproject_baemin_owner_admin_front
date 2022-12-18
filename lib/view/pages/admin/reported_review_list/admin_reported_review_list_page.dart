@@ -2,19 +2,21 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/model/admin_reported_review_detail_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/model/admin_reported_review_detail_page_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/model/admin_reported_review_list_page_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/model/admin_reported_review_list_page_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReportedReviewListPage extends ConsumerStatefulWidget {
-  const ReportedReviewListPage({Key? key}) : super(key: key);
+class AdminReportedReviewListPage extends ConsumerStatefulWidget {
+  const AdminReportedReviewListPage({Key? key}) : super(key: key);
 
   @override
-  ConsumerState<ReportedReviewListPage> createState() => _ReportedReviewListPageState();
+  ConsumerState<AdminReportedReviewListPage> createState() => _ReportedReviewListPageState();
 }
 
-class _ReportedReviewListPageState extends ConsumerState<ReportedReviewListPage> {
+class _ReportedReviewListPageState extends ConsumerState<AdminReportedReviewListPage> {
   final _valueList1 = ['신고자유형순', '유저아이디순'];
   var _selectedValue1 = '신고자유형순';
 
@@ -231,11 +233,13 @@ class _ReportedReviewListPageState extends ConsumerState<ReportedReviewListPage>
   }
 
   Widget _buildReportedReview(WidgetRef ref, AdminReportedReviewListPageModel model, int index) {
+    AdminReportedReviewDetailPageModel? model2 = ref.watch(adminReportedReviewDetailPageViewModel);
     return SizedBox(
       height: 32,
       child: InkWell(
-        onTap: () {
-          ref.read(adminMainPageViewModel.notifier).moveToReviewDetailPage(index);
+        onTap: () async {
+          await ref.read(adminReportedReviewDetailPageViewModel.notifier).notifyViewModel(model.adminReportedReviewListRespDtos[index].id);
+          await ref.read(adminMainPageViewModel.notifier).moveToReviewDetailPage();
         },
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,

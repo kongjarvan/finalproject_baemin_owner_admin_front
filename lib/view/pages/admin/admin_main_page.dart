@@ -4,8 +4,10 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/admin_register_owner_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/reported_review_detail_page.dart';
-import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/reported_review_list_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/admin_reported_review_detail_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/model/admin_reported_review_detail_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/model/admin_reported_review_detail_page_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/admin_reported_review_list_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -21,7 +23,7 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
 
   @override
   Widget build(BuildContext context) {
-    AdminMainPageModel? model = ref.watch(adminMainPageViewModel);
+    AdminMainPageModel? model1 = ref.watch(adminMainPageViewModel);
 
     final List selectedTitle = [
       '유저관리 > 사업자회원',
@@ -35,8 +37,8 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
       AdminRegisterOwnerPage(),
       AdminRegisterOwnerPage(),
       AdminRegisterOwnerPage(),
-      ReportedReviewListPage(),
-      ReportedReviewDetailPage(),
+      AdminReportedReviewListPage(),
+      AdminReportedReviewDetailPage(),
     ];
 
     return Scaffold(
@@ -65,9 +67,9 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                             },
                             body: Column(
                               children: [
-                                _buildUserManageListButton(model, '전체 회원', 2, 1),
-                                _buildUserManageListButton(model, '일반 회원', 1, 1),
-                                _buildUserManageListButton(model, '사업자회원', 0, 0),
+                                _buildUserManageListButton(model1, '전체 회원', 2, 1),
+                                _buildUserManageListButton(model1, '일반 회원', 1, 1),
+                                _buildUserManageListButton(model1, '사업자회원', 0, 0),
                               ],
                             ),
                             isExpanded: _isOpen,
@@ -80,14 +82,14 @@ class _AdminMainPageState extends ConsumerState<AdminMainPage> {
                         },
                       ),
                     ),
-                    _buildReportedReviewButton(model, 3),
+                    _buildReportedReviewButton(model1, 3),
                   ],
                 ),
                 _buildLogoutButton(context),
               ],
             ),
           ),
-          _buildSelectedIndexPage(model, selectedTitle, selectedMainView),
+          _buildSelectedIndexPage(model1, selectedTitle, selectedMainView),
         ],
       ),
     );
