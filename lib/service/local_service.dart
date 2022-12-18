@@ -7,7 +7,6 @@ import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:http/http.dart';
-import 'package:logger/logger.dart';
 
 const secureStorage = FlutterSecureStorage();
 

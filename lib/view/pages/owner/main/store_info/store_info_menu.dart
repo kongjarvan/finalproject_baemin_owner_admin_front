@@ -11,7 +11,6 @@ import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 class StoreInfoMenu extends ConsumerStatefulWidget {
   const StoreInfoMenu({Key? key}) : super(key: key);

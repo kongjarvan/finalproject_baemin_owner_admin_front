@@ -5,6 +5,7 @@ import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/owner_service.dart';
+import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../core/constant/move.dart';
@@ -31,6 +32,10 @@ class OwnerController {
     // 2. 통신 요청
     ResponseDto responseDto = await ownerService.fetchLogin(loginReqDto);
     //3. 비지니스 로직 처리
+    if (UserSession.user.role == '관리자') {
+      Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.adminPage, (route) => false);
+    }
+
     if (responseDto.code == 1) {
       ResponseDto responseDto = await ownerService.fetchGetUserState();
 

@@ -1,17 +1,20 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/model/admin_reported_review_list_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/model/admin_reported_review_list_page_view_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class ReportedReviewListPage extends StatefulWidget {
-  final Function() notifyParent;
-  const ReportedReviewListPage({Key? key, required this.notifyParent}) : super(key: key);
+class ReportedReviewListPage extends ConsumerStatefulWidget {
+  const ReportedReviewListPage({Key? key}) : super(key: key);
 
   @override
-  State<ReportedReviewListPage> createState() => _ReportedReviewListPageState();
+  ConsumerState<ReportedReviewListPage> createState() => _ReportedReviewListPageState();
 }
 
-class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
+class _ReportedReviewListPageState extends ConsumerState<ReportedReviewListPage> {
   final _valueList1 = ['신고자유형순', '유저아이디순'];
   var _selectedValue1 = '신고자유형순';
 
@@ -20,6 +23,7 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
 
   @override
   Widget build(BuildContext context) {
+    AdminReportedReviewListPageModel? model = ref.watch(adminReportedReviewListPageViewModel);
     return Scaffold(
       body: Padding(
         padding: const EdgeInsets.all(gap_l),
@@ -33,7 +37,7 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
                 child: Text('총 99명이 가입신청을 했어요', style: textTheme().headline1),
               ),
             ),
-            SizedBox(height: gap_l),
+            const SizedBox(height: gap_l),
             _buildReportedReviewList(),
           ],
         ),
@@ -85,7 +89,7 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
                           });
                         }),
                   ),
-                  SizedBox(width: gap_s),
+                  const SizedBox(width: gap_s),
                   Container(
                     width: 200,
                     decoration: BoxDecoration(
@@ -121,7 +125,7 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
                   ),
                 ],
               ),
-              SizedBox(height: gap_l),
+              const SizedBox(height: gap_l),
               Table(
                 defaultVerticalAlignment: TableCellVerticalAlignment.middle,
                 border: TableBorder.all(),
@@ -138,7 +142,7 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
                       color: kBackgroundColor,
                     ),
                     children: <Widget>[
-                      Container(
+                      SizedBox(
                         height: 32,
                         child: Align(
                           alignment: AlignmentDirectional.center,
@@ -178,29 +182,47 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
                       3: FlexColumnWidth(),
                       4: FlexColumnWidth(),
                     },
-                    children: <TableRow>[
-                      _buildReportedReview('1', '사업자', 'cs123', '욕설', '처리완료'),
-                      _buildReportedReview('2', '일반', 'jinsa', '욕설', '숨기기'),
-                      _buildReportedReview('3', '일반', 'sylar', '욕설', '숨기기'),
-                      _buildReportedReview('1', '사업자', 'cs123', '욕설', '처리완료'),
-                      _buildReportedReview('2', '일반', 'jinsa', '욕설', '숨기기'),
-                      _buildReportedReview('3', '일반', 'sylar', '욕설', '숨기기'),
-                      _buildReportedReview('1', '사업자', 'cs123', '욕설', '처리완료'),
-                      _buildReportedReview('2', '일반', 'jinsa', '욕설', '숨기기'),
-                      _buildReportedReview('3', '일반', 'sylar', '욕설', '숨기기'),
-                      _buildReportedReview('1', '사업자', 'cs123', '욕설', '처리완료'),
-                      _buildReportedReview('2', '일반', 'jinsa', '욕설', '숨기기'),
-                      _buildReportedReview('3', '일반', 'sylar', '욕설', '숨기기'),
-                      _buildReportedReview('1', '사업자', 'cs123', '욕설', '처리완료'),
-                      _buildReportedReview('2', '일반', 'jinsa', '욕설', '숨기기'),
-                      _buildReportedReview('3', '일반', 'sylar', '욕설', '숨기기'),
-                      _buildReportedReview('1', '사업자', 'cs123', '욕설', '처리완료'),
-                      _buildReportedReview('2', '일반', 'jinsa', '욕설', '숨기기'),
-                      _buildReportedReview('3', '일반', 'sylar', '욕설', '숨기기'),
-                    ],
                   ),
                 ),
-              )
+              ),
+              Consumer(
+                builder: (context, ref, child) {
+                  AdminReportedReviewListPageModel? model = ref.watch(adminReportedReviewListPageViewModel);
+                  return model == null
+                      ? const Center(child: CircularProgressIndicator())
+                      : Column(
+                          children: List.generate(
+                            model.adminReportedReviewListRespDtos.length,
+                            (index) {
+                              return _buildReportedReview(ref, model, index);
+                            },
+                          ),
+                        );
+                },
+              ),
+
+              // Consumer(
+              //   builder: (context, ref, child) {
+              //     AdminReportedReviewListPageModel? model = ref.watch(adminReportedReviewListPageViewModel);
+              //     return Flexible(
+              //       child: SingleChildScrollView(
+              //         scrollDirection: Axis.vertical,
+              //         child: Table(
+              //           defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+              //           border: TableBorder.all(),
+              //           columnWidths: const <int, TableColumnWidth>{
+              //             0: FlexColumnWidth(),
+              //             1: FlexColumnWidth(),
+              //             2: FlexColumnWidth(),
+              //             3: FlexColumnWidth(),
+              //             4: FlexColumnWidth(),
+              //           },
+              //           children: <TableRow>[asdf(ref)],
+              //         ),
+              //       ),
+              //     );
+              //   },
+              // )
             ],
           ),
         ),
@@ -208,51 +230,102 @@ class _ReportedReviewListPageState extends State<ReportedReviewListPage> {
     );
   }
 
-  TableRow _buildReportedReview(reportNumber, ownerId, storeRegisterNumber, ownerName, result) {
-    return TableRow(
-      decoration: const BoxDecoration(
-        color: kWhiteColor,
-      ),
-      children: <Widget>[
-        InkWell(
-          onTap: widget.notifyParent,
-          child: SizedBox(
-            height: 32,
-            child: Align(
-              alignment: AlignmentDirectional.center,
-              child: Text('${reportNumber}', style: textTheme().headline1),
+  Widget _buildReportedReview(WidgetRef ref, AdminReportedReviewListPageModel model, int index) {
+    return SizedBox(
+      height: 32,
+      child: InkWell(
+        onTap: () {
+          ref.read(adminMainPageViewModel.notifier).moveToReviewDetailPage(index);
+        },
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Flexible(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),
+                child: Center(child: Text('${model.adminReportedReviewListRespDtos[index].id}')),
+              ),
             ),
-          ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),
+                child: Center(child: Text('${model.adminReportedReviewListRespDtos[index].role}')),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),
+                child: Center(child: Text('${model.adminReportedReviewListRespDtos[index].username}')),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),
+                child: Center(child: Text('${model.adminReportedReviewListRespDtos[index].reason}')),
+              ),
+            ),
+            Flexible(
+              flex: 1,
+              child: Container(
+                decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),
+                child: Center(child: Text(model.adminReportedReviewListRespDtos[index].isResolved == false ? '처리 대기중' : '처리완료')),
+              ),
+            ),
+          ],
         ),
-        InkWell(
-          onTap: widget.notifyParent,
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Text('${ownerId}', style: textTheme().headline1),
-          ),
-        ),
-        InkWell(
-          onTap: widget.notifyParent,
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Text('${storeRegisterNumber}', style: textTheme().headline1),
-          ),
-        ),
-        InkWell(
-          onTap: widget.notifyParent,
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Text('${ownerName}', style: textTheme().headline1),
-          ),
-        ),
-        InkWell(
-          onTap: widget.notifyParent,
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Text('${result}', style: textTheme().headline1),
-          ),
-        ),
-      ],
+      ),
     );
   }
+
+  // TableRow _buildReportedReview(int index) {
+  //   return TableRow(
+  //     decoration: const BoxDecoration(
+  //       color: kWhiteColor,
+  //     ),
+  //     children: <Widget>[
+  //       InkWell(
+  //         onTap: ref.read(adminMainPageViewModel.notifier).changeIndex(index),
+  //         child: SizedBox(
+  //           height: 32,
+  //           child: Align(
+  //             alignment: AlignmentDirectional.center,
+  //             child: Text('1', style: textTheme().headline1),
+  //           ),
+  //         ),
+  //       ),
+  //       InkWell(
+  //         onTap: ref.read(adminMainPageViewModel.notifier).changeIndex(index),
+  //         child: Align(
+  //           alignment: AlignmentDirectional.center,
+  //           child: Text('사업자', style: textTheme().headline1),
+  //         ),
+  //       ),
+  //       InkWell(
+  //         onTap: ref.read(adminMainPageViewModel.notifier).changeIndex(index),
+  //         child: Align(
+  //           alignment: AlignmentDirectional.center,
+  //           child: Text('cs123', style: textTheme().headline1),
+  //         ),
+  //       ),
+  //       InkWell(
+  //         onTap: ref.read(adminMainPageViewModel.notifier).changeIndex(index),
+  //         child: Align(
+  //           alignment: AlignmentDirectional.center,
+  //           child: Text('욕설', style: textTheme().headline1),
+  //         ),
+  //       ),
+  //       InkWell(
+  //         onTap: ref.read(adminMainPageViewModel.notifier).changeIndex(index),
+  //         child: Align(
+  //           alignment: AlignmentDirectional.center,
+  //           child: Text('처리완료', style: textTheme().headline1),
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 }

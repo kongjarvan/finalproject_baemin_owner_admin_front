@@ -27,7 +27,7 @@ class OrderInfo extends ConsumerWidget {
             ),
           ),
           SizedBox(height: gap_s),
-          Text('주문번호: ${model!.reviewListRespDtos[index].id}', style: TextStyle(fontSize: 20)),
+          Text('주문번호: ${model!.reviewListRespDtos[index].orderId}', style: TextStyle(fontSize: 20)),
           SizedBox(height: gap_s),
           Text('주문일자: ${model.reviewListRespDtos[index].orderCreatedAt}', style: textTheme().bodyText2),
           SizedBox(height: gap_s),

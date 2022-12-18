@@ -1,31 +1,28 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/admin_register_owner_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_detail/reported_review_detail_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/reported_review_list/reported_review_list_page.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class AdminMainPage extends StatefulWidget {
+class AdminMainPage extends ConsumerStatefulWidget {
   const AdminMainPage({Key? key}) : super(key: key);
 
   @override
-  State<AdminMainPage> createState() => _AdminMainPageState();
+  ConsumerState<AdminMainPage> createState() => _AdminMainPageState();
 }
 
-class _AdminMainPageState extends State<AdminMainPage> {
-  var _selectedIndex = 0;
-
-  void _callbackReportedReviewDetailPage() {
-    setState(() {
-      _selectedIndex = 4;
-    });
-  }
-
+class _AdminMainPageState extends ConsumerState<AdminMainPage> {
   bool _isOpen = false;
 
   @override
   Widget build(BuildContext context) {
+    AdminMainPageModel? model = ref.watch(adminMainPageViewModel);
+
     final List selectedTitle = [
       '유저관리 > 사업자회원',
       '유저관리 > 사업자회원',
@@ -38,7 +35,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
       AdminRegisterOwnerPage(),
       AdminRegisterOwnerPage(),
       AdminRegisterOwnerPage(),
-      ReportedReviewListPage(notifyParent: _callbackReportedReviewDetailPage),
+      ReportedReviewListPage(),
       ReportedReviewDetailPage(),
     ];
 
@@ -68,9 +65,9 @@ class _AdminMainPageState extends State<AdminMainPage> {
                             },
                             body: Column(
                               children: [
-                                _buildUserManageListButton('전체 회원', 2, 1),
-                                _buildUserManageListButton('일반 회원', 1, 1),
-                                _buildUserManageListButton('사업자회원', 0, 0),
+                                _buildUserManageListButton(model, '전체 회원', 2, 1),
+                                _buildUserManageListButton(model, '일반 회원', 1, 1),
+                                _buildUserManageListButton(model, '사업자회원', 0, 0),
                               ],
                             ),
                             isExpanded: _isOpen,
@@ -83,14 +80,14 @@ class _AdminMainPageState extends State<AdminMainPage> {
                         },
                       ),
                     ),
-                    _buildReportedReviewButton(3),
+                    _buildReportedReviewButton(model, 3),
                   ],
                 ),
                 _buildLogoutButton(context),
               ],
             ),
           ),
-          _buildSelectedIndexPage(selectedTitle, selectedMainView),
+          _buildSelectedIndexPage(model, selectedTitle, selectedMainView),
         ],
       ),
     );
@@ -110,7 +107,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
     );
   }
 
-  Expanded _buildSelectedIndexPage(List<dynamic> selectedTitle, List<Widget> selectedMainView) {
+  Expanded _buildSelectedIndexPage(AdminMainPageModel? model, List<dynamic> selectedTitle, List<Widget> selectedMainView) {
     return Expanded(
       child: Column(
         children: [
@@ -122,7 +119,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
               child: Padding(
                 padding: const EdgeInsets.all(gap_m),
                 child: Text(
-                  '${selectedTitle[_selectedIndex]}',
+                  '${selectedTitle[model!.selectedIndex]}',
                   style: TextStyle(fontSize: 24, height: 1),
                 ),
               ),
@@ -131,7 +128,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
           Divider(thickness: 1, height: 1, color: kAdminSemiBlackColor),
           Flexible(
             child: Container(
-              child: selectedMainView[_selectedIndex],
+              child: selectedMainView[model.selectedIndex],
             ),
           ),
         ],
@@ -139,13 +136,13 @@ class _AdminMainPageState extends State<AdminMainPage> {
     );
   }
 
-  Container _buildReportedReviewButton(index1) {
+  Container _buildReportedReviewButton(AdminMainPageModel? model, index1) {
     return Container(
-      color: (_selectedIndex == index1 || _selectedIndex == 4) ? kMainColor : kUnselectedListColor,
+      color: (model!.selectedIndex == index1 || model.selectedIndex == 4) ? kMainColor : kUnselectedListColor,
       child: InkWell(
         onTap: () {
           setState(() {
-            _selectedIndex = index1;
+            model.selectedIndex = index1;
           });
         },
         child: Padding(
@@ -157,7 +154,7 @@ class _AdminMainPageState extends State<AdminMainPage> {
                 '신고 리뷰 관리',
                 style: TextStyle(
                   fontSize: 18.0,
-                  color: (_selectedIndex == index1 || _selectedIndex == 4) ? kAdminBlackColor : kWhiteColor,
+                  color: (model.selectedIndex == index1 || model.selectedIndex == 4) ? kAdminBlackColor : kWhiteColor,
                   height: 1.0,
                 ),
               ),
@@ -205,13 +202,13 @@ class _AdminMainPageState extends State<AdminMainPage> {
     );
   }
 
-  Widget _buildUserManageListButton(text, index1, index2) {
+  Widget _buildUserManageListButton(AdminMainPageModel? model, text, index1, index2) {
     return Container(
-      color: index1 == _selectedIndex ? kMainColor : kBackgroundColor,
+      color: index1 == model!.selectedIndex ? kMainColor : kBackgroundColor,
       child: InkWell(
         onTap: () {
           setState(() {
-            _selectedIndex = index1;
+            model.selectedIndex = index1;
           });
         },
         child: Padding(
