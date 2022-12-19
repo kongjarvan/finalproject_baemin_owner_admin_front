@@ -8,6 +8,7 @@ import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/menu_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 import '../core/constant/move.dart';
 
@@ -83,6 +84,7 @@ class MenuController {
   }
 
   Future<void> insertMenu(InsertMenuReqDto insertMenuReqDto) async {
+    Logger().d('컨트롤러 진입');
     ResponseDto responseDto = await MenuService().fetchInsertMenu(insertMenuReqDto);
 
     if (responseDto.code == 1) {

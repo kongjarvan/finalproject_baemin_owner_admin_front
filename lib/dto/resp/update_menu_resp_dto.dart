@@ -2,7 +2,7 @@ class UpdateMenuRespDto {
   final String category;
   final String name;
   final String intro;
-  final String price;
+  final int price;
   final dynamic thumbnail;
   final bool closure;
 

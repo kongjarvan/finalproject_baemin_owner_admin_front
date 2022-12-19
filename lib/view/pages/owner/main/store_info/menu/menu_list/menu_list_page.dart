@@ -23,24 +23,27 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
-        children: [
-          const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
-          Expanded(
-            child: Padding(
-              padding: const EdgeInsets.all(gap_l),
-              child: Column(
-                children: [
-                  _buildMenuListHeader(context),
-                  const SizedBox(height: gap_l),
-                  _buildMenuList(),
-                ],
-              ),
+    MenuListPageModel? model = ref.watch(menuListPageViewModel);
+    return model == null ? const Center(child: CircularProgressIndicator()) : Scaffold(body: _buildBody(context));
+  }
+
+  Column _buildBody(BuildContext context) {
+    return Column(
+      children: [
+        const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+        Expanded(
+          child: Padding(
+            padding: const EdgeInsets.all(gap_l),
+            child: Column(
+              children: [
+                _buildMenuListHeader(context),
+                const SizedBox(height: gap_l),
+                _buildMenuList(),
+              ],
             ),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
@@ -147,7 +150,7 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
                         const SizedBox(height: gap_xs),
                         Text('$price 원', style: textTheme().bodyText1),
                         const SizedBox(height: gap_s),
-                        Text('$price', style: textTheme().bodyText2),
+                        Text('$intro', style: textTheme().bodyText2),
                       ],
                     ),
                   ),

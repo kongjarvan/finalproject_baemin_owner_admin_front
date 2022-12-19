@@ -2,7 +2,7 @@ class UpdateMenuReqDto {
   dynamic thumbnail;
   String category;
   String name;
-  String price;
+  int price;
   String intro;
 
   UpdateMenuReqDto({

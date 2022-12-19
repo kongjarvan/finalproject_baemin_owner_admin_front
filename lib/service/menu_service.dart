@@ -53,18 +53,21 @@ class MenuService {
   Future<ResponseDto> fetchHideMenu(HideMenuReqDto hideMenuReqDto, int menuId) async {
     String requestBody = jsonEncode(hideMenuReqDto.toJson());
 
-    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update/state", requestBody, jwtToken: UserSession.jwtToken);
+    Response response =
+        await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update/state", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     return responseDto;
   }
 
   fetchInsertMenu(InsertMenuReqDto insertMenuReqDto) async {
+    Logger().d('서비스 진입');
     String requestBody = jsonEncode(insertMenuReqDto.toJson());
-
-    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/save", requestBody, jwtToken: UserSession.jwtToken);
-
+    Logger().d('tojson 파싱 완료');
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/menu/save", requestBody, jwtToken: UserSession.jwtToken);
+    Logger().d('응답완료');
     ResponseDto responseDto = toResponseDto(response);
+    Logger().d('${responseDto.code}');
     if (responseDto.code == 1) {
       responseDto.data = InsertMenuRespDto.fromJson(responseDto.data);
     }
@@ -74,7 +77,8 @@ class MenuService {
   fetchUpdateMenu(UpdateMenuReqDto updateMenuReqDto, int menuId) async {
     String requestBody = jsonEncode(updateMenuReqDto.toJson());
 
-    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update", requestBody, jwtToken: UserSession.jwtToken);
+    Response response =
+        await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {

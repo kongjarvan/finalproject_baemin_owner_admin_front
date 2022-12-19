@@ -2,7 +2,7 @@ class InsertMenuRespDto {
   final dynamic thumbnail;
   final String category;
   final String name;
-  final String price;
+  final int price;
   final String intro;
   final bool closure;
 

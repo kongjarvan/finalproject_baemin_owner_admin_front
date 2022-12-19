@@ -4,7 +4,6 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import 'package:table_calendar/table_calendar.dart';
 
 class StatisticsPage extends StatefulWidget {
   const StatisticsPage({Key? key}) : super(key: key);
@@ -14,6 +13,8 @@ class StatisticsPage extends StatefulWidget {
 }
 
 class _StatisticsPageState extends State<StatisticsPage> {
+  var time = DateTime.now();
+
   @override
   Widget build(BuildContext context) {
     DateTime selectedDay1 = DateTime(
@@ -249,7 +250,9 @@ class _StatisticsPageState extends State<StatisticsPage> {
 
   InkWell _buildDateButton(formatDates) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        showDatePickerPop(formatDates);
+      },
       child: Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(4),
@@ -274,23 +277,46 @@ class _StatisticsPageState extends State<StatisticsPage> {
       ),
     );
   }
-}
 
-Widget _buildPeriodButton(text) {
-  return InkWell(
-    onTap: () {},
-    child: Container(
-      decoration: BoxDecoration(
-        border: Border.all(color: kUnselectedListColor),
-        borderRadius: BorderRadius.circular(4),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 60, vertical: gap_xs),
-        child: Text(
-          '${text}',
-          style: TextStyle(color: kUnselectedListColor, fontSize: 24, height: 1),
+  Widget _buildPeriodButton(text) {
+    return InkWell(
+      onTap: () {},
+      child: Container(
+        decoration: BoxDecoration(
+          border: Border.all(color: kUnselectedListColor),
+          borderRadius: BorderRadius.circular(4),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 60, vertical: gap_xs),
+          child: Text(
+            '${text}',
+            style: TextStyle(color: kUnselectedListColor, fontSize: 24, height: 1),
+          ),
         ),
       ),
-    ),
-  );
+    );
+  }
+
+  void showDatePickerPop(formatDates) {
+    Future<DateTime?> selectedDate = showDatePicker(
+      context: context,
+      currentDate: time,
+      initialDate: time, //초기값
+      firstDate: DateTime(2000), //시작일
+      lastDate: DateTime(2099), //마지막일
+      builder: (BuildContext context, Widget? child) {
+        return Theme(
+          data: ThemeData.light().copyWith(
+            colorScheme: ColorScheme.light(primary: Colors.deepOrange),
+          ),
+          child: child!,
+        );
+      },
+    );
+    selectedDate.then((formatDates) {
+      setState(() {
+        time = formatDates!;
+      });
+    });
+  }
 }

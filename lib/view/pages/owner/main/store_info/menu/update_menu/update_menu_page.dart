@@ -6,9 +6,12 @@ import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/update_menu/model/update_menu_page_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/update_menu/model/update_menu_page_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_view_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 class UpdateMenuPage extends ConsumerStatefulWidget {
   const UpdateMenuPage({Key? key}) : super(key: key);
@@ -20,46 +23,38 @@ class UpdateMenuPage extends ConsumerStatefulWidget {
 final _formKey = GlobalKey<FormState>();
 
 class _UpdateMenuPageState extends ConsumerState<UpdateMenuPage> {
+  var _name;
+  var _price;
+  var _thumbnail;
+  var _intro;
+
+  var _categoryList = ['메인 메뉴', '사이드 메뉴', '음료'];
+  var _selectedCategory;
   @override
   Widget build(BuildContext context) {
     UpdateMenuPageModel? model = ref.watch(updateMenuPageViewModel);
-    var _categoryList = ['메인 메뉴', '사이드', '음료'];
-    var _selectedCategory = model!.menuDetailRespDto.category;
 
-    var _name = TextEditingController(text: model.menuDetailRespDto.name);
-    var _price = TextEditingController(text: '${model.menuDetailRespDto.price}');
-    var _thumbnail = TextEditingController(text: model.menuDetailRespDto.thumbnail);
-    var _intro = TextEditingController(text: model.menuDetailRespDto.intro);
+    _selectedCategory = model!.menuDetailRespDto.category;
+
+    _name = TextEditingController(text: model.menuDetailRespDto.name);
+    _price = TextEditingController(text: '${model.menuDetailRespDto.price}');
+    _thumbnail = TextEditingController(text: model.menuDetailRespDto.thumbnail);
+    _intro = TextEditingController(text: model.menuDetailRespDto.intro);
     return Scaffold(
-      body: model == null
-          ? const Center(child: CircularProgressIndicator())
-          : _buildBody(
-              _selectedCategory,
-              _name,
-              _price,
-              _thumbnail,
-              _intro,
-              _categoryList,
-            ),
+      body: model == null ? const Center(child: CircularProgressIndicator()) : _buildBody(),
     );
   }
 
-  Column _buildBody(
-    String _selectedCategory,
-    TextEditingController _name,
-    TextEditingController _price,
-    TextEditingController _thumbnail,
-    TextEditingController _intro,
-    List<String> _categoryList,
-  ) {
+  Column _buildBody() {
     return Column(
+      key: _formKey,
       children: [
         const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
         Padding(
           padding: const EdgeInsets.all(gap_l),
           child: Column(
             children: [
-              _buildInsertMenuHeader(_selectedCategory, _name.text.trim(), _price.text.trim(), _thumbnail.text.trim(), _intro.text.trim()),
+              _buildInsertMenuHeader(),
               const SizedBox(height: gap_xxs),
               Column(
                 children: [
@@ -126,29 +121,33 @@ class _UpdateMenuPageState extends ConsumerState<UpdateMenuPage> {
                                         borderRadius: BorderRadius.circular(4),
                                         color: Colors.white,
                                       ),
-                                      child: DropdownButton(
-                                          isExpanded: true,
-                                          style: textTheme().headline1,
-                                          underline: Container(
-                                            height: 0,
-                                          ),
-                                          value: _selectedCategory,
-                                          items: _categoryList.map(
-                                            (value) {
-                                              return DropdownMenuItem(
-                                                value: value,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: gap_xs),
-                                                  child: Text(value),
-                                                ),
-                                              );
-                                            },
-                                          ).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _selectedCategory = value as String;
-                                            });
-                                          }),
+                                      child: StatefulBuilder(
+                                        builder: (context, setState) {
+                                          return DropdownButton(
+                                              isExpanded: true,
+                                              style: textTheme().headline1,
+                                              underline: Container(
+                                                height: 0,
+                                              ),
+                                              value: _selectedCategory,
+                                              items: _categoryList.map(
+                                                (value) {
+                                                  return DropdownMenuItem(
+                                                    value: value,
+                                                    child: Padding(
+                                                      padding: const EdgeInsets.only(left: gap_xs),
+                                                      child: Text(value),
+                                                    ),
+                                                  );
+                                                },
+                                              ).toList(),
+                                              onChanged: (value) {
+                                                setState(() {
+                                                  _selectedCategory = value as String;
+                                                });
+                                              });
+                                        },
+                                      ),
                                     ),
                                   ],
                                 ),
@@ -176,9 +175,8 @@ class _UpdateMenuPageState extends ConsumerState<UpdateMenuPage> {
     );
   }
 
-  Widget _buildInsertMenuHeader(String selectedCategory, String name, String price, String thumbnail, String intro) {
+  Widget _buildInsertMenuHeader() {
     return Column(
-      key: _formKey,
       children: [
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -189,17 +187,20 @@ class _UpdateMenuPageState extends ConsumerState<UpdateMenuPage> {
             ),
             Consumer(
               builder: (context, ref, child) {
-                UpdateMenuPageModel? model = ref.watch(updateMenuPageViewModel);
+                UpdateMenuPageModel? model1 = ref.watch(updateMenuPageViewModel);
+                StoreInfoPageModel? model2 = ref.watch(storeInfoPageViewModel);
                 return InkWell(
                   onTap: () async {
                     MenuController menuCT = ref.read(menuController);
+
                     UpdateMenuReqDto updateMenuReqDto = UpdateMenuReqDto(
-                      category: selectedCategory,
-                      name: name,
-                      price: price,
-                      intro: intro,
+                      category: _selectedCategory,
+                      name: _name.text.trim(),
+                      price: int.parse(_price.text.trim()),
+                      intro: _intro.text.trim(),
                     );
-                    await menuCT.updateMenu(updateMenuReqDto, 1);
+                    await menuCT.updateMenu(updateMenuReqDto, model1!.menuDetailRespDto.menuId);
+                    ref.read(storeInfoPageViewModel.notifier).changeIndex(1);
                   },
                   child: Container(
                     decoration: BoxDecoration(

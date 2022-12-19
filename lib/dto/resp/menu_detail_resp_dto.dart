@@ -1,4 +1,5 @@
 class MenuDetailRespDto {
+  int menuId;
   String category;
   String name;
   String intro;
@@ -7,6 +8,7 @@ class MenuDetailRespDto {
   bool closure;
 
   MenuDetailRespDto({
+    required this.menuId,
     required this.category,
     required this.name,
     required this.intro,
@@ -16,6 +18,7 @@ class MenuDetailRespDto {
   });
 
   factory MenuDetailRespDto.fromJson(Map<String, dynamic> json) => MenuDetailRespDto(
+        menuId: json["menuId"],
         category: json["category"],
         name: json["name"],
         intro: json["intro"],
