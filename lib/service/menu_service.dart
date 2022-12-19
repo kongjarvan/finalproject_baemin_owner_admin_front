@@ -48,11 +48,12 @@ class MenuService {
   }
 
   Future<ResponseDto> fetchHideMenu(HideMenuReqDto hideMenuReqDto, int menuId) async {
+    print('메뉴 숨기기 서비스 진입');
+    print('menuId : ${menuId}');
     String requestBody = jsonEncode(hideMenuReqDto.toJson());
-
-    Response response =
-        await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update/state", requestBody, jwtToken: UserSession.jwtToken);
-
+    print('requestBody : ${requestBody}');
+    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update/state", requestBody, jwtToken: UserSession.jwtToken);
+    print('response 데이터: ${response.body}');
     ResponseDto responseDto = toResponseDto(response);
     return responseDto;
   }
@@ -70,8 +71,7 @@ class MenuService {
   fetchUpdateMenu(UpdateMenuReqDto updateMenuReqDto, int menuId) async {
     String requestBody = jsonEncode(updateMenuReqDto.toJson());
 
-    Response response =
-        await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update", requestBody, jwtToken: UserSession.jwtToken);
+    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {

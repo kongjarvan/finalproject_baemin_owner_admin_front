@@ -37,12 +37,17 @@ class OwnerService {
     String jwtToken = response.headers["authorization"].toString();
 
     await secureStorage.write(key: "jwtToken", value: jwtToken);
-
+    print('jwtToken : ${jwtToken}');
     ResponseDto responseDto = toResponseDto(response);
 
     if (responseDto.code == 1) {
       Users user = Users.fromJson(responseDto.data);
+      print('user : ${user.nickname}');
+      print('user : ${user.id}');
+      print('user : ${user.role}');
+      print('user : ${user.createdAt}');
       UserSession.successAuthentication(user, jwtToken);
+      print('세션 승인됨');
     }
 
     return responseDto;
@@ -82,9 +87,14 @@ class OwnerService {
 
   Future<ResponseDto> fetchGetUserState() async {
     Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/name", jwtToken: UserSession.jwtToken);
+
     ResponseDto responseDto = toResponseDto(response);
-    responseDto.data = StoreCheckDto.fromJson(responseDto.data);
-    StoreSession.successAuthentication(responseDto.data.storeId);
+
+    if (responseDto.code == 1) {
+      responseDto.data = StoreCheckDto.fromJson(responseDto.data);
+
+      StoreSession.successAuthentication(responseDto.data.storeId);
+    }
     return responseDto;
   }
 

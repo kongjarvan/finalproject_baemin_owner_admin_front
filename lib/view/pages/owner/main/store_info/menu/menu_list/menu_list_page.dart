@@ -7,6 +7,7 @@ import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/m
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/menu_list/model/menu_list_page_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/update_menu/model/update_menu_page_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/update_menu/model/update_menu_page_view_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -273,15 +274,16 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
                       Consumer(
                         builder: (context, ref, child) {
                           MenuListPageModel? model = ref.watch(menuListPageViewModel);
+
                           MenuController menuCT = ref.read(menuController);
 
                           return InkWell(
                             onTap: () async {
-                              HideMenuReqDto hideMenuReqDto = HideMenuReqDto(Closure: true);
+                              HideMenuReqDto hideMenuReqDto = HideMenuReqDto(closure: true);
 
                               await menuCT.hideMenu(hideMenuReqDto, model!.menuListRespDtos[index].id);
                               Navigator.pop(context);
-                              ref.read(storeInfoPageViewModel.notifier).changeIndex(1);
+                              ref.read(menuListPageViewModel.notifier).notifyViewModel();
                             },
                             child: Container(
                               width: 240,

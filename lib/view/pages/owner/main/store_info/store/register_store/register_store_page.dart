@@ -407,29 +407,33 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedOpenTime,
-                  items: _openTimeList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedOpenTime = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedOpenTime,
+                      items: _openTimeList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedOpenTime = value as String;
+                        });
+                      });
+                },
+              ),
             ),
             const SizedBox(width: gap_m),
             Text('~', style: textTheme().headline2),
@@ -443,29 +447,33 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedCloseTime,
-                  items: _closeTimeList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCloseTime = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedCloseTime,
+                      items: _closeTimeList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCloseTime = value as String;
+                        });
+                      });
+                },
+              ),
             ),
           ],
         ),
@@ -490,29 +498,33 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedDeliveryTime,
-                  items: _deliveryTimeList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedDeliveryTime = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedDeliveryTime,
+                      items: _deliveryTimeList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDeliveryTime = value as String;
+                        });
+                      });
+                },
+              ),
             ),
           ],
         ),
@@ -537,29 +549,33 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedCategory,
-                  items: _categoryList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCategory = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedCategory,
+                      items: _categoryList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategory = value as String;
+                        });
+                      });
+                },
+              ),
             ),
           ],
         ),

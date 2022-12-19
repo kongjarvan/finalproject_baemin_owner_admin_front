@@ -265,7 +265,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
             child: InputTextFormField(
               text1: '가게 이름',
               text2: '가게 이름 입력',
-              isReadOnly: true,
+              isReadOnly: false,
               controller: _name,
               maxLine: 1,
             ),
@@ -278,7 +278,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
             child: InputTextFormField(
               text1: '전화번호',
               text2: '전화번호 입력',
-              isReadOnly: true,
+              isReadOnly: false,
               controller: _phone,
               maxLine: 1,
             ),
@@ -294,7 +294,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
       child: InputTextFormField(
         text1: '가게 소개란',
         text2: '가게 소개란 입력',
-        isReadOnly: true,
+        isReadOnly: false,
         controller: _intro,
         maxLine: 4,
       ),
@@ -349,6 +349,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
 
   Widget timeAndCategory() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           child: Align(
@@ -423,29 +424,33 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedOpenTime,
-                  items: _OpenTimeList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedOpenTime = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedOpenTime,
+                      items: _OpenTimeList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedOpenTime = value as String;
+                        });
+                      });
+                },
+              ),
             ),
             SizedBox(width: gap_m),
             Text('~', style: textTheme().headline2),
@@ -459,29 +464,33 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedCloseTime,
-                  items: _CloseTimeList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCloseTime = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedCloseTime,
+                      items: _CloseTimeList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCloseTime = value as String;
+                        });
+                      });
+                },
+              ),
             ),
           ],
         ),
@@ -506,29 +515,33 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedDeliveryTime,
-                  items: _deliveryTimeList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedDeliveryTime = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedDeliveryTime,
+                      items: _deliveryTimeList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedDeliveryTime = value as String;
+                        });
+                      });
+                },
+              ),
             ),
           ],
         ),
@@ -553,29 +566,33 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
                 borderRadius: BorderRadius.circular(4),
                 color: Colors.white,
               ),
-              child: DropdownButton(
-                  isExpanded: true,
-                  style: textTheme().headline1,
-                  underline: Container(
-                    height: 0,
-                  ),
-                  value: _selectedCategory,
-                  items: _categoryList.map(
-                    (value) {
-                      return DropdownMenuItem(
-                        value: value,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left: gap_xs),
-                          child: Text(value),
-                        ),
-                      );
-                    },
-                  ).toList(),
-                  onChanged: (value) {
-                    setState(() {
-                      _selectedCategory = value as String;
-                    });
-                  }),
+              child: StatefulBuilder(
+                builder: (context, setState) {
+                  return DropdownButton(
+                      isExpanded: true,
+                      style: textTheme().headline1,
+                      underline: Container(
+                        height: 0,
+                      ),
+                      value: _selectedCategory,
+                      items: _categoryList.map(
+                        (value) {
+                          return DropdownMenuItem(
+                            value: value,
+                            child: Padding(
+                              padding: const EdgeInsets.only(left: gap_xs),
+                              child: Text(value),
+                            ),
+                          );
+                        },
+                      ).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          _selectedCategory = value as String;
+                        });
+                      });
+                },
+              ),
             ),
           ],
         ),

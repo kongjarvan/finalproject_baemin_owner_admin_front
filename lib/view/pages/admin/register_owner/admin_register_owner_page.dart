@@ -261,7 +261,7 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
         return InkWell(
           onTap: () {
             AdminController reviewCT = ref.read(adminController);
-            AdminAcceptOwnerReqDto adminAcceptOwnerReqDto = AdminAcceptOwnerReqDto(model.adminRegisterOwnerListRespDtos[index].accept);
+            AdminAcceptOwnerReqDto adminAcceptOwnerReqDto = AdminAcceptOwnerReqDto(true);
             reviewCT.acceptOwner(adminAcceptOwnerReqDto, model.adminRegisterOwnerListRespDtos[index].id);
           },
           child: Container(

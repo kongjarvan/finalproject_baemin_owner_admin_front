@@ -24,6 +24,9 @@ class MenuController {
   MenuService orderService = MenuService();
 
   Future<void> hideMenu(HideMenuReqDto hideMenuReqDto, int menuId) async {
+    print('메뉴 숨기기 컨트롤러 진입');
+    print('menuId :$menuId');
+    print('hideMenuReqDto :${hideMenuReqDto.closure}');
     ResponseDto responseDto = await MenuService().fetchHideMenu(hideMenuReqDto, menuId);
 
     if (responseDto.code == 1) {

@@ -1,11 +1,11 @@
 class HideMenuReqDto {
-  final bool Closure;
+  final bool closure;
 
-  HideMenuReqDto({required this.Closure});
+  HideMenuReqDto({required this.closure});
 
   Map<String, dynamic> toJson() {
     return {
-      "Closure": Closure,
+      "closure": closure,
     };
   }
 }
