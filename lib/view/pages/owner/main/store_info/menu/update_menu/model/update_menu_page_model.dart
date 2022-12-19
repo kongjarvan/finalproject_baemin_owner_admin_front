@@ -1,8 +1,8 @@
-import 'package:baemin_owner_admin_front/dto/resp/update_menu_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/menu_detail_resp_dto.dart';
 
 class UpdateMenuPageModel {
   // state
-  List<UpdateMenuRespDto> updateMenuRespDtos;
+  MenuDetailRespDto menuDetailRespDto;
 
-  UpdateMenuPageModel(this.updateMenuRespDtos);
+  UpdateMenuPageModel(this.menuDetailRespDto);
 }

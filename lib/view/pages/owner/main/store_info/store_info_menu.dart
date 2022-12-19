@@ -3,6 +3,7 @@ import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/insert_menu/insert_menu_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/menu_list/menu_list_page.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/update_menu/update_menu_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/store_info_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/review/reported_review/reported_review_page.dart';
@@ -31,6 +32,7 @@ class _StoreInfoMenuState extends ConsumerState<StoreInfoMenu> {
       InsertMenuPage(),
       ReviewListPage(),
       ReportedReviewPage(),
+      UpdateMenuPage(),
     ];
 
     return model == null ? Flexible(child: Center(child: CircularProgressIndicator())) : _buildBody(model, selectedMainView);

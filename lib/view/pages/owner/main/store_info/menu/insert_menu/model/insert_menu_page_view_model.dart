@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final insertMenuPageViewModel = StateNotifierProvider.autoDispose<InsertMenuPageViewModel, MenuListPageModel?>((ref) {
-  return InsertMenuPageViewModel(null)..notifyViewModel();
+  return InsertMenuPageViewModel(null);
 });
 
 class InsertMenuPageViewModel extends StateNotifier<MenuListPageModel?> {
@@ -14,11 +14,4 @@ class InsertMenuPageViewModel extends StateNotifier<MenuListPageModel?> {
   final mContext = navigatorKey.currentContext;
 
   InsertMenuPageViewModel(super.state);
-
-  Future<void> notifyViewModel() async {
-    ResponseDto responseDto = await menuService.fetchGetInsertMenu();
-    if (responseDto.code == 1) {
-      state = MenuListPageModel(responseDto.data);
-    }
-  }
 }
