@@ -25,6 +25,10 @@ class OrderInfo extends ConsumerWidget {
               borderRadius: BorderRadius.circular(4),
               color: Colors.green,
             ),
+            child: AspectRatio(
+              aspectRatio: 4 / 3,
+              child: Image.asset('assets/리뷰사진.jpg', fit: BoxFit.cover),
+            ),
           ),
           SizedBox(height: gap_s),
           Text('주문번호: ${model!.reviewListRespDtos[index].orderId}', style: TextStyle(fontSize: 20)),

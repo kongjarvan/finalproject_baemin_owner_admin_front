@@ -219,8 +219,16 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               intro(model),
               notice(model),
               minAmountAndDeliveryCost(model),
-              Time(),
-              category(),
+              SizedBox(
+                height: 400,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(flex: 1, child: timeAndCategory()),
+                    Flexible(flex: 1, child: image()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -339,47 +347,62 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     );
   }
 
-  Row Time() {
-    return Row(
+  Widget timeAndCategory() {
+    return Column(
       children: [
-        Flexible(
-          flex: 1,
-          child: SizedBox(
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsets.all(gap_m),
-                child: SizedBox(
-                  width: 400,
-                  child: _buildDeliveryTime('평균배달시간'),
-                ),
+        SizedBox(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Padding(
+              padding: const EdgeInsets.all(gap_m),
+              child: Container(
+                width: 500,
+                child: _buildOpenTime('영업시간', '시작시간', '종료시간'),
               ),
             ),
           ),
         ),
-        Flexible(
-          flex: 1,
-          child: SizedBox(
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsets.all(gap_m),
-                child: _buildOpenTime('영업시간', '시작시간', '종료시간'),
+        SizedBox(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Padding(
+              padding: const EdgeInsets.all(gap_m),
+              child: SizedBox(
+                width: 500,
+                child: _buildDeliveryTime('평균배달시간'),
               ),
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(gap_m),
+          child: SizedBox(
+            width: 500,
+            child: _buildCategory('카테고리'),
           ),
         ),
       ],
     );
   }
 
-  Padding category() {
-    return Padding(
-      padding: const EdgeInsets.all(gap_m),
-      child: SizedBox(
-        width: 400,
-        child: _buildCategory('카테고리'),
-      ),
+  Widget image() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(child: Image.asset('assets/네네치킨.png', fit: BoxFit.cover)),
+        const SizedBox(height: gap_m),
+        Container(
+          width: 300,
+          decoration: BoxDecoration(border: Border.all(color: kMainColor), borderRadius: BorderRadius.circular(4)),
+          child: const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: gap_xl, vertical: gap_xs),
+              child: Text('사진 업로드', style: TextStyle(color: kMainColor, fontSize: 18)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

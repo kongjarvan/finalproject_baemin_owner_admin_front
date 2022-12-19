@@ -18,6 +18,8 @@ class MenuListPage extends ConsumerStatefulWidget {
   ConsumerState<MenuListPage> createState() => _MenuListPageState();
 }
 
+List<String> imageList = ['레드마블치킨.jpg', '청양마요치킨.jpg', '치즈스틱.jpg', '콜라.jpg'];
+
 class _MenuListPageState extends ConsumerState<MenuListPage> {
   final ScrollController _scrollController = ScrollController();
 
@@ -108,6 +110,7 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: List.generate(model!.menuListRespDtos.length, (index) {
                 return _buildMenuInfo(
+                  imageList[index],
                   model.menuListRespDtos[index].name,
                   model.menuListRespDtos[index].price,
                   model.menuListRespDtos[index].intro,
@@ -121,7 +124,7 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
     );
   }
 
-  Padding _buildMenuInfo(menu, price, intro, index) {
+  Padding _buildMenuInfo(image, menu, price, intro, index) {
     return Padding(
       padding: const EdgeInsets.all(gap_s),
       child: Column(
@@ -139,6 +142,7 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
                       borderRadius: BorderRadius.circular(4),
                       color: kButtonSubColor,
                     ),
+                    child: Image.asset('assets/$image', fit: BoxFit.cover),
                   ),
                   const SizedBox(width: gap_m),
                   Padding(

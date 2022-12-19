@@ -5,6 +5,7 @@ import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/component/insert_image.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/register_store/model/insert_store_page_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store/register_store/model/insert_store_page_view_model.dart';
 import 'package:flutter/cupertino.dart';
@@ -33,8 +34,8 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
   final _minAmount = TextEditingController();
   final _deliveryCost = TextEditingController();
 
-  final _OpenTimeList = timeList();
-  final _CloseTimeList = timeList();
+  final _openTimeList = timeList();
+  final _closeTimeList = timeList();
 
   final _deliveryTimeList = ['배달시간을 선택 해 주세요', '20분', '30분', '40분', '50분', '60분', '70분', '80분'];
   var _selectedDeliveryTime = '배달시간을 선택 해 주세요';
@@ -48,7 +49,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
   @override
   Widget build(BuildContext context) {
     InsertStorePageModel? model = ref.watch(insertStorePageViewModel);
-    return model == null ? Center(child: CircularProgressIndicator()) : Scaffold(body: _buildBody(model));
+    return model == null ? const Center(child: CircularProgressIndicator()) : Scaffold(body: _buildBody(model));
   }
 
   Widget _buildBody(InsertStorePageModel model) {
@@ -56,11 +57,11 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       key: _formKey,
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
-        Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+        const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
         Flexible(
           child: RawScrollbar(
             thumbColor: kUnselectedListColor,
-            radius: Radius.circular(5),
+            radius: const Radius.circular(5),
             controller: _scrollController,
             thickness: 10,
             thumbVisibility: true,
@@ -70,7 +71,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
               child: Padding(
                 padding: const EdgeInsets.all(gap_l),
                 child: Column(
-                  children: [RegisterStoreForm('가게등록', model)],
+                  children: [registerStoreForm('가게등록', model)],
                 ),
               ),
             ),
@@ -80,15 +81,15 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
     );
   }
 
-  Widget RegisterStoreForm(title, InsertStorePageModel model) {
+  Widget registerStoreForm(title, InsertStorePageModel model) {
     return Column(
       children: [
         _buildTitle(title),
-        SizedBox(height: gap_m),
+        const SizedBox(height: gap_m),
         _buildOwnerInfo(model),
-        SizedBox(height: gap_xl),
+        const SizedBox(height: gap_xl),
         _buildStoreInfo(),
-        SizedBox(height: gap_xl),
+        const SizedBox(height: gap_xl),
         _buildConfirmButton(title),
       ],
     );
@@ -98,8 +99,8 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
     return Align(
       alignment: AlignmentDirectional.centerStart,
       child: Text(
-        '${text}',
-        style: TextStyle(fontSize: 32),
+        '$text',
+        style: const TextStyle(fontSize: 32),
         textAlign: TextAlign.start,
       ),
     );
@@ -109,7 +110,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
     return Column(
       children: [
         ownerFormTitle(),
-        SizedBox(height: gap_xxs),
+        const SizedBox(height: gap_xxs),
         Container(
           color: Colors.white,
           child: Column(
@@ -130,8 +131,8 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
         padding: const EdgeInsets.all(gap_m),
         child: Row(
           children: [
-            Icon(CupertinoIcons.person_alt),
-            SizedBox(width: gap_xs),
+            const Icon(CupertinoIcons.person_alt),
+            const SizedBox(width: gap_xs),
             Text(
               '사업자 정보  (수정불가)',
               style: textTheme().headline2,
@@ -151,7 +152,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
             padding: const EdgeInsets.all(gap_m),
             child: InputTextFormField(
               text1: '사업자 이름',
-              text2: '${model.insertStoreRespDto.ceoName}',
+              text2: model.insertStoreRespDto.ceoName,
               isReadOnly: true,
               controller: _ceoName,
               maxLine: 1,
@@ -164,7 +165,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
             padding: const EdgeInsets.all(gap_m),
             child: InputTextFormField(
               text1: '사업자 등록번호',
-              text2: '${model.insertStoreRespDto.businessNumber}',
+              text2: model.insertStoreRespDto.businessNumber,
               isReadOnly: true,
               controller: _businessNumber,
               maxLine: 1,
@@ -180,7 +181,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       padding: const EdgeInsets.all(gap_m),
       child: InputTextFormField(
         text1: '사업자 주소',
-        text2: '${model.insertStoreRespDto.businessAddress}',
+        text2: model.insertStoreRespDto.businessAddress,
         isReadOnly: true,
         controller: _businessAddress,
         maxLine: 1,
@@ -192,7 +193,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
     return Column(
       children: [
         storeFormTitle(),
-        SizedBox(height: gap_xxs),
+        const SizedBox(height: gap_xxs),
         Container(
           color: Colors.white,
           child: Column(
@@ -202,8 +203,16 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
               intro(),
               notice(),
               minAmountAndDeliveryCost(),
-              Time(),
-              category(),
+              SizedBox(
+                height: 400,
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(flex: 1, child: timeAndCategory()),
+                    Flexible(flex: 1, child: image()),
+                  ],
+                ),
+              ),
             ],
           ),
         ),
@@ -218,8 +227,8 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
         padding: const EdgeInsets.all(gap_m),
         child: Row(
           children: [
-            Icon(CupertinoIcons.doc_text),
-            SizedBox(width: gap_xs),
+            const Icon(CupertinoIcons.doc_text),
+            const SizedBox(width: gap_xs),
             Text(
               '가게 정보 입력하기',
               style: textTheme().headline2,
@@ -322,47 +331,62 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
     );
   }
 
-  Row Time() {
-    return Row(
+  Widget timeAndCategory() {
+    return Column(
       children: [
-        Flexible(
-          flex: 1,
-          child: SizedBox(
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsets.all(gap_m),
-                child: SizedBox(
-                  width: 400,
-                  child: _buildDeliveryTime('평균배달시간'),
-                ),
+        SizedBox(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Padding(
+              padding: const EdgeInsets.all(gap_m),
+              child: Container(
+                width: 500,
+                child: _buildOpenTime('영업시간', '시작시간', '종료시간'),
               ),
             ),
           ),
         ),
-        Flexible(
-          flex: 1,
-          child: SizedBox(
-            child: Align(
-              alignment: AlignmentDirectional.centerStart,
-              child: Padding(
-                padding: const EdgeInsets.all(gap_m),
-                child: _buildOpenTime('영업시간', '시작시간', '종료시간'),
+        SizedBox(
+          child: Align(
+            alignment: AlignmentDirectional.centerStart,
+            child: Padding(
+              padding: const EdgeInsets.all(gap_m),
+              child: SizedBox(
+                width: 500,
+                child: _buildDeliveryTime('평균배달시간'),
               ),
             ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(gap_m),
+          child: SizedBox(
+            width: 500,
+            child: _buildCategory('카테고리'),
           ),
         ),
       ],
     );
   }
 
-  Padding category() {
-    return Padding(
-      padding: const EdgeInsets.all(gap_m),
-      child: SizedBox(
-        width: 400,
-        child: _buildCategory('카테고리'),
-      ),
+  Widget image() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Center(child: Image.asset('assets/네네치킨.png', fit: BoxFit.cover)),
+        const SizedBox(height: gap_m),
+        Container(
+          width: 300,
+          decoration: BoxDecoration(border: Border.all(color: kMainColor), borderRadius: BorderRadius.circular(4)),
+          child: const Center(
+            child: Padding(
+              padding: EdgeInsets.symmetric(horizontal: gap_xl, vertical: gap_xs),
+              child: Text('사진 업로드', style: TextStyle(color: kMainColor, fontSize: 18)),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -371,7 +395,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('$text1', style: textTheme().headline2),
-        SizedBox(height: gap_s),
+        const SizedBox(height: gap_s),
         Row(
           children: [
             Container(
@@ -390,7 +414,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                     height: 0,
                   ),
                   value: _selectedOpenTime,
-                  items: _OpenTimeList.map(
+                  items: _openTimeList.map(
                     (value) {
                       return DropdownMenuItem(
                         value: value,
@@ -407,9 +431,9 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                     });
                   }),
             ),
-            SizedBox(width: gap_m),
+            const SizedBox(width: gap_m),
             Text('~', style: textTheme().headline2),
-            SizedBox(width: gap_m),
+            const SizedBox(width: gap_m),
             Container(
               width: 200,
               decoration: BoxDecoration(
@@ -426,7 +450,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
                     height: 0,
                   ),
                   value: _selectedCloseTime,
-                  items: _CloseTimeList.map(
+                  items: _closeTimeList.map(
                     (value) {
                       return DropdownMenuItem(
                         value: value,
@@ -454,7 +478,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('$text1', style: textTheme().headline2),
-        SizedBox(height: gap_s),
+        const SizedBox(height: gap_s),
         Row(
           children: [
             Container(
@@ -501,7 +525,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text('$text1', style: textTheme().headline2),
-        SizedBox(height: gap_s),
+        const SizedBox(height: gap_s),
         Row(
           children: [
             Container(
