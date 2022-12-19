@@ -231,9 +231,7 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
                     return InkWell(
                       onTap: () async {
                         String startTime = DateFormat('yyyy-MM-dd').format(selectedDay1);
-                        Logger().d(startTime);
                         String endTime = DateFormat('yyyy-MM-dd').format(selectedDay2);
-                        Logger().d(endTime);
                         StatisticsReqDto statisticsReqDto = StatisticsReqDto(startTime: startTime, endTime: endTime);
                         await ref.read(statisticsPageViewModel.notifier).notifyViewModel(statisticsReqDto);
                       },
@@ -328,9 +326,7 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
         return InkWell(
           onTap: () async {
             String startTime = DateFormat('yyyy-MM-dd').format(DateTime.now());
-            Logger().d(startTime);
             String endTime = DateFormat('yyyy-MM-dd').format(DateTime.now());
-            Logger().d(endTime);
             StatisticsReqDto statisticsReqDto = StatisticsReqDto(startTime: startTime, endTime: endTime);
             await ref.read(statisticsPageViewModel.notifier).notifyViewModel(statisticsReqDto);
           },
@@ -371,7 +367,6 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
     selectedDate.then((dateTime) {
       setState(() {
         selectedDay1 = dateTime!;
-        Logger().d('$selectedDay1');
       });
     });
   }
@@ -395,7 +390,6 @@ class _StatisticsPageState extends ConsumerState<StatisticsPage> {
     selectedDate.then((dateTime) {
       setState(() {
         selectedDay2 = dateTime!;
-        Logger().d('$selectedDay2');
       });
     });
   }

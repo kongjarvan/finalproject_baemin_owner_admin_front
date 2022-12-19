@@ -16,7 +16,6 @@ class MenuListPageViewModel extends StateNotifier<MenuListPageModel?> {
   MenuListPageViewModel(super.state);
 
   Future<void> notifyViewModel() async {
-    Logger().d('notifyViewModel 진입');
     ResponseDto responseDto = await menuService.fetchGetMenuList();
     if (responseDto.code == 1) {
       state = MenuListPageModel(responseDto.data);
