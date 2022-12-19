@@ -8,7 +8,6 @@ import 'package:baemin_owner_admin_front/view/pages/owner/main/store_management/
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 class OrderListPage extends ConsumerStatefulWidget {
   const OrderListPage({Key? key}) : super(key: key);
@@ -17,8 +16,9 @@ class OrderListPage extends ConsumerStatefulWidget {
   ConsumerState<OrderListPage> createState() => _OrderListPageState();
 }
 
+List<bool> _isChecked = [true, true];
+
 class _OrderListPageState extends ConsumerState<OrderListPage> {
-  List<bool> _isChecked = [false, false];
   final ScrollController _scrollController = ScrollController();
 
   @override
@@ -191,6 +191,9 @@ class _OrderListPageState extends ConsumerState<OrderListPage> {
           onChanged: (value) {
             setState(() {
               _isChecked[index] = value!;
+              if (_isChecked[index] == true) {
+                print('$text 체크됨');
+              }
             });
           },
         ),

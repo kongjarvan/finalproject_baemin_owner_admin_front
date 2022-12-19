@@ -24,14 +24,11 @@ class MenuService {
   }
 
   Future<ResponseDto> fetchGetMenuList() async {
-    Logger().d('서비스 진입');
     Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/menu/list", UserSession.jwtToken);
-    Logger().d('response body: ${response.body}');
     ResponseDto responseDto = toResponseDto(response);
 
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
-      Logger().d('매핑시작');
       List<MenuListRespDto> menuListRespDtos = mapList.map((e) => MenuListRespDto.fromJson(e)).toList();
       responseDto.data = menuListRespDtos;
     }
@@ -61,13 +58,9 @@ class MenuService {
   }
 
   fetchInsertMenu(InsertMenuReqDto insertMenuReqDto) async {
-    Logger().d('서비스 진입');
     String requestBody = jsonEncode(insertMenuReqDto.toJson());
-    Logger().d('tojson 파싱 완료');
     Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/menu/save", requestBody, jwtToken: UserSession.jwtToken);
-    Logger().d('응답완료');
     ResponseDto responseDto = toResponseDto(response);
-    Logger().d('${responseDto.code}');
     if (responseDto.code == 1) {
       responseDto.data = InsertMenuRespDto.fromJson(responseDto.data);
     }

@@ -84,7 +84,6 @@ class MenuController {
   }
 
   Future<void> insertMenu(InsertMenuReqDto insertMenuReqDto) async {
-    Logger().d('컨트롤러 진입');
     ResponseDto responseDto = await MenuService().fetchInsertMenu(insertMenuReqDto);
 
     if (responseDto.code == 1) {
