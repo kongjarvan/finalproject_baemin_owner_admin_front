@@ -9,7 +9,6 @@ import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/model/a
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:logger/logger.dart';
-
 import '../core/constant/move.dart';
 
 final adminController = Provider<AdminController>((ref) {
@@ -55,7 +54,6 @@ class AdminController {
   }
 
   Future<void> resolveReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
-    Logger().d('컨트롤러 진입 : ${adminResolveReviewReqDto.adminComment}, $reportedReviewId');
     ResponseDto responseDto = await AdminService().fetchResolveReview(adminResolveReviewReqDto, reportedReviewId);
 
     if (responseDto.code == 1) {

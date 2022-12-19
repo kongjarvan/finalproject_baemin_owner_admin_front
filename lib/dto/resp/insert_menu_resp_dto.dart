@@ -1,26 +1,26 @@
-class UpdateMenuRespDto {
+class InsertMenuRespDto {
+  final dynamic thumbnail;
   final String category;
   final String name;
-  final String intro;
   final int price;
-  final dynamic thumbnail;
+  final String intro;
   final bool closure;
 
-  UpdateMenuRespDto({
+  InsertMenuRespDto({
+    this.thumbnail,
     required this.category,
     required this.name,
-    required this.intro,
     required this.price,
-    required this.thumbnail,
+    required this.intro,
     required this.closure,
   });
 
-  factory UpdateMenuRespDto.fromJson(Map<String, dynamic> json) => UpdateMenuRespDto(
+  factory InsertMenuRespDto.fromJson(Map<String, dynamic> json) => InsertMenuRespDto(
+        thumbnail: json["thumbnail"],
         category: json["category"],
         name: json["name"],
-        intro: json["intro"],
         price: json["price"],
-        thumbnail: json["thumbnail"],
+        intro: json["intro"],
         closure: json["closure"],
       );
 }

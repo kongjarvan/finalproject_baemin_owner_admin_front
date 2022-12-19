@@ -2,7 +2,8 @@ class MenuListRespDto {
   int id;
   String? thumbnail;
   String name;
-  String price;
+  int price;
+  String intro;
   bool closure;
 
   MenuListRespDto({
@@ -10,6 +11,7 @@ class MenuListRespDto {
     this.thumbnail,
     required this.name,
     required this.price,
+    required this.intro,
     required this.closure,
   });
 
@@ -18,6 +20,7 @@ class MenuListRespDto {
         thumbnail: json["thumbnail"],
         name: json["name"],
         price: json["price"],
+        intro: json["intro"],
         closure: json["closure"],
       );
 }

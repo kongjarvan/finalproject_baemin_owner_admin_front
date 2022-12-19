@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final updateMenuPageViewModel = StateNotifierProvider.autoDispose<UpdateMenuPageViewModel, UpdateMenuPageModel?>((ref) {
-  return UpdateMenuPageViewModel(null)..notifyViewModel();
+  return UpdateMenuPageViewModel(null);
 });
 
 class UpdateMenuPageViewModel extends StateNotifier<UpdateMenuPageModel?> {
@@ -15,8 +15,8 @@ class UpdateMenuPageViewModel extends StateNotifier<UpdateMenuPageModel?> {
 
   UpdateMenuPageViewModel(super.state);
 
-  Future<void> notifyViewModel() async {
-    ResponseDto responseDto = await menuService.fetchGetMenuDetail();
+  Future<void> notifyViewModel(int menuId) async {
+    ResponseDto responseDto = await menuService.fetchGetMenuDetail(menuId);
     if (responseDto.code == 1) {
       state = UpdateMenuPageModel(responseDto.data);
     }

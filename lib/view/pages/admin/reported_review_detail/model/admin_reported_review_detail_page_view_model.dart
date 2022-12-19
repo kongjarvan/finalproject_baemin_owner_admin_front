@@ -18,7 +18,6 @@ class AdminReportedReviewDetailPageViewModel extends StateNotifier<AdminReported
   Future<void> notifyViewModel(int reviewId) async {
     ResponseDto responseDto = await adminService.fetchGetReportedReviewDetail(reviewId);
     if (responseDto.code == 1) {
-      Logger().d('서비스 통과');
       state = AdminReportedReviewDetailPageModel(responseDto.data);
     }
   }

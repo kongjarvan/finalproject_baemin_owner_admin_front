@@ -1,5 +1,4 @@
 import 'package:baemin_owner_admin_front/constants.dart';
-import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:baemin_owner_admin_front/size.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/statistics/statistics_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store_info_menu.dart';

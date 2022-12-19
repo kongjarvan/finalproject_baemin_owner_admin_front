@@ -1,10 +1,18 @@
+import 'dart:convert';
+
 import 'package:baemin_owner_admin_front/core/http_connector.dart';
 import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
+import 'package:baemin_owner_admin_front/dto/req/hide_menu_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/insert_menu_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/update_menu_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/insert_menu_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/menu_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/menu_detail_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/update_menu_resp_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
+import 'package:logger/logger.dart';
 
 class MenuService {
   final HttpConnector httpConnector = HttpConnector();
@@ -16,11 +24,14 @@ class MenuService {
   }
 
   Future<ResponseDto> fetchGetMenuList() async {
+    Logger().d('서비스 진입');
     Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/menu/list", UserSession.jwtToken);
-
+    Logger().d('response body: ${response.body}');
     ResponseDto responseDto = toResponseDto(response);
+
     if (responseDto.code == 1) {
       List<dynamic> mapList = responseDto.data;
+      Logger().d('매핑시작');
       List<MenuListRespDto> menuListRespDtos = mapList.map((e) => MenuListRespDto.fromJson(e)).toList();
       responseDto.data = menuListRespDtos;
     }
@@ -28,29 +39,51 @@ class MenuService {
     return responseDto;
   }
 
-  Future<ResponseDto> fetchGetMenuDetail() async {
-    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/menu/1/info", UserSession.jwtToken);
+  Future<ResponseDto> fetchGetMenuDetail(int menuId) async {
+    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/menu/$menuId/info", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
-      List<dynamic> mapList = responseDto.data;
-      List<UpdateMenuRespDto> updateMenuRespDtos = mapList.map((e) => UpdateMenuRespDto.fromJson(e)).toList();
-      responseDto.data = updateMenuRespDtos;
+      responseDto.data = MenuDetailRespDto.fromJson(responseDto.data);
     }
 
     return responseDto;
   }
 
-  Future<ResponseDto> fetchGetInsertMenu() async {
-    Response response = await httpConnector.getInitSession("", UserSession.jwtToken);
+  Future<ResponseDto> fetchHideMenu(HideMenuReqDto hideMenuReqDto, int menuId) async {
+    String requestBody = jsonEncode(hideMenuReqDto.toJson());
+
+    Response response =
+        await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update/state", requestBody, jwtToken: UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    return responseDto;
+  }
+
+  fetchInsertMenu(InsertMenuReqDto insertMenuReqDto) async {
+    Logger().d('서비스 진입');
+    String requestBody = jsonEncode(insertMenuReqDto.toJson());
+    Logger().d('tojson 파싱 완료');
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/menu/save", requestBody, jwtToken: UserSession.jwtToken);
+    Logger().d('응답완료');
+    ResponseDto responseDto = toResponseDto(response);
+    Logger().d('${responseDto.code}');
+    if (responseDto.code == 1) {
+      responseDto.data = InsertMenuRespDto.fromJson(responseDto.data);
+    }
+    return responseDto;
+  }
+
+  fetchUpdateMenu(UpdateMenuReqDto updateMenuReqDto, int menuId) async {
+    String requestBody = jsonEncode(updateMenuReqDto.toJson());
+
+    Response response =
+        await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update", requestBody, jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
-      List<dynamic> mapList = responseDto.data;
-      List<UpdateMenuRespDto> updateMenuRespDtos = mapList.map((e) => UpdateMenuRespDto.fromJson(e)).toList();
-      responseDto.data = updateMenuRespDtos;
+      responseDto.data = UpdateMenuRespDto.fromJson(responseDto.data);
     }
-
     return responseDto;
   }
 }
