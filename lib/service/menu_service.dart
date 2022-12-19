@@ -7,7 +7,7 @@ import 'package:baemin_owner_admin_front/dto/req/insert_menu_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_menu_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/insert_menu_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/menu_list_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/menu_detail_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/update_menu_resp_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';

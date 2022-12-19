@@ -4,7 +4,7 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/dto/req/hide_menu_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/insert_menu_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_menu_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/menu_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

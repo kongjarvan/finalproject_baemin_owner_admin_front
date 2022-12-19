@@ -2,12 +2,15 @@ import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/statistics_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/owner_service.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/statistics/model/statistics__page_view_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 import '../core/constant/move.dart';
 
 final ownerController = Provider<OwnerController>((ref) {
@@ -148,4 +151,23 @@ class OwnerController {
       );
     }
   }
+
+  // getStatistics(StatisticsReqDto statisticsReqDto) async {
+  //   ResponseDto responseDto = await OwnerService().fetchGetStatistics(statisticsReqDto);
+  //
+  //   if (responseDto.code == 1) {
+  //   }else{
+  //     ScaffoldMessenger.of(mContext!).showSnackBar(
+  //       SnackBar(
+  //         backgroundColor: Color(0x996D62E8),
+  //         content: Text("통계 불러오기 실패"),
+  //         action: SnackBarAction(
+  //           label: '확인',
+  //           textColor: kWhiteColor,
+  //           onPressed: () {},
+  //         ),
+  //       ),
+  //     );
+  //   }
+  // }
 }

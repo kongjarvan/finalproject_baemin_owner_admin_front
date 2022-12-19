@@ -4,14 +4,14 @@ import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
 import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/req/store_check_resp_dto.dart';
+import 'package:baemin_owner_admin_front/dto/resp/store_check_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/get_store_info_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/get_update_store_info_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/register_store_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/statistics_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/update_store_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 
 import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/service/local_service.dart';
@@ -60,15 +60,12 @@ class OwnerService {
     return responseDto;
   }
 
-  Future<ResponseDto> fetchGetStatistics() async {
-    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/info/stats", UserSession.jwtToken);
-
+  Future<ResponseDto> fetchGetStatistics(statisticsReqDto) async {
+    String requestBody = jsonEncode(statisticsReqDto.toJson());
+    Response response = await httpConnector.post("/api/user/${UserSession.user.id}/store/info/stats", requestBody, jwtToken: UserSession.jwtToken);
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
-      List<dynamic> mapList = responseDto.data;
-
-      List<StatisticsRespDto> statisticsRespDtos = mapList.map((e) => StatisticsRespDto.fromJson(e)).toList();
-      responseDto.data = statisticsRespDtos;
+      responseDto.data = StatisticsRespDto.fromJson(responseDto.data);
     }
 
     return responseDto;
