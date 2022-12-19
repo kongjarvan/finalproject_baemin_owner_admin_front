@@ -1,7 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/dto/req/admin_accept_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/admin_resolve_review_req_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/admin_service.dart';
 import 'package:baemin_owner_admin_front/service/menu_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/model/admin_main_view_model.dart';

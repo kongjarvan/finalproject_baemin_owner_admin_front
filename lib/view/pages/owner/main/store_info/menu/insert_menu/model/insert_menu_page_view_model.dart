@@ -1,5 +1,5 @@
 import 'package:baemin_owner_admin_front/core/constant/move.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/menu_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/menu/menu_list/model/menu_list_page_model.dart';
 import 'package:flutter/material.dart';
