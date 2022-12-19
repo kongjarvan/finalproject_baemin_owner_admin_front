@@ -1,16 +1,14 @@
 class StatisticsRespDto {
   int orderCount;
-  int orderAmount;
-  int orderExpenseAmount;
+  int? orderAmount;
   int deliveryCount;
-  int deliveryAmount;
+  int? deliveryAmount;
   int takeOutCount;
-  int takeOutAmount;
+  int? takeOutAmount;
 
   StatisticsRespDto({
     required this.orderCount,
     required this.orderAmount,
-    required this.orderExpenseAmount,
     required this.deliveryCount,
     required this.deliveryAmount,
     required this.takeOutCount,
@@ -20,7 +18,6 @@ class StatisticsRespDto {
   factory StatisticsRespDto.fromJson(Map<String, dynamic> json) => StatisticsRespDto(
         orderCount: json["orderCount"],
         orderAmount: json["orderAmount"],
-        orderExpenseAmount: json["orderExpenseAmount"],
         deliveryCount: json["deliveryCount"],
         deliveryAmount: json["deliveryAmount"],
         takeOutCount: json["takeOutCount"],

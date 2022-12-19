@@ -1,5 +1,5 @@
 import 'package:baemin_owner_admin_front/core/constant/move.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/admin_service.dart';
 import 'package:baemin_owner_admin_front/view/pages/admin/register_owner/model/admin_register_owner_page_model.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';

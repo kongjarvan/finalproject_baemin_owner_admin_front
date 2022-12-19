@@ -5,7 +5,7 @@ import 'package:baemin_owner_admin_front/dto/req/delivery_complete_req_dto.dart'
 import 'package:baemin_owner_admin_front/dto/req/order_accept_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/order_cancel_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/order_list_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/store_session.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
@@ -22,7 +22,8 @@ class OrderService {
   }
 
   Future<ResponseDto> fetchOrderList() async {
-    Response response = await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order", UserSession.jwtToken);
+    Response response =
+        await httpConnector.getInitSession("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order", UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
@@ -37,7 +38,8 @@ class OrderService {
   Future<ResponseDto> fetchDelete(OrderCancelReqDto orderCancelReqDto, int orderId) async {
     String requestBody = jsonEncode(orderCancelReqDto.toJson());
 
-    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody, jwtToken: UserSession.jwtToken);
+    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody,
+        jwtToken: UserSession.jwtToken);
     ResponseDto responseDto = toResponseDto(response);
 
     return responseDto;
@@ -46,7 +48,8 @@ class OrderService {
   fetchAcceptOrder(OrderAcceptReqDto orderAcceptReqDto, int orderId) async {
     String requestBody = jsonEncode(orderAcceptReqDto.toJson());
 
-    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody, jwtToken: UserSession.jwtToken);
+    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody,
+        jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     return responseDto;
@@ -55,7 +58,8 @@ class OrderService {
   fetchCompleteDelivery(DeliveryCompleteReqDto deliveryCompleteReqDto, orderId) async {
     String requestBody = jsonEncode(deliveryCompleteReqDto.toJson());
 
-    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody, jwtToken: UserSession.jwtToken);
+    Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/${StoreSession.storeId}/order/${orderId}/state", requestBody,
+        jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
     return responseDto;

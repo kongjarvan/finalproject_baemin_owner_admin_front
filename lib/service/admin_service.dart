@@ -8,7 +8,7 @@ import 'package:baemin_owner_admin_front/dto/resp/admin_register_owner_list_resp
 import 'package:baemin_owner_admin_front/dto/resp/admin_reported_review_detail_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/admin_reported_review_list_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/admin_resolve_review_resp_dto.dart';
-import 'package:baemin_owner_admin_front/dto/resp/response_dto.dart';
+import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/user_session.dart';
 import 'package:http/http.dart';
 import 'package:logger/logger.dart';
