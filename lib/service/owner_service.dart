@@ -4,6 +4,7 @@ import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
 import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/store_open_close_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/store_check_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/get_store_info_resp_dto.dart';
@@ -12,7 +13,6 @@ import 'package:baemin_owner_admin_front/dto/resp/register_store_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/statistics_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/update_store_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-
 import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/service/local_service.dart';
 import 'package:baemin_owner_admin_front/service/store_session.dart';
@@ -89,7 +89,7 @@ class OwnerService {
     Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/name", jwtToken: UserSession.jwtToken);
 
     ResponseDto responseDto = toResponseDto(response);
-
+    print(responseDto.data);
     if (responseDto.code == 1) {
       responseDto.data = StoreCheckDto.fromJson(responseDto.data);
 
@@ -125,6 +125,20 @@ class OwnerService {
     ResponseDto responseDto = toResponseDto(response);
 
     responseDto.data = UpdateStoreRespDto.fromJson(responseDto.data);
+
+    return responseDto;
+  }
+
+  fetchOpenCloseStore(StoreOpenCloseReqDto storeOpenCloseReqDto) async {
+    String requestBody = jsonEncode(storeOpenCloseReqDto.toJson());
+    Logger().d('requestBody : ${requestBody}');
+    Response response =
+        await httpConnector.put("/api/user/${UserSession.user.id}/store/update/business", requestBody, jwtToken: UserSession.jwtToken);
+    Logger().d('응답됨');
+    ResponseDto responseDto = toResponseDto(response);
+    Logger().d('responseDto code : ${responseDto.code}');
+    Logger().d('responseDto data : ${responseDto.data}');
+    Logger().d('responseDto msg : ${responseDto.msg}');
 
     return responseDto;
   }

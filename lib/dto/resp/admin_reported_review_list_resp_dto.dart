@@ -3,14 +3,16 @@ class AdminReportedReviewListRespDto {
   String role;
   String username;
   String reason;
-  bool isResolved;
+  bool accept;
+  bool resolved;
 
   AdminReportedReviewListRespDto({
     required this.id,
     required this.role,
     required this.username,
     required this.reason,
-    required this.isResolved,
+    required this.accept,
+    required this.resolved,
   });
 
   factory AdminReportedReviewListRespDto.fromJson(Map<String, dynamic> json) => AdminReportedReviewListRespDto(
@@ -18,6 +20,7 @@ class AdminReportedReviewListRespDto {
         role: json["role"],
         username: json["username"],
         reason: json["reason"],
-        isResolved: json["isResolved"],
+        accept: json["accept"],
+        resolved: json["resolved"],
       );
 }

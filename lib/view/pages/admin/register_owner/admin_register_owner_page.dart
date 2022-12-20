@@ -44,7 +44,7 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
                   child: Column(
                     children: [
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         children: [
                           Container(
                             width: 200,
@@ -78,13 +78,6 @@ class _AdminRegisterOwnerPageState extends State<AdminRegisterOwnerPage> {
                                     _selectedValue = value as String;
                                   });
                                 }),
-                          ),
-                          Row(
-                            children: [
-                              _buildRefuseButton(),
-                              const SizedBox(width: gap_s),
-                              _buildRegisterButton(),
-                            ],
                           ),
                         ],
                       ),

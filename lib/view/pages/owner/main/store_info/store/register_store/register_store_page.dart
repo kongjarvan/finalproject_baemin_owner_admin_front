@@ -333,6 +333,7 @@ class _RegisterStorePageState extends ConsumerState<RegisterStorePage> {
 
   Widget timeAndCategory() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         SizedBox(
           child: Align(

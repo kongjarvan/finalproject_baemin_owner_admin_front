@@ -33,7 +33,6 @@ class OrderController {
 
       if (responseDto.code == 1) {
         await _ref.read(orderListPageViewModel.notifier).notifyViewModel();
-        //_ref.read(mainPageViewModel.notifier).delete(orderId);
         ScaffoldMessenger.of(mContext!).showSnackBar(
           SnackBar(
             backgroundColor: Color(0x996D62E8),
@@ -49,7 +48,7 @@ class OrderController {
         ScaffoldMessenger.of(mContext!).showSnackBar(
           SnackBar(
             backgroundColor: Color(0x996D62E8),
-            content: Text("주문을 취소 할 수 없습니다. (1)"),
+            content: Text("주문을 취소 할 수 없습니다. (${orderState} ${orderId}"),
             action: SnackBarAction(
               label: '확인',
               textColor: kWhiteColor,
@@ -62,7 +61,7 @@ class OrderController {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(
           backgroundColor: Color(0x996D62E8),
-          content: Text("주문을 취소 할 수 없습니다. (2)"),
+          content: Text("주문을 취소 할 수 없습니다."),
           action: SnackBarAction(
             label: '확인',
             textColor: kWhiteColor,
@@ -71,9 +70,6 @@ class OrderController {
         ),
       );
     }
-
-    // Navigator.popAndPushNamed(mContext!, Move.loginPage);
-    //_ref.read(mainPageViewModel.notifier).delete();
   }
 
   Future<void> acceptOrder(OrderAcceptReqDto orderAcceptReqDto, int orderId, orderState) async {

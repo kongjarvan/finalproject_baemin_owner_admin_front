@@ -27,7 +27,7 @@ class OrderInfo extends ConsumerWidget {
             ),
             child: AspectRatio(
               aspectRatio: 4 / 3,
-              child: Image.asset('assets/리뷰사진.jpg', fit: BoxFit.cover),
+              child: Image.asset(index == 0 ? 'assets/리뷰사진.jpg' : 'assets/리뷰사진2.jpg', fit: BoxFit.cover),
             ),
           ),
           SizedBox(height: gap_s),

@@ -73,10 +73,26 @@ class AdminService {
     return responseDto;
   }
 
-  fetchResolveReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
+  fetchAcceptReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
     String requestBody = jsonEncode(adminResolveReviewReqDto.toJson());
-    Response response = await httpConnector.put("/api/admin/review/$reportedReviewId/resolve", requestBody, jwtToken: UserSession.jwtToken);
 
+    Response response = await httpConnector.put("/api/admin/review/$reportedReviewId/accept", requestBody, jwtToken: UserSession.jwtToken);
+
+    ResponseDto responseDto = toResponseDto(response);
+    if (responseDto.code == 1) {
+      AdminResolveReviewRespDto adminResolveReviewRespDto = AdminResolveReviewRespDto.fromJson(responseDto.data);
+      responseDto.data = adminResolveReviewRespDto;
+    }
+
+    return responseDto;
+  }
+
+  fetchRefuseReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
+    Logger().d('서비스 진입');
+    String requestBody = jsonEncode(adminResolveReviewReqDto.toJson());
+    Logger().d('requestBody : ${requestBody}');
+    Response response = await httpConnector.put("/api/admin/review/$reportedReviewId/refuse", requestBody, jwtToken: UserSession.jwtToken);
+    Logger().d('기각 응답됨 : ${response.body}');
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       AdminResolveReviewRespDto adminResolveReviewRespDto = AdminResolveReviewRespDto.fromJson(responseDto.data);

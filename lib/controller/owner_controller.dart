@@ -3,6 +3,7 @@ import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/statistics_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/store_open_close_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
 import 'package:baemin_owner_admin_front/service/owner_service.dart';
@@ -41,16 +42,16 @@ class OwnerController {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.adminPage, (route) => false);
     } else {
       if (responseDto.code == 1) {
-        ResponseDto responseDto = await ownerService.fetchGetUserState();
+        ResponseDto responseDto2 = await ownerService.fetchGetUserState();
 
-        if (responseDto.code == 1) {
-          if (responseDto.data.name.isEmpty) {
+        if (responseDto2.code == 1) {
+          if (responseDto2.data.name.isEmpty) {
             Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.registerStorePage, (route) => false);
           } else {
             Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
           }
         } else {
-          if (responseDto.msg == '입점미신청') {
+          if (responseDto2.msg == '입점미신청') {
             Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.registerOwnerPage, (route) => false);
           } else {
             Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.waitingRegistrationPage, (route) => false);
@@ -144,6 +145,26 @@ class OwnerController {
         SnackBar(
           backgroundColor: Color(0x996D62E8),
           content: Text("가게 수정 실패"),
+          action: SnackBarAction(
+            label: '확인',
+            textColor: kWhiteColor,
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
+  }
+
+  void openCloseStore(StoreOpenCloseReqDto storeOpenCloseReqDto) async {
+    ResponseDto responseDto = await OwnerService().fetchOpenCloseStore(storeOpenCloseReqDto);
+
+    if (responseDto.code == 1) {
+      Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.mainPage, (route) => false);
+    } else {
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        SnackBar(
+          backgroundColor: Color(0x996D62E8),
+          content: Text("영업 종료 실패"),
           action: SnackBarAction(
             label: '확인',
             textColor: kWhiteColor,
