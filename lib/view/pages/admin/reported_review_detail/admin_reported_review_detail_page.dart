@@ -54,7 +54,7 @@ class _ReportedReviewDetailPageState extends ConsumerState<AdminReportedReviewDe
                   color: kBackgroundColor,
                   child: Padding(
                     padding: const EdgeInsets.all(gap_m),
-                    child: Text('신고사유: ${model.adminReportedReviewDetailRespDto.reason}', style: textTheme().headline1),
+                    child: Text('신고사유: ${model.adminReportedReviewDetailRespDto.reason == "HONOR" ? "명예훼손" : "5252"}', style: textTheme().headline1),
                   ),
                 ),
                 const Divider(thickness: 1, height: 1, color: kUnselectedListColor),
@@ -86,7 +86,7 @@ class _ReportedReviewDetailPageState extends ConsumerState<AdminReportedReviewDe
                             ),
                           ),
                           const SizedBox(width: gap_s),
-                          _buildRefuseButton('기각'),
+                          _buildRefuseButton('기각', model.adminReportedReviewDetailRespDto.reportReviewId),
                           const SizedBox(width: gap_s),
                           _buildResolveButton('처리', model.adminReportedReviewDetailRespDto.reportReviewId),
                         ],
@@ -102,9 +102,13 @@ class _ReportedReviewDetailPageState extends ConsumerState<AdminReportedReviewDe
     );
   }
 
-  InkWell _buildRefuseButton(String text) {
+  InkWell _buildRefuseButton(String text, int reportReviewId) {
     return InkWell(
-      onTap: () {},
+      onTap: () async {
+        AdminController adminCT = ref.read(adminController);
+        AdminResolveReviewReqDto adminResolveReviewReqDto = AdminResolveReviewReqDto(adminComment: _adminComment.text.trim());
+        await adminCT.refuseReview(adminResolveReviewReqDto, reportReviewId);
+      },
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(color: kUnselectedListColor),
@@ -127,7 +131,7 @@ class _ReportedReviewDetailPageState extends ConsumerState<AdminReportedReviewDe
       onTap: () async {
         AdminController adminCT = ref.read(adminController);
         AdminResolveReviewReqDto adminResolveReviewReqDto = AdminResolveReviewReqDto(adminComment: _adminComment.text.trim());
-        await adminCT.resolveReview(adminResolveReviewReqDto, reportReviewId);
+        await adminCT.acceptReview(adminResolveReviewReqDto, reportReviewId);
       },
       child: Container(
         decoration: BoxDecoration(

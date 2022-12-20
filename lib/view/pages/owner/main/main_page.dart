@@ -1,5 +1,9 @@
 import 'package:baemin_owner_admin_front/constants.dart';
+import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
+import 'package:baemin_owner_admin_front/dto/req/store_open_close_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/model/main_page_model.dart';
+import 'package:baemin_owner_admin_front/view/pages/owner/main/model/main_page_view_model.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/statistics/statistics_page.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/store_info_menu.dart';
 import 'package:baemin_owner_admin_front/view/pages/owner/main/store_management/order_list_page.dart';
@@ -25,28 +29,38 @@ class _MainPageState extends ConsumerState<MainPage> {
   final _valueList = ['건강상의 사유', '재고소진', '영업시간 아님', '기타'];
   var _selectedValue = '건강상의 사유';
 
-  bool _isOpen = true;
   @override
   Widget build(BuildContext context) {
+    MainPageModel? model = ref.watch(mainPageViewModel);
+    MainPageViewModel viewModel = ref.read(mainPageViewModel.notifier);
     final List<Widget> selectedMainView = [
-      OrderListPage(),
-      StatisticsPage(),
-      StoreInfoMenu(),
+      const OrderListPage(),
+      const StatisticsPage(),
+      const StoreInfoMenu(),
     ];
 
     return Scaffold(
       key: scaffoldKey,
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(model!),
       body: Row(
         children: [
-          _buildMainMenuBar(context),
-          selectedMainView[_selectedIndex],
+          _buildMainMenuBar(model),
+          model.isOpened == true
+              ? selectedMainView[_selectedIndex]
+              : const Expanded(
+                  child: Center(
+                    child: Text(
+                      '현재 영업중이 아닙니다. 좌측 하단의 영업시작 버튼을 눌러주세요.',
+                      style: TextStyle(color: kMainColor, fontSize: 22),
+                    ),
+                  ),
+                )
         ],
       ),
     );
   }
 
-  NavigationRail _buildMainMenuBar(BuildContext context) {
+  NavigationRail _buildMainMenuBar(MainPageModel model) {
     return NavigationRail(
         backgroundColor: kMenuBarSubColor,
         labelType: NavigationRailLabelType.all,
@@ -63,10 +77,10 @@ class _MainPageState extends ConsumerState<MainPage> {
             _selectedIndex = index;
           });
         },
-        trailing: (_isOpen == true) ? _buildStoreClose(context) : _buildStoreOpen(context));
+        trailing: (model.isOpened == true) ? _buildStoreClose(context) : _buildStoreOpen(context));
   }
 
-  AppBar _buildAppBar() {
+  AppBar _buildAppBar(MainPageModel model) {
     return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: kMenuBarMainColor,
@@ -76,11 +90,11 @@ class _MainPageState extends ConsumerState<MainPage> {
         padding: const EdgeInsets.symmetric(horizontal: gap_s),
         child: Row(
           children: [
-            Icon(CupertinoIcons.circle_filled, color: (_isOpen == true) ? kMainColor : kUnselectedListColor, size: 20),
-            SizedBox(width: gap_s),
+            Icon(CupertinoIcons.circle_filled, color: (model.isOpened == true) ? kMainColor : kUnselectedListColor, size: 20),
+            const SizedBox(width: gap_s),
             Padding(
               padding: const EdgeInsets.only(bottom: gap_xxs),
-              child: Text((_isOpen == true) ? '영업중' : '영업중지', style: TextStyle(color: Colors.white, fontSize: 18)),
+              child: Text((model.isOpened == true) ? '영업중' : '영업중지', style: const TextStyle(color: Colors.white, fontSize: 18)),
             ),
           ],
         ),
@@ -91,7 +105,7 @@ class _MainPageState extends ConsumerState<MainPage> {
   NavigationRailDestination _buildMainMenuIcon(text, icon) {
     return NavigationRailDestination(
       icon: Icon(icon, color: kMenuIconColor, size: 32),
-      label: Text('${text}', style: TextStyle(color: kMenuIconColor)),
+      label: Text('$text', style: const TextStyle(color: kMenuIconColor)),
     );
   }
 
@@ -102,7 +116,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         children: [
           InkWell(
               child: Column(
-                children: [
+                children: const [
                   Icon(FontAwesomeIcons.shop, color: kMenuIconColor),
                   Text('영업중지', style: TextStyle(color: kMenuIconColor)),
                   SizedBox(height: gap_m),
@@ -113,8 +127,8 @@ class _MainPageState extends ConsumerState<MainPage> {
                   context: context,
                   builder: (context) => StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
-                      titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-                      title: SizedBox(
+                      titlePadding: const EdgeInsets.only(left: 120, right: 120, top: 60),
+                      title: const SizedBox(
                         width: 300,
                         child: Text(
                           '영업을 중지할까요?',
@@ -175,8 +189,8 @@ class _MainPageState extends ConsumerState<MainPage> {
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(color: kMainColor),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: gap_s),
                                     child: Center(
                                       child: Text(
                                         '아니오',
@@ -190,34 +204,39 @@ class _MainPageState extends ConsumerState<MainPage> {
                                   ),
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _isOpen = false;
-                                    Navigator.pop(context);
-                                  });
-                                },
-                                child: Container(
-                                  width: 240,
-                                  decoration: BoxDecoration(
-                                    color: kMainColor,
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: kMainColor),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: gap_s),
-                                    child: Center(
-                                      child: Text(
-                                        '네',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          height: 1,
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  MainPageModel? model = ref.watch(mainPageViewModel);
+                                  OwnerController ownerCT = ref.read(ownerController);
+                                  return InkWell(
+                                    onTap: () {
+                                      StoreOpenCloseReqDto storeOpenCloseReqDto = StoreOpenCloseReqDto(isOpend: false);
+                                      ownerCT.openCloseStore(storeOpenCloseReqDto);
+                                      ref.read(mainPageViewModel.notifier).closeStore();
+                                    },
+                                    child: Container(
+                                      width: 240,
+                                      decoration: BoxDecoration(
+                                        color: kMainColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(color: kMainColor),
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: gap_s),
+                                        child: Center(
+                                          child: Text(
+                                            '네',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              height: 1,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                             ],
                           ),
@@ -239,7 +258,7 @@ class _MainPageState extends ConsumerState<MainPage> {
         children: [
           InkWell(
               child: Column(
-                children: [
+                children: const [
                   Icon(FontAwesomeIcons.shop, color: kMenuIconColor),
                   Text('영업시작', style: TextStyle(color: kMenuIconColor)),
                   SizedBox(height: gap_m),
@@ -250,8 +269,8 @@ class _MainPageState extends ConsumerState<MainPage> {
                   context: context,
                   builder: (context) => StatefulBuilder(
                     builder: (context, setState) => AlertDialog(
-                      titlePadding: EdgeInsets.only(left: 120, right: 120, top: 60),
-                      title: SizedBox(
+                      titlePadding: const EdgeInsets.only(left: 120, right: 120, top: 60),
+                      title: const SizedBox(
                         width: 300,
                         child: Text(
                           '영업을 시작할까요?',
@@ -277,8 +296,8 @@ class _MainPageState extends ConsumerState<MainPage> {
                                     borderRadius: BorderRadius.circular(4),
                                     border: Border.all(color: kMainColor),
                                   ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: gap_s),
+                                  child: const Padding(
+                                    padding: EdgeInsets.symmetric(vertical: gap_s),
                                     child: Center(
                                       child: Text(
                                         '아니오',
@@ -292,34 +311,39 @@ class _MainPageState extends ConsumerState<MainPage> {
                                   ),
                                 ),
                               ),
-                              InkWell(
-                                onTap: () {
-                                  setState(() {
-                                    _isOpen = true;
-                                    Navigator.pop(context);
-                                  });
-                                },
-                                child: Container(
-                                  width: 240,
-                                  decoration: BoxDecoration(
-                                    color: kMainColor,
-                                    borderRadius: BorderRadius.circular(4),
-                                    border: Border.all(color: kMainColor),
-                                  ),
-                                  child: Padding(
-                                    padding: const EdgeInsets.symmetric(vertical: gap_s),
-                                    child: Center(
-                                      child: Text(
-                                        '네',
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 20,
-                                          height: 1,
+                              Consumer(
+                                builder: (context, ref, child) {
+                                  MainPageModel? model = ref.watch(mainPageViewModel);
+                                  OwnerController ownerCT = ref.read(ownerController);
+                                  return InkWell(
+                                    onTap: () {
+                                      StoreOpenCloseReqDto storeOpenCloseReqDto = StoreOpenCloseReqDto(isOpend: true);
+                                      ownerCT.openCloseStore(storeOpenCloseReqDto);
+                                      ref.read(mainPageViewModel.notifier).openStore();
+                                    },
+                                    child: Container(
+                                      width: 240,
+                                      decoration: BoxDecoration(
+                                        color: kMainColor,
+                                        borderRadius: BorderRadius.circular(4),
+                                        border: Border.all(color: kMainColor),
+                                      ),
+                                      child: const Padding(
+                                        padding: EdgeInsets.symmetric(vertical: gap_s),
+                                        child: Center(
+                                          child: Text(
+                                            '네',
+                                            style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 20,
+                                              height: 1,
+                                            ),
+                                          ),
                                         ),
                                       ),
                                     ),
-                                  ),
-                                ),
+                                  );
+                                },
                               ),
                             ],
                           ),

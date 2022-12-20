@@ -53,8 +53,8 @@ class AdminController {
     }
   }
 
-  Future<void> resolveReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
-    ResponseDto responseDto = await AdminService().fetchResolveReview(adminResolveReviewReqDto, reportedReviewId);
+  Future<void> acceptReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
+    ResponseDto responseDto = await AdminService().fetchAcceptReview(adminResolveReviewReqDto, reportedReviewId);
 
     if (responseDto.code == 1) {
       await _ref.read(adminMainPageViewModel.notifier).moveToReviewListPage();
@@ -62,6 +62,38 @@ class AdminController {
         SnackBar(
           backgroundColor: const Color(0x99FF521C),
           content: const Text("처리 완료."),
+          action: SnackBarAction(
+            label: '확인',
+            textColor: kWhiteColor,
+            onPressed: () {},
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        SnackBar(
+          backgroundColor: const Color(0x996D62E8),
+          content: const Text("오류 발생"),
+          action: SnackBarAction(
+            label: '확인',
+            textColor: kWhiteColor,
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
+  }
+
+
+  Future<void> refuseReview(AdminResolveReviewReqDto adminResolveReviewReqDto, int reportedReviewId) async {
+    ResponseDto responseDto = await AdminService().fetchRefuseReview(adminResolveReviewReqDto, reportedReviewId);
+
+    if (responseDto.code == 1) {
+      await _ref.read(adminMainPageViewModel.notifier).moveToReviewListPage();
+      ScaffoldMessenger.of(mContext!).showSnackBar(
+        SnackBar(
+          backgroundColor: const Color(0x99FF521C),
+          content: const Text("기각 완료."),
           action: SnackBarAction(
             label: '확인',
             textColor: kWhiteColor,

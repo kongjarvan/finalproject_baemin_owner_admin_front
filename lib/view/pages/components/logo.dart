@@ -9,7 +9,7 @@ class Logo extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text('배달의 민족', style: TextStyle(color: kMainColor, fontSize: 40)),
+        Text('땡기는 민족', style: TextStyle(color: kMainColor, fontSize: 40)),
         Text('사장님', style: textTheme().headline1),
       ],
     );

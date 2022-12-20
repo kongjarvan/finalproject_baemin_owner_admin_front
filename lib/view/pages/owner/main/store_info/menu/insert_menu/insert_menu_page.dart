@@ -70,18 +70,7 @@ class _InsertMenuPageState extends ConsumerState<InsertMenuPage> {
                                     border: Border.all(color: Colors.grey),
                                     borderRadius: BorderRadius.circular(4),
                                   ),
-                                  child: Center(
-                                    child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.center,
-                                      children: [
-                                        const Icon(CupertinoIcons.add),
-                                        Text(
-                                          '사진 추가하기',
-                                          style: textTheme().bodyText2,
-                                        ),
-                                      ],
-                                    ),
-                                  ),
+                                  child: Image.asset('assets/레드마블치킨.jpg', fit: BoxFit.cover),
                                 ),
                               ),
                               const SizedBox(width: gap_l),

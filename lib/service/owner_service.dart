@@ -4,6 +4,7 @@ import 'package:baemin_owner_admin_front/core/util/parsing_util.dart';
 import 'package:baemin_owner_admin_front/dto/req/login_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
+import 'package:baemin_owner_admin_front/dto/req/store_open_close_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/store_check_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/get_store_info_resp_dto.dart';
@@ -12,7 +13,6 @@ import 'package:baemin_owner_admin_front/dto/resp/register_store_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/statistics_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/resp/update_store_resp_dto.dart';
 import 'package:baemin_owner_admin_front/dto/response_dto.dart';
-
 import 'package:baemin_owner_admin_front/dto/users_dto.dart';
 import 'package:baemin_owner_admin_front/service/local_service.dart';
 import 'package:baemin_owner_admin_front/service/store_session.dart';
@@ -37,12 +37,18 @@ class OwnerService {
     String jwtToken = response.headers["authorization"].toString();
 
     await secureStorage.write(key: "jwtToken", value: jwtToken);
+    print('jwtToken : ${jwtToken}');
 
     ResponseDto responseDto = toResponseDto(response);
 
     if (responseDto.code == 1) {
       Users user = Users.fromJson(responseDto.data);
+      print('user : ${user.nickname}');
+      print('user : ${user.id}');
+      print('user : ${user.role}');
+      print('user : ${user.createdAt}');
       UserSession.successAuthentication(user, jwtToken);
+      print('세션 승인됨');
     }
 
     return responseDto;
@@ -82,9 +88,14 @@ class OwnerService {
 
   Future<ResponseDto> fetchGetUserState() async {
     Response response = await httpConnector.get("/api/user/${UserSession.user.id}/store/name", jwtToken: UserSession.jwtToken);
+
     ResponseDto responseDto = toResponseDto(response);
-    responseDto.data = StoreCheckDto.fromJson(responseDto.data);
-    StoreSession.successAuthentication(responseDto.data.storeId);
+    print(responseDto.data);
+    if (responseDto.code == 1) {
+      responseDto.data = StoreCheckDto.fromJson(responseDto.data);
+
+      StoreSession.successAuthentication(responseDto.data.storeId);
+    }
     return responseDto;
   }
 
@@ -115,6 +126,20 @@ class OwnerService {
     ResponseDto responseDto = toResponseDto(response);
 
     responseDto.data = UpdateStoreRespDto.fromJson(responseDto.data);
+
+    return responseDto;
+  }
+
+  fetchOpenCloseStore(StoreOpenCloseReqDto storeOpenCloseReqDto) async {
+    String requestBody = jsonEncode(storeOpenCloseReqDto.toJson());
+    Logger().d('requestBody : ${requestBody}');
+    Response response =
+        await httpConnector.put("/api/user/${UserSession.user.id}/store/update/business", requestBody, jwtToken: UserSession.jwtToken);
+    Logger().d('응답됨');
+    ResponseDto responseDto = toResponseDto(response);
+    Logger().d('responseDto code : ${responseDto.code}');
+    Logger().d('responseDto data : ${responseDto.data}');
+    Logger().d('responseDto msg : ${responseDto.msg}');
 
     return responseDto;
   }

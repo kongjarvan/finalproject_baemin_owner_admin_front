@@ -276,7 +276,13 @@ class _ReportedReviewListPageState extends ConsumerState<AdminReportedReviewList
               flex: 1,
               child: Container(
                 decoration: BoxDecoration(border: Border.all(color: kAdminGreyColor)),
-                child: Center(child: Text(model.adminReportedReviewListRespDtos[index].isResolved == false ? '처리 대기중' : '처리완료')),
+                child: Center(
+                  child: Text(model.adminReportedReviewListRespDtos[index].resolved == false
+                      ? '처리 대기중'
+                      : model.adminReportedReviewListRespDtos[index].accept == true
+                          ? '처리됨'
+                          : '기각됨'),
+                ),
               ),
             ),
           ],
