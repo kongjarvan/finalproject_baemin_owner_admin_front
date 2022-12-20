@@ -451,6 +451,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
                       });
                 },
               ),
+
             ),
             SizedBox(width: gap_m),
             Text('~', style: textTheme().headline2),

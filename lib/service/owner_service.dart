@@ -38,6 +38,7 @@ class OwnerService {
 
     await secureStorage.write(key: "jwtToken", value: jwtToken);
     print('jwtToken : ${jwtToken}');
+
     ResponseDto responseDto = toResponseDto(response);
 
     if (responseDto.code == 1) {

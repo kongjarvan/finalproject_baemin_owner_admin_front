@@ -72,7 +72,6 @@ class MenuService {
     String requestBody = jsonEncode(updateMenuReqDto.toJson());
 
     Response response = await httpConnector.put("/api/user/${UserSession.user.id}/store/menu/$menuId/update", requestBody, jwtToken: UserSession.jwtToken);
-
     ResponseDto responseDto = toResponseDto(response);
     if (responseDto.code == 1) {
       responseDto.data = UpdateMenuRespDto.fromJson(responseDto.data);

@@ -48,7 +48,7 @@ class OrderController {
         ScaffoldMessenger.of(mContext!).showSnackBar(
           SnackBar(
             backgroundColor: Color(0x996D62E8),
-            content: Text("주문을 취소 할 수 없습니다. (${orderState} ${orderId}"),
+            content: Text("주문을 취소 할 수 없습니다."),
             action: SnackBarAction(
               label: '확인',
               textColor: kWhiteColor,

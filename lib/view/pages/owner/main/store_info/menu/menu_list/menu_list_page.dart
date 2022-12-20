@@ -274,7 +274,6 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
                       Consumer(
                         builder: (context, ref, child) {
                           MenuListPageModel? model = ref.watch(menuListPageViewModel);
-
                           MenuController menuCT = ref.read(menuController);
 
                           return InkWell(

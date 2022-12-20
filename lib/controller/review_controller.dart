@@ -53,7 +53,6 @@ class ReviewController {
 
   Future<void> reportReview(ReportReviewReqDto reportReviewReqDto, int reviewId) async {
     ResponseDto responseDto = await ReviewService().fetchReportReview(reportReviewReqDto, reviewId);
-
     if (responseDto.code == 1) {
       ScaffoldMessenger.of(mContext!).showSnackBar(
         SnackBar(

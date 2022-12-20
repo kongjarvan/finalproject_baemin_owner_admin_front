@@ -40,6 +40,7 @@ class OwnerController {
     //3. 비지니스 로직 처리
     if (UserSession.user.role == '관리자') {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.adminPage, (route) => false);
+
     } else {
       if (responseDto.code == 1) {
         ResponseDto responseDto2 = await ownerService.fetchGetUserState();
