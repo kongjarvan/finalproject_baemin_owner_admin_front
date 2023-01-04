@@ -9,7 +9,7 @@ import 'package:baemin_owner_admin_front/view/pages/owner/main/store_info/model/
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
+import 'package:baemin_owner_admin_front/core/util/validator_util.dart';
 
 class InsertMenuPage extends ConsumerStatefulWidget {
   const InsertMenuPage({Key? key}) : super(key: key);
@@ -35,124 +35,129 @@ class _InsertMenuPageState extends ConsumerState<InsertMenuPage> {
     );
   }
 
-  Column _buildBody() {
-    return Column(
+  Widget _buildBody() {
+    return Form(
       key: _formKey,
-      children: [
-        const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
-        Padding(
-          padding: const EdgeInsets.all(gap_l),
-          child: Column(
-            children: [
-              Column(
-                children: [
-                  _buildInsertMenuHeader(),
-                  const SizedBox(height: gap_m),
-                  _buildMenuInfoHeader(),
-                ],
-              ),
-              const SizedBox(height: gap_xxs),
-              Column(
-                children: [
-                  Container(
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(gap_m),
-                      child: Column(
-                        children: [
-                          Row(
-                            children: [
-                              Flexible(
-                                flex: 1,
-                                child: Container(
-                                  height: 300,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(color: Colors.grey),
-                                    borderRadius: BorderRadius.circular(4),
+      child: Column(
+        children: [
+          const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+          Padding(
+            padding: const EdgeInsets.all(gap_l),
+            child: Column(
+              children: [
+                Column(
+                  children: [
+                    _buildInsertMenuHeader(),
+                    const SizedBox(height: gap_m),
+                    _buildMenuInfoHeader(),
+                  ],
+                ),
+                const SizedBox(height: gap_xxs),
+                Column(
+                  children: [
+                    Container(
+                      color: Colors.white,
+                      child: Padding(
+                        padding: const EdgeInsets.all(gap_m),
+                        child: Column(
+                          children: [
+                            Row(
+                              children: [
+                                Flexible(
+                                  flex: 1,
+                                  child: Container(
+                                    height: 300,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Colors.grey),
+                                      borderRadius: BorderRadius.circular(4),
+                                    ),
+                                    child: Image.asset('assets/레드마블치킨.jpg', fit: BoxFit.cover),
                                   ),
-                                  child: Image.asset('assets/레드마블치킨.jpg', fit: BoxFit.cover),
                                 ),
-                              ),
-                              const SizedBox(width: gap_l),
-                              Flexible(
-                                flex: 1,
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    InputTextFormField(
-                                      text1: '메뉴 이름',
-                                      text2: '메뉴 이름 입력',
-                                      controller: _name,
-                                      maxLine: 1,
-                                      isReadOnly: false,
-                                    ),
-                                    const SizedBox(height: gap_l),
-                                    InputTextFormField(
-                                      text1: '메뉴 가격',
-                                      text2: '메뉴 가격 입력',
-                                      controller: _price,
-                                      maxLine: 1,
-                                      isReadOnly: false,
-                                    ),
-                                    const SizedBox(height: gap_l),
-                                    Text('카테고리', style: textTheme().headline2),
-                                    const SizedBox(height: gap_s),
-                                    Container(
-                                      width: 300,
-                                      decoration: BoxDecoration(
-                                        border: Border.all(
-                                          color: kUnselectedListColor,
-                                        ),
-                                        borderRadius: BorderRadius.circular(4),
-                                        color: Colors.white,
+                                const SizedBox(width: gap_l),
+                                Flexible(
+                                  flex: 1,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      InputTextFormField(
+                                        text1: '메뉴 이름',
+                                        text2: '메뉴 이름 입력',
+                                        controller: _name,
+                                        funValidator: validateMenuName(),
+                                        maxLine: 1,
+                                        isReadOnly: false,
                                       ),
-                                      child: DropdownButton(
-                                          isExpanded: true,
-                                          style: textTheme().headline1,
-                                          underline: Container(
-                                            height: 0,
+                                      const SizedBox(height: gap_l),
+                                      InputTextFormField(
+                                        text1: '메뉴 가격',
+                                        text2: '메뉴 가격 입력',
+                                        controller: _price,
+                                        funValidator: validateMenuPrice(),
+                                        maxLine: 1,
+                                        isReadOnly: false,
+                                      ),
+                                      const SizedBox(height: gap_l),
+                                      Text('카테고리', style: textTheme().headline2),
+                                      const SizedBox(height: gap_s),
+                                      Container(
+                                        width: 300,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(
+                                            color: kUnselectedListColor,
                                           ),
-                                          value: _selectedCategory,
-                                          items: _categoryList.map(
-                                            (value) {
-                                              return DropdownMenuItem(
-                                                value: value,
-                                                child: Padding(
-                                                  padding: const EdgeInsets.only(left: gap_xs),
-                                                  child: Text(value),
-                                                ),
-                                              );
-                                            },
-                                          ).toList(),
-                                          onChanged: (value) {
-                                            setState(() {
-                                              _selectedCategory = value as String;
-                                            });
-                                          }),
-                                    ),
-                                  ],
+                                          borderRadius: BorderRadius.circular(4),
+                                          color: Colors.white,
+                                        ),
+                                        child: DropdownButton(
+                                            isExpanded: true,
+                                            style: textTheme().headline1,
+                                            underline: Container(
+                                              height: 0,
+                                            ),
+                                            value: _selectedCategory,
+                                            items: _categoryList.map(
+                                              (value) {
+                                                return DropdownMenuItem(
+                                                  value: value,
+                                                  child: Padding(
+                                                    padding: const EdgeInsets.only(left: gap_xs),
+                                                    child: Text(value),
+                                                  ),
+                                                );
+                                              },
+                                            ).toList(),
+                                            onChanged: (value) {
+                                              setState(() {
+                                                _selectedCategory = value as String;
+                                              });
+                                            }),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: gap_m),
-                          InputTextFormField(
-                            text1: '메뉴 설명',
-                            text2: '메뉴 설명 입력',
-                            controller: _intro,
-                            maxLine: 3,
-                            isReadOnly: false,
-                          ),
-                        ],
+                              ],
+                            ),
+                            const SizedBox(height: gap_m),
+                            InputTextFormField(
+                              text1: '메뉴 설명',
+                              text2: '메뉴 설명 입력',
+                              controller: _intro,
+                              funValidator: validateContent(),
+                              maxLine: 3,
+                              isReadOnly: false,
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ],
+                  ],
+                ),
+              ],
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -190,16 +195,17 @@ class _InsertMenuPageState extends ConsumerState<InsertMenuPage> {
               builder: (context, ref, child) {
                 return InkWell(
                   onTap: () async {
-                    MenuController menuCT = ref.read(menuController);
-                    InsertMenuReqDto insertMenuReqDto = InsertMenuReqDto(
-                      category: _selectedCategory,
-                      name: _name.text.trim(),
-                      price: int.parse(_price.text.trim()),
-                      intro: _intro.text.trim(),
-                    );
-
-                    await menuCT.insertMenu(insertMenuReqDto);
-                    ref.read(storeInfoPageViewModel.notifier).changeIndex(1);
+                    if (_formKey.currentState!.validate()) {
+                      MenuController menuCT = ref.read(menuController);
+                      InsertMenuReqDto insertMenuReqDto = InsertMenuReqDto(
+                        category: _selectedCategory,
+                        name: _name.text.trim(),
+                        price: int.parse(_price.text.trim()),
+                        intro: _intro.text.trim(),
+                      );
+                      await menuCT.insertMenu(insertMenuReqDto);
+                      ref.read(storeInfoPageViewModel.notifier).changeIndex(1);
+                    }
                   },
                   child: Container(
                     decoration: BoxDecoration(

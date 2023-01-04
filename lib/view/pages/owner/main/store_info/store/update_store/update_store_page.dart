@@ -1,6 +1,7 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
 import 'package:baemin_owner_admin_front/core/util/time_list.dart';
+import 'package:baemin_owner_admin_front/core/util/validator_util.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/dto/req/update_store_req_dto.dart';
 import 'package:baemin_owner_admin_front/size.dart';
@@ -69,31 +70,33 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
     _selectedOpenTime = model.updateStoreListRespDto.openTime;
     _selectedCloseTime = model.updateStoreListRespDto.closeTime;
 
-    return Column(
+    return Form(
       key: _formKey,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
-        Flexible(
-          child: RawScrollbar(
-            thumbColor: kUnselectedListColor,
-            radius: Radius.circular(5),
-            controller: _scrollController,
-            thickness: 10,
-            thumbVisibility: true,
-            child: SingleChildScrollView(
-              scrollDirection: Axis.vertical,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+          Flexible(
+            child: RawScrollbar(
+              thumbColor: kUnselectedListColor,
+              radius: Radius.circular(5),
               controller: _scrollController,
-              child: Padding(
-                padding: const EdgeInsets.all(gap_l),
-                child: Column(
-                  children: [RegisterStoreForm('가게수정', model)],
+              thickness: 10,
+              thumbVisibility: true,
+              child: SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+                controller: _scrollController,
+                child: Padding(
+                  padding: const EdgeInsets.all(gap_l),
+                  child: Column(
+                    children: [RegisterStoreForm('가게수정', model)],
+                  ),
                 ),
               ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -171,6 +174,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               text2: '사업자 이름 입력',
               isReadOnly: true,
               controller: _ceoName,
+              funValidator: null,
               maxLine: 1,
             ),
           ),
@@ -184,6 +188,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               text2: '사업자 등록번호 입력',
               isReadOnly: true,
               controller: _businessNumber,
+              funValidator: null,
               maxLine: 1,
             ),
           ),
@@ -200,6 +205,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
         text2: '사업자 주소 입력',
         isReadOnly: true,
         controller: _businessAddress,
+        funValidator: null,
         maxLine: 1,
       ),
     );
@@ -267,6 +273,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               text2: '가게 이름 입력',
               isReadOnly: false,
               controller: _name,
+              funValidator: validateStoreName(),
               maxLine: 1,
             ),
           ),
@@ -280,6 +287,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               text2: '전화번호 입력',
               isReadOnly: false,
               controller: _phone,
+              funValidator: validatePhoneNumber(),
               maxLine: 1,
             ),
           ),
@@ -296,6 +304,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
         text2: '가게 소개란 입력',
         isReadOnly: false,
         controller: _intro,
+        funValidator: validateContent(),
         maxLine: 4,
       ),
     );
@@ -309,6 +318,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
         text2: '가게 공지사항 입력',
         isReadOnly: false,
         controller: _notice,
+        funValidator: validateContent(),
         maxLine: 15,
       ),
     );
@@ -326,6 +336,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               text2: '최소주문금액 입력',
               isReadOnly: false,
               controller: _minAmount,
+              funValidator: validateMinOrderPrice(),
               maxLine: 1,
             ),
           ),
@@ -339,6 +350,7 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
               text2: '배달비용 입력',
               isReadOnly: false,
               controller: _deliveryCost,
+              funValidator: validateDeliveryPrice(),
               maxLine: 1,
             ),
           ),
@@ -451,7 +463,6 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
                       });
                 },
               ),
-
             ),
             SizedBox(width: gap_m),
             Text('~', style: textTheme().headline2),
@@ -607,19 +618,21 @@ class _UpdateStorePageState extends ConsumerState<UpdateStorePage> {
         OwnerController ownerCT = ref.read(ownerController);
         return InkWell(
           onTap: () async {
-            UpdateStoreReqDto registerStoreReqDto = UpdateStoreReqDto(
-              category: _selectedCategory,
-              name: _name.text.trim(),
-              phone: _phone.text.trim(),
-              openTime: _selectedOpenTime,
-              closeTime: _selectedCloseTime,
-              minAmount: _minAmount.text.trim(),
-              deliveryHour: _selectedDeliveryTime,
-              deliveryCost: _deliveryCost.text.trim(),
-              intro: _intro.text.trim(),
-              notice: _notice.text.trim(),
-            );
-            await ownerCT.updateStore(registerStoreReqDto);
+            if (_formKey.currentState!.validate()) {
+              UpdateStoreReqDto registerStoreReqDto = UpdateStoreReqDto(
+                category: _selectedCategory,
+                name: _name.text.trim(),
+                phone: _phone.text.trim(),
+                openTime: _selectedOpenTime,
+                closeTime: _selectedCloseTime,
+                minAmount: _minAmount.text.trim(),
+                deliveryHour: _selectedDeliveryTime,
+                deliveryCost: _deliveryCost.text.trim(),
+                intro: _intro.text.trim(),
+                notice: _notice.text.trim(),
+              );
+              await ownerCT.updateStore(registerStoreReqDto);
+            }
           },
           child: Container(
             decoration: BoxDecoration(

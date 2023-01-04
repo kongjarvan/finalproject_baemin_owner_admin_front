@@ -10,7 +10,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class OwnerComment extends ConsumerWidget {
   final int index;
-  const OwnerComment({required this.index, Key? key}) : super(key: key);
+  final formKey;
+  const OwnerComment({required this.index, required this.formKey, Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -101,10 +102,12 @@ class OwnerComment extends ConsumerWidget {
                       ),
                       InkWell(
                         onTap: () async {
-                          InsertCeoCommentReqDto insertCeoCommentReqDto = InsertCeoCommentReqDto(content: _ceoContent.text.trim());
+                          if (formKey.currentState!.validate()) {
+                            InsertCeoCommentReqDto insertCeoCommentReqDto = InsertCeoCommentReqDto(content: _ceoContent.text.trim());
 
-                          await reviewCT.insertCeoComment(insertCeoCommentReqDto, model.reviewListRespDtos[index].id);
-                          Navigator.pop(context);
+                            await reviewCT.insertCeoComment(insertCeoCommentReqDto, model.reviewListRespDtos[index].id);
+                            Navigator.pop(context);
+                          }
                         },
                         child: Container(
                           width: 240,

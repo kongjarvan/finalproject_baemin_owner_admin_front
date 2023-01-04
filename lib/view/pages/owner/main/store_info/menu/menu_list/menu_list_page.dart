@@ -212,71 +212,70 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
   }
 
   Widget hideMenu(int index) {
-    return InkWell(
-      onTap: () {
-        showDialog(
-          context: context,
-          builder: (context) => StatefulBuilder(
-            builder: (context, setState) => AlertDialog(
-              titlePadding: const EdgeInsets.only(left: 120, right: 120, top: 60),
-              title: const SizedBox(
-                width: 300,
-                child: Text(
-                  '메뉴를 숨길까요?',
-                  textAlign: TextAlign.center,
-                  style: TextStyle(color: kMainColor, fontSize: 32),
-                ),
-              ),
-              content: const Padding(
-                padding: EdgeInsets.only(bottom: 40),
-                child: SizedBox(
-                  height: 32,
-                  child: Align(
-                    alignment: AlignmentDirectional.center,
+    return Consumer(
+      builder: (context, ref, child) {
+        MenuListPageModel? model = ref.watch(menuListPageViewModel);
+        MenuController menuCT = ref.read(menuController);
+        return InkWell(
+          onTap: () {
+            showDialog(
+              context: context,
+              builder: (context) => StatefulBuilder(
+                builder: (context, setState) => AlertDialog(
+                  titlePadding: const EdgeInsets.only(left: 120, right: 120, top: 60),
+                  title: const SizedBox(
+                    width: 300,
                     child: Text(
-                      '메뉴 외 n건',
-                      style: TextStyle(fontSize: 24, color: kUnselectedListColor),
+                      '메뉴를 숨길까요?',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(color: kMainColor, fontSize: 32),
                     ),
                   ),
-                ),
-              ),
-              actions: [
-                Padding(
-                  padding: const EdgeInsets.all(gap_s),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      InkWell(
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
-                        child: Container(
-                          width: 240,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(4),
-                            border: Border.all(color: kMainColor),
-                          ),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: gap_s),
-                            child: Center(
-                              child: Text(
-                                '아니오',
-                                style: TextStyle(
-                                  color: kMainColor,
-                                  fontSize: 20,
-                                  height: 1,
+                  content: Padding(
+                    padding: const EdgeInsets.only(bottom: 40),
+                    child: SizedBox(
+                      height: 32,
+                      child: Align(
+                        alignment: AlignmentDirectional.center,
+                        child: Text(
+                          '메뉴: ${model!.menuListRespDtos[index].name}',
+                          style: const TextStyle(fontSize: 24, color: kUnselectedListColor),
+                        ),
+                      ),
+                    ),
+                  ),
+                  actions: [
+                    Padding(
+                      padding: const EdgeInsets.all(gap_s),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              Navigator.pop(context);
+                            },
+                            child: Container(
+                              width: 240,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(4),
+                                border: Border.all(color: kMainColor),
+                              ),
+                              child: const Padding(
+                                padding: EdgeInsets.symmetric(vertical: gap_s),
+                                child: Center(
+                                  child: Text(
+                                    '아니오',
+                                    style: TextStyle(
+                                      color: kMainColor,
+                                      fontSize: 20,
+                                      height: 1,
+                                    ),
+                                  ),
                                 ),
                               ),
                             ),
                           ),
-                        ),
-                      ),
-                      Consumer(
-                        builder: (context, ref, child) {
-                          MenuListPageModel? model = ref.watch(menuListPageViewModel);
-                          MenuController menuCT = ref.read(menuController);
-
-                          return InkWell(
+                          InkWell(
                             onTap: () async {
                               HideMenuReqDto hideMenuReqDto = HideMenuReqDto(closure: true);
 
@@ -305,36 +304,36 @@ class _MenuListPageState extends ConsumerState<MenuListPage> {
                                 ),
                               ),
                             ),
-                          );
-                        },
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              ],
+                    )
+                  ],
+                ),
+              ),
+            );
+          },
+          child: Container(
+            width: 120,
+            decoration: BoxDecoration(
+              border: Border.all(color: kButtonSubColor),
+              borderRadius: BorderRadius.circular(gap_xxs),
+            ),
+            child: const Padding(
+              padding: EdgeInsets.symmetric(
+                vertical: gap_xs,
+              ),
+              child: Align(
+                alignment: AlignmentDirectional.center,
+                child: Text(
+                  '메뉴 숨기기',
+                  style: TextStyle(color: kButtonSubColor, fontSize: 16, height: 1),
+                ),
+              ),
             ),
           ),
         );
       },
-      child: Container(
-        width: 120,
-        decoration: BoxDecoration(
-          border: Border.all(color: kButtonSubColor),
-          borderRadius: BorderRadius.circular(gap_xxs),
-        ),
-        child: const Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: gap_xs,
-          ),
-          child: Align(
-            alignment: AlignmentDirectional.center,
-            child: Text(
-              '메뉴 숨기기',
-              style: TextStyle(color: kButtonSubColor, fontSize: 16, height: 1),
-            ),
-          ),
-        ),
-      ),
     );
   }
 }
