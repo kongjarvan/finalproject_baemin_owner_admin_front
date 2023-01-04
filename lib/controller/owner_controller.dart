@@ -31,16 +31,16 @@ class OwnerController {
   // 로그인
   Future<void> login({required String username, required String password}) async {
     // 1. DTO 변환
-
+    Logger().d('컨트롤러 진입1');
     LoginReqDto loginReqDto = LoginReqDto(username: username, password: password);
-
+    Logger().d('컨트롤러 진입2');
     // 2. 통신 요청
 
     ResponseDto responseDto = await ownerService.fetchLogin(loginReqDto);
+    Logger().d('컨트롤러 진입3');
     //3. 비지니스 로직 처리
     if (UserSession.user.role == '관리자') {
       Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(Move.adminPage, (route) => false);
-
     } else {
       if (responseDto.code == 1) {
         ResponseDto responseDto2 = await ownerService.fetchGetUserState();

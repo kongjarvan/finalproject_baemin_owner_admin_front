@@ -1,5 +1,6 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
+import 'package:baemin_owner_admin_front/core/util/validator_util.dart';
 import 'package:baemin_owner_admin_front/dto/req/register_owner_req_dto.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
@@ -10,6 +11,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class RegisterOwnerPage extends StatelessWidget {
   RegisterOwnerPage({super.key});
 
+  final _formKey = GlobalKey<FormState>();
   final _ceoName = TextEditingController();
   final _businessAddress = TextEditingController();
   final _businessNumber = TextEditingController();
@@ -18,21 +20,48 @@ class RegisterOwnerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: kWhiteColor,
-      body: Center(
-        child: SizedBox(
-          width: 400,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Logo(),
-              InputTextFormField(text1: '대표자 이름', text2: '대표자 이름 입력', controller: _ceoName, maxLine: 1, isReadOnly: false),
-              SizedBox(height: 24),
-              InputTextFormField(text1: '사업자 주소', text2: '사업자 주소 입력', controller: _businessAddress, maxLine: 1, isReadOnly: false),
-              SizedBox(height: 24),
-              InputTextFormField(text1: '사업자 번호', text2: '사업자 번호 입력', controller: _businessNumber, maxLine: 1, isReadOnly: false),
-              SizedBox(height: 24),
-              _buildApplicateButton(context),
-            ],
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: SizedBox(
+            width: 400,
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Logo(),
+                InputTextFormField(
+                  key: _formKey,
+                  text1: '대표자 이름',
+                  text2: '대표자 이름 입력',
+                  controller: _ceoName,
+                  funValidator: validateOwnerName(),
+                  maxLine: 1,
+                  isReadOnly: false,
+                ),
+                SizedBox(height: 24),
+                InputTextFormField(
+                  key: _formKey,
+                  text1: '사업자 주소',
+                  text2: '사업자 주소 입력',
+                  controller: _businessAddress,
+                  funValidator: validateAddress(),
+                  maxLine: 1,
+                  isReadOnly: false,
+                ),
+                SizedBox(height: 24),
+                InputTextFormField(
+                  key: _formKey,
+                  text1: '사업자 번호',
+                  text2: '사업자 번호 입력',
+                  controller: _businessNumber,
+                  funValidator: validateBusinessNumber(),
+                  maxLine: 1,
+                  isReadOnly: false,
+                ),
+                SizedBox(height: 24),
+                _buildApplicateButton(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -54,12 +83,14 @@ class RegisterOwnerPage extends StatelessWidget {
             ),
           ),
           onTap: () {
-            RegisterOwnerReqDto registerOwnerReqDto = RegisterOwnerReqDto(
-              ceoName: _ceoName.text.trim(),
-              businessNumber: _businessNumber.text.trim(),
-              businessAddress: _businessAddress.text.trim(),
-            );
-            ownerCT.registerOwner(registerOwnerReqDto);
+            if (_formKey.currentState!.validate()) {
+              RegisterOwnerReqDto registerOwnerReqDto = RegisterOwnerReqDto(
+                ceoName: _ceoName.text.trim(),
+                businessNumber: _businessNumber.text.trim(),
+                businessAddress: _businessAddress.text.trim(),
+              );
+              ownerCT.registerOwner(registerOwnerReqDto);
+            }
           },
         );
       },

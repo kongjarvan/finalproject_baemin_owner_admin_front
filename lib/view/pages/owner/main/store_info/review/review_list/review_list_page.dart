@@ -13,11 +13,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 class ReviewListPage extends ConsumerStatefulWidget {
-  const ReviewListPage({Key? key}) : super(key: key);
+  ReviewListPage({Key? key}) : super(key: key);
 
   @override
   ConsumerState<ReviewListPage> createState() => _ReviewListPageState();
 }
+
+final _formKey = GlobalKey<FormState>();
 
 class _ReviewListPageState extends ConsumerState<ReviewListPage> {
   bool? _isChecked = false;
@@ -37,55 +39,58 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
   }
 
   Widget _buildBody(ReviewListPageModel? model) {
-    return Column(
-      children: [
-        const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
-        Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(gap_l),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Text(
-                  '리뷰관리',
-                  style: TextStyle(fontSize: 32),
-                ),
-                const SizedBox(height: gap_m),
-                Row(
-                  children: const [
-                    ReviewTypeButton(text: '전체 리뷰', index: 3),
-                    SizedBox(width: gap_s),
-                    ReviewTypeButton(text: '신고된 리뷰', index: 4),
-                  ],
-                ),
-                const SizedBox(height: gap_m),
-                _buildReviewFilterForm(),
-                const SizedBox(height: gap_m),
-                Expanded(
-                  child: model!.reviewListRespDtos.length == 0
-                      ? const Center(
-                          child: Text(
-                            '리뷰가 없습니다.',
-                            style: TextStyle(fontSize: 32, color: kMainColor, height: 1),
-                          ),
-                        )
-                      : SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: Column(
-                            children: List.generate(
-                              model.reviewListRespDtos.length,
-                              (index) {
-                                return _buildReview(model, index);
-                              },
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          const Divider(height: gap_xxs, thickness: gap_xxs, color: kMainColor),
+          Expanded(
+            child: Padding(
+              padding: const EdgeInsets.all(gap_l),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  const Text(
+                    '리뷰관리',
+                    style: TextStyle(fontSize: 32),
+                  ),
+                  const SizedBox(height: gap_m),
+                  Row(
+                    children: const [
+                      ReviewTypeButton(text: '전체 리뷰', index: 3),
+                      SizedBox(width: gap_s),
+                      ReviewTypeButton(text: '신고된 리뷰', index: 4),
+                    ],
+                  ),
+                  const SizedBox(height: gap_m),
+                  _buildReviewFilterForm(),
+                  const SizedBox(height: gap_m),
+                  Expanded(
+                    child: model!.reviewListRespDtos.length == 0
+                        ? const Center(
+                            child: Text(
+                              '리뷰가 없습니다.',
+                              style: TextStyle(fontSize: 32, color: kMainColor, height: 1),
+                            ),
+                          )
+                        : SingleChildScrollView(
+                            scrollDirection: Axis.vertical,
+                            child: Column(
+                              children: List.generate(
+                                model.reviewListRespDtos.length,
+                                (index) {
+                                  return _buildReview(model, index);
+                                },
+                              ),
                             ),
                           ),
-                        ),
-                ),
-              ],
+                  ),
+                ],
+              ),
             ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -125,7 +130,7 @@ class _ReviewListPageState extends ConsumerState<ReviewListPage> {
                       children: [
                         _buildUserReview(model, index),
                         const SizedBox(height: gap_m),
-                        OwnerComment(index: index),
+                        OwnerComment(index: index, formKey: _formKey),
                       ],
                     ),
                   ),

@@ -1,10 +1,12 @@
 import 'package:baemin_owner_admin_front/constants.dart';
 import 'package:baemin_owner_admin_front/controller/owner_controller.dart';
+import 'package:baemin_owner_admin_front/core/util/validator_util.dart';
 import 'package:baemin_owner_admin_front/theme.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/input_text_form_field.dart';
 import 'package:baemin_owner_admin_front/view/pages/components/logo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:logger/logger.dart';
 
 class LoginPage extends ConsumerStatefulWidget {
   LoginPage({super.key});
@@ -26,33 +28,38 @@ class _LoginPageState extends ConsumerState<LoginPage> {
 
     return Scaffold(
       backgroundColor: kWhiteColor,
-      body: Center(
-        child: SizedBox(
-          width: 400,
-          height: 500,
-          child: ListView(
-            children: [
-              Logo(),
-              InputTextFormField(
-                text1: '아이디',
-                text2: '아이디 입력',
-                controller: _username,
-                maxLine: 1,
-                isReadOnly: false,
-              ),
-              SizedBox(height: 24),
-              InputTextFormField(
-                text1: '비밀번호',
-                text2: '비밀번호 입력',
-                controller: _password,
-                maxLine: 1,
-                isReadOnly: false,
-              ),
-              SizedBox(height: 24),
-              _buildLoginButton(context, ownerCT),
-              SizedBox(height: 24),
-              _buildAdditionalMenu(context),
-            ],
+      body: Form(
+        key: _formKey,
+        child: Center(
+          child: SizedBox(
+            width: 400,
+            height: 500,
+            child: ListView(
+              children: [
+                Logo(),
+                InputTextFormField(
+                  text1: '아이디',
+                  text2: '아이디 입력',
+                  controller: _username,
+                  funValidator: validateUsername(),
+                  maxLine: 1,
+                  isReadOnly: false,
+                ),
+                SizedBox(height: 24),
+                InputTextFormField(
+                  text1: '비밀번호',
+                  text2: '비밀번호 입력',
+                  controller: _password,
+                  funValidator: validatePassword(),
+                  maxLine: 1,
+                  isReadOnly: false,
+                ),
+                SizedBox(height: 24),
+                _buildLoginButton(context, ownerCT),
+                SizedBox(height: 24),
+                _buildAdditionalMenu(context),
+              ],
+            ),
           ),
         ),
       ),
@@ -70,10 +77,15 @@ class _LoginPageState extends ConsumerState<LoginPage> {
           ),
         ),
         onTap: () async {
-          await ownerCT.login(
-            username: _username.text.trim(),
-            password: _password.text.trim(),
-          ); // 추가
+          Logger().d('컨트롤러 진입전1');
+          if (_formKey.currentState!.validate()) {
+            Logger().d('컨트롤러 진입전2');
+            await ownerCT.login(
+              username: _username.text.trim(),
+              password: _password.text.trim(),
+            );
+          }
+          // 추가
         });
   }
 
