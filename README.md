@@ -27,3 +27,5 @@ https://www.notion.so/getinthere/PPT-0aec3737c253488aa1608726403bc093
 * 모듈화하여 개발 가능
 * 여러개의 view가 하나의 viewModel을 의존할 수 있다.
 
+### 5. 개발일지
+https://antique-nurse-0b4.notion.site/1c2b3fba7c5643e59f108874d8a98965
